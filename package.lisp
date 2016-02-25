@@ -6,4 +6,5 @@
   (:use #:cl
         #:alexandria)
   
-  (:export #:*version*))
+  (:export #:*version*
+           #:run))
