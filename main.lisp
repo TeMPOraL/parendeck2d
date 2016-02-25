@@ -3,6 +3,10 @@
 (defparameter *engine-hello-message* (concatenate 'string "Parenscript 2D Engine, version " *version*))
 (defparameter *game* nil "Game to be run.")
 
+(defparameter *use-fixed-timestep* t)
+(defparameter *update-step* (float (/ 1 30)))
+(defparameter *max-accumulated-timestep* 2.0)
+
 ;;; lifecycle management
 (defmacro with-engine-init (&body body)
   `(progn
@@ -41,33 +45,50 @@
   "Main loop of the engine."
   (log:info "Entering main loop.")
 
-  (sdl2:with-event-loop ()
 
-    (:keydown
-     (:keysym key :state state)
-     (on-key-event *game* key state))
+  (let ((dt 0)
+        (dt-accumulator 0)
+        (last-sdl-ticks 0)
+        (current-sdl-ticks 0))
+    (sdl2:with-event-loop ()
 
-    (:keyup
-     (:keysym key :state state)
-     (on-key-event *game* key state))
+      (:keydown
+       (:keysym key :state state)
+       (on-key-event *game* key state))
 
-    (:mousemotion
-     (:x x :y y :xrel xrel :yrel yrel :state state)
-     (on-mouse-move *game* x y xrel yrel state))
+      (:keyup
+       (:keysym key :state state)
+       (on-key-event *game* key state))
 
-    (:mousebuttonup
-     (:x x :y y :state state :button button)
-     (on-mouse-button-event *game* x y button state))
+      (:mousemotion
+       (:x x :y y :xrel xrel :yrel yrel :state state)
+       (on-mouse-move *game* x y xrel yrel state))
+
+      (:mousebuttonup
+       (:x x :y y :state state :button button)
+       (on-mouse-button-event *game* x y button state))
     
-    (:mousebuttondown
-     (:x x :y y :state state :button button)
-     (on-mouse-button-event *game* x y button state))
+      (:mousebuttondown
+       (:x x :y y :state state :button button)
+       (on-mouse-button-event *game* x y button state))
 
-    (:idle ()
-           (on-idle *game*))
+      (:idle ()
+             (when *use-fixed-timestep*
+               ;; fixed-step game loop
+               (setf current-sdl-ticks (sdl2:get-ticks)
+                     dt (max 0 (float (/ (- current-sdl-ticks last-sdl-ticks)
+                                         1000)))
+                     last-sdl-ticks current-sdl-ticks
+                     dt-accumulator (clamp (+ dt-accumulator dt) 0 *max-accumulated-timestep*))
 
-    (:quit ()
-           (on-quit *game*)))
+               (loop while (> dt-accumulator *update-step*) do
+                    (on-tick *game* *update-step*)
+                    (decf dt-accumulator *update-step*)))
+             
+             (on-idle *game*)
+             (on-render *game*))
+      (:quit ()
+             (on-quit *game*))))
   
   (log:info "Leaving main loop."))
 

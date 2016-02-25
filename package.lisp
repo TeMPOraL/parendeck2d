@@ -12,6 +12,9 @@
 
            ;; some configurables (to be later moved elsewhere)
            #:*window-title*
+           #:*use-fixed-timestep*
+           #:*max-accumulated-timestep*
+           #:*update-step*
 
            ;; game class
            #:game
