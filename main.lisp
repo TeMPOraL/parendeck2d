@@ -50,7 +50,7 @@
         (dt-accumulator 0)
         (last-sdl-ticks 0)
         (current-sdl-ticks 0))
-    (sdl2:with-event-loop ()
+    (sdl2:with-event-loop (:method :poll)
 
       (:keydown
        (:keysym key :state state)
