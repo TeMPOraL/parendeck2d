@@ -43,6 +43,26 @@
 
   (sdl2:with-event-loop ()
 
+    (:keydown
+     (:keysym key :state state)
+     (on-key-event *game* key state))
+
+    (:keyup
+     (:keysym key :state state)
+     (on-key-event *game* key state))
+
+    (:mousemotion
+     (:x x :y y :xrel xrel :yrel yrel :state state)
+     (on-mouse-move *game* x y xrel yrel state))
+
+    (:mousebuttonup
+     (:x x :y y :state state :button button)
+     (on-mouse-button-event *game* x y button state))
+    
+    (:mousebuttondown
+     (:x x :y y :state state :button button)
+     (on-mouse-button-event *game* x y button state))
+
     (:idle ()
            (on-idle *game*))
 

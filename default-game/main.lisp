@@ -12,11 +12,15 @@
 (defmethod deinitialize ((game default-game))
   (log:info "Default game deinit."))
 
-(defmethod on-mouse-event ((game default-game) mouse-event)
-  (log:info "Default game mouse event."))
+(defmethod on-mouse-move ((game default-game) x y xrel yrel state))
 
-(defmethod on-key-event ((game default-game) key-event)
-  (log:info "Default game key event."))
+(defmethod on-mouse-button-event ((game default-game) x y button state)
+  (log:info "Default game mouse event.")
+  (log:debug x y button state))
+
+(defmethod on-key-event ((game default-game) key state)
+  (log:info "Default game key event.")
+  (log:debug key state))
 
 (defmethod on-idle ((game default-game)))
 

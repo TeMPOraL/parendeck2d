@@ -13,11 +13,17 @@
 (defgeneric deinitialize (game)
   (:documentation "Deinitialize `GAME'. Called before engine deinitialization."))
 
-(defgeneric on-mouse-event (game mouse-event)
-  (:documentation "Lets the `GAME' react to `MOUSE-EVENT'."))
+(defgeneric on-mouse-move (game x y xrel yrel state)
+  (:documentation "Lets the `GAME' react to mouse movements. `X' and
+  `Y' are current cursor positions. `XREL' and `YREL' are the relative
+  movements the mouse did since the last call to this event. `STATE'
+  is the button state."))
 
-(defgeneric on-key-event (game key-event)
-  (:documentation "Lets the `GAME' react to `KEY-EVENT'."))
+(defgeneric on-mouse-button-event (game x y button state)
+  (:documentation "Lets the `GAME' react to mouse button presses."))
+
+(defgeneric on-key-event (game key state)
+  (:documentation "Lets the `GAME' react to the `STATE' of a `KEY'."))
 
 (defgeneric on-idle (game)
   (:documentation "Called whenever there are no events to process in the engine. The `GAME' can use it to simulate a frame."))
@@ -45,25 +51,29 @@
   (declare (ignore game))
   (log:debug "The game did not specify deinitialization method."))
 
-(defmethod on-mouse-event ((game game) mouse-event)
-  (declare (ignore game mouse-event))
-  (log:debug "The game did not specify mouse event handler"))
+(defmethod on-mouse-move ((game game) x y xrel yrel state)
+  (declare (ignore game x y xrel yrel state))
+  (log:trace "The game did not specify mouse movement event handler."))
 
-(defmethod on-key-event ((game game) key-event)
-  (declare (ignore game key-event))
-  (log:debug "The game did not specify keyboard event handler"))
+(defmethod on-mouse-button-event ((game game) x y button state)
+  (declare (ignore game x y button state))
+  (log:debug "The game did not specify mouse button event handler."))
+
+(defmethod on-key-event ((game game) key state)
+  (declare (ignore game key state))
+  (log:debug "The game did not specify keyboard event handler."))
 
 (defmethod on-idle ((game game))
   (declare (ignore game))
-  (log:trace "The game did not specify idle handler"))
+  (log:trace "The game did not specify idle handler."))
 
 (defmethod on-tick ((game game) dt)
   (declare (ignore game dt))
-  (log:trace "The game did not specify tick handler"))
+  (log:trace "The game did not specify tick handler."))
 
 (defmethod on-quit ((game game))
   (declare (ignore game))
-  (log:debug "The game did not specify quit handler")
+  (log:debug "The game did not specify quit handler.")
   t)
 
 (defmethod on-render ((game game))
