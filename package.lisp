@@ -7,7 +7,21 @@
         #:alexandria)
   
   (:export #:*version*
+           #:*main-window*
            #:run
-           #:register-game
 
-           #:*main-window*))
+           ;; some configurables (to be later moved elsewhere)
+           #:*window-title*
+
+           ;; game class
+           #:game
+
+           #:preinit
+           #:initialize
+           #:deinitialize
+           #:on-mouse-event
+           #:on-key-event
+           #:on-idle
+           #:on-tick
+           #:on-quit
+           #:on-render))

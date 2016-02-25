@@ -3,10 +3,6 @@
 (defparameter *engine-hello-message* (concatenate 'string "Parenscript 2D Engine, version " *version*))
 (defparameter *game* nil "Game to be run.")
 
-(defun register-game (game)
-  "Sets the game that will be launched by the engine."
-  (setf *game* game))
-
 ;;; lifecycle management
 (defmacro with-engine-init (&body body)
   `(progn
@@ -15,13 +11,16 @@
           (progn ,@body)
        (deinit-engine))))
 
-(defun run ()
-  "Current entry point into the engine."
+(defun run (&optional game)
+  "Start the engine. Will load the `GAME' if provided."
   (format t "Hello World~%")
 
-  (unless *game*
-    (log:warn "No game registered; will use engine default scene.")
-    (setf *game* (make-instance 'default-game)))
+
+  (setf *game* (if game
+                   game
+                   (progn
+                     (log:warn "No game registered; will use engine default scene.")
+                     (setf *game* (make-instance 'default-game)))))
 
   (preinit *game*)
 
