@@ -1,0 +1,5 @@
+#+title: Parendeck 2D Engine
+#+startup: hidestars
+
+A rebirth of Holodeck 2D idea from my teenage years, except this time it's not C++ but Lisp :).
+
