@@ -25,6 +25,7 @@
                
                (:module "core"
                         :components ((:file "logger")
+                                     (:file "printers")
                                      (:file "game")))
 
                (:module "config"
