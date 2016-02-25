@@ -7,4 +7,7 @@
         #:alexandria)
   
   (:export #:*version*
-           #:run))
+           #:run
+           #:register-game
+
+           #:*main-window*))

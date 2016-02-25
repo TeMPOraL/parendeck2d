@@ -16,10 +16,25 @@
 
     :encoding :utf-8
 
-    :depends-on (#:alexandria)
+    :depends-on (#:alexandria
+                 #:log4cl
+                 #:sdl2)
 
     :components ((:file "package")
                  (:file "version")
+                 
+                 (:module "core"
+                          :components ((:file "logger")
+                                       (:file "game")))
+
+                 (:module "config"
+                          :components ((:file "config")
+                                       (:file "program-options")))
+
+                 (:module "renderer"
+                          :components ((:file "renderer")))
+
+                 (:module "default-game"
+                          :components ((:file "main")))
 
                  (:file "main")))
-
