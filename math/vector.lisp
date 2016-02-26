@@ -112,6 +112,9 @@
   "Compute dot product of two vectors."
   (the standard-float (reduce #'+ (map 'vector #'* a b))))
 
+(defparameter dot-product '())
+(setf (symbol-function 'dot-product) #'⋅)
+
 (defun × (a b)
   "Compute cross product of two 3D vectors."
   (make-vector-3d (- (* (vec-y a) (vec-z b))
@@ -120,3 +123,6 @@
                      (* (vec-z b) (vec-x a)))
                   (- (* (vec-x a) (vec-y b))
                      (* (vec-x b) (vec-y a)))))
+
+(defparameter cross-product '())
+(setf (symbol-function 'cross-product) #'×)
