@@ -6,4 +6,5 @@
   "Sets up log4cl for the engine."
   (uiop/filesystem:delete-file-if-exists +default-log-destination+)  ; a workaround for log4cl apparently being unable to overwrite a log file
   (log:config :daily +default-log-destination+
-              :nopretty))
+              :nopretty
+              :immediate-flush))
