@@ -1,6 +1,6 @@
 (in-package #:parendeck2d)
 
-(defparameter *engine-hello-message* (concatenate 'string "Parenscript 2D Engine, version " *version*))
+(defparameter *engine-hello-message* (concatenate 'string "Parendeck 2D Engine, version " *version*))
 (defparameter *game* nil "Game to be run.")
 
 (defparameter *use-fixed-timestep* t)
