@@ -12,8 +12,8 @@
   `(progn
      (init-engine)
      (unwind-protect
-          (progn ,@body)
-       (deinit-engine))))
+          (sdl2:in-main-thread () ,@body)
+       (sdl2:in-main-thread () (deinit-engine)))))
 
 (defun run (&optional game)
   "Start the engine. Will load the `GAME' if provided."
@@ -29,6 +29,7 @@
   (preinit *game*)
 
   (with-engine-init
+    (init-main-window)
     (initialize *game*)
     (run-main-loop)
     (deinitialize *game*)))
@@ -38,8 +39,7 @@
   (configure-logger)
   (log-engine-startup-message)
   
-  (sdl2:init :everything)
-  (init-main-window))
+  (sdl2:init :everything))
 
 (defun run-main-loop ()
   "Main loop of the engine."
