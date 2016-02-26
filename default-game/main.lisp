@@ -9,7 +9,8 @@
   ())
 
 (defmethod preinit ((game default-game))
-  (log:info "Default game pre-init."))
+  (log:info "Default game pre-init.")
+  (setf *window-title* "Parendeck 2D - no game loaded"))
 
 (defmethod initialize ((game default-game))
   (log:info "Default game init.")

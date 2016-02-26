@@ -6,7 +6,7 @@
 ;;; configurables
 (defparameter *window-width* 800)
 (defparameter *window-height* 600)
-(defparameter *window-title* "TEST WINDOW")
+(defparameter *window-title* "Parendeck 2D")
 
 (defparameter *canvas-width* 800 "Width of the virtual canvas - i.e. GL 'screen space' in ortho mode.")
 (defparameter *canvas-height* 600 "Height of the virtual canvas - i.e. GL 'screen space' in ortho mode.")

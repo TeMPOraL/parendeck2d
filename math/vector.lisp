@@ -9,14 +9,26 @@
 (defun vec-x (a)
   (elt a 0))
 
+(defun (setf vec-x) (new-value a)
+  (setf (elt a 0) new-value))
+
 (defun vec-y (a)
   (elt a 1))
+
+(defun (setf vec-y) (new-value a)
+  (setf (elt a 1) new-value))
 
 (defun vec-z (a)
   (elt a 2))
 
+(defun (setf vec-z) (new-value a)
+  (setf (elt a 2) new-value))
+
 (defun vec-w (a)
   (elt a 3))
+
+(defun (setf vec-w) (new-value a)
+  (setf (elt a 3) new-value))
 
 (declaim (ftype (function (&optional standard-float standard-float) vector-2d) make-vector-2d))
 (defun make-vector-2d (&optional (a +standard-float-zero+) (b +standard-float-zero+))
