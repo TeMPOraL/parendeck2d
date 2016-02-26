@@ -1,4 +1,4 @@
-(in-package #:parendeck2d)
+(in-package #:parendeck2d.math)
 
 (define-constant +epsilon+ single-float-epsilon :documentation "The difference between 0 and minimum floating point value used in computations.")
 

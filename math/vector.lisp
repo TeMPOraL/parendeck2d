@@ -1,4 +1,4 @@
-(in-package #:parendeck2d)
+(in-package #:parendeck2d.math)
 
 (deftype vector-2d () '(simple-array standard-float (2)))
 (deftype vector-3d () '(simple-array standard-float (3)))

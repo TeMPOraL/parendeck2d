@@ -1,7 +1,7 @@
-;;; package.lisp
+;;; packages.lisp
 
 (defpackage #:parendeck2d
-  (:nicknames :p2d)
+  (:nicknames #:p2d)
   
   (:use #:cl
         #:alexandria)
@@ -16,11 +16,33 @@
            #:*max-accumulated-timestep*
            #:*update-step*
 
-           ;; math
-           #:+epsilon+
+           ;; game class
+           #:game
+
+           #:preinit
+           #:initialize
+           #:deinitialize
+           #:on-mouse-event
+           #:on-key-event
+           #:on-idle
+           #:on-tick
+           #:on-quit
+           #:on-render))
+
+(defpackage #:parendeck2d.math
+  (:nicknames #:p2d.math #:p2dm)
+
+  (:use #:cl)
+  (:import-from #:alexandria
+                #:define-constant
+                #:clamp
+                #:rcurry)
+
+  (:export #:+epsilon+
            #:standard-float
            #:+standard-float-zero+
            #:square
+           #:clamp
            #:clamp-vector-elements
            #:deg->rad
            #:rad->deg
@@ -54,18 +76,4 @@
            #:cross-product
            #:dot-product
            #:⋅
-           #:×
-           
-
-           ;; game class
-           #:game
-
-           #:preinit
-           #:initialize
-           #:deinitialize
-           #:on-mouse-event
-           #:on-key-event
-           #:on-idle
-           #:on-tick
-           #:on-quit
-           #:on-render))
+           #:×))

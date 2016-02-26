@@ -20,7 +20,7 @@
                #:log4cl
                #:sdl2)
 
-  :components ((:file "package")
+  :components ((:file "packages")
                (:file "version")
                
                (:module "core"
