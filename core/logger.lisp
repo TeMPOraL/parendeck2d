@@ -14,9 +14,10 @@
   (unless *logging-condition*
     (let ((*logging-condition* t))
       (typecase condition
-        (error (log:fatal "Lisp error: ~A." condition))
         (warning (log:warn "Lisp warning: ~A." condition))
-        (t (log:fatal "Lisp condition: ~A" condition))))))
+        (t (progn (log:fatal "Lisp condition: ~A" condition)
+                  (log:fatal "~A" (with-output-to-string (s)
+                                    (uiop/image:print-condition-backtrace condition :stream s)))))))))
 
 (defmacro with-logging-conditions (&body forms)
   "Set up a passthrough condition handler that will log all signalled conditions."
