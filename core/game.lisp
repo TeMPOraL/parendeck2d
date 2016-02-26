@@ -22,8 +22,8 @@
 (defgeneric on-mouse-button-event (game x y button state)
   (:documentation "Lets the `GAME' react to mouse button presses."))
 
-(defgeneric on-key-event (game key state)
-  (:documentation "Lets the `GAME' react to the `STATE' of a `KEY'."))
+(defgeneric on-key-event (game key state repeat)
+  (:documentation "Lets the `GAME' react to the `STATE' of a `KEY' and know if it was a `REPEAT'ed press."))
 
 (defgeneric on-idle (game)
   (:documentation "Called whenever there are no events to process in the engine. The `GAME' can use it to simulate a frame."))
@@ -59,8 +59,8 @@
   (declare (ignore game x y button state))
   (log:debug "The game did not specify mouse button event handler."))
 
-(defmethod on-key-event ((game game) key state)
-  (declare (ignore game key state))
+(defmethod on-key-event ((game game) key state repeat)
+  (declare (ignore game key state repeat))
   (log:debug "The game did not specify keyboard event handler."))
 
 (defmethod on-idle ((game game))

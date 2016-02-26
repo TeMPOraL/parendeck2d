@@ -3,3 +3,11 @@
 
 A rebirth of Holodeck 2D idea from my teenage years, except this time it's not C++ but Lisp :).
 
+This time the architecture is... incremental, i.e. I'll be throwing
+code at the pile until some structure manifests itself, and then
+refactor accordingly.
+
+* Games currently using the engine
+
+- [[https://github.com/TeMPOraL/tswr-asteroids/][TSW Redux: Asteroids]] (PROTOTYPE) (WIP)
+

@@ -4,7 +4,7 @@
 (defparameter *game* nil "Game to be run.")
 
 (defparameter *use-fixed-timestep* t)
-(defparameter *update-step* (float (/ 1 30)))
+(defparameter *update-step* (float (/ 1 60)))
 (defparameter *max-accumulated-timestep* 2.0)
 
 ;;; lifecycle management
@@ -53,12 +53,12 @@
     (sdl2:with-event-loop (:method :poll)
 
       (:keydown
-       (:keysym key :state state)
-       (on-key-event *game* key state))
+       (:keysym key :state state :repeat repeat)
+       (on-key-event *game* key state repeat))
 
       (:keyup
-       (:keysym key :state state)
-       (on-key-event *game* key state))
+       (:keysym key :state state :repeat repeat)
+       (on-key-event *game* key state repeat))
 
       (:mousemotion
        (:x x :y y :xrel xrel :yrel yrel :state state)

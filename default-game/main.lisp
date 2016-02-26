@@ -30,10 +30,10 @@
   (log:info "Default game mouse event.")
   (log:debug x y button state))
 
-(defmethod on-key-event ((game default-game) key state)
+(defmethod on-key-event ((game default-game) key state repeat)
   (log:info "Default game key event.")
-  (log:debug key state)
-  (sdl2:push-event :quit))
+  (log:debug key state repeat)
+  (when (= repeat 1) (sdl2:push-event :quit)))
 
 (defmethod on-idle ((game default-game)))
 
