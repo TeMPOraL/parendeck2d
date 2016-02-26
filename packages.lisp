@@ -46,6 +46,7 @@
            #:clamp-vector-elements
            #:deg->rad
            #:rad->deg
+           #:random-float
 
            #:vector-2d
            #:vector-3d

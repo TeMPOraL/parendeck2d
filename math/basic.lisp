@@ -30,3 +30,8 @@
   (defun rad->deg (rad)
     (declare (optimize (speed 3) (safety 0)))
     (the standard-float (* rad deg/rad))))
+
+(defun random-float (&optional (min 0.0) (max 1.0) (div 10000.0))
+  (let ((random-val (/ (random div) div))
+        (range (- max min)))
+    (coerce (+ (* random-val range) min) 'standard-float)))
