@@ -34,7 +34,8 @@
   (gl:viewport 0 0 *window-width* *window-height*)
 
   (gl:matrix-mode :projection)
-  (gl:ortho 0 *canvas-width* *canvas-height* 0 -1 1)
+  ;; (gl:ortho 0 *canvas-width* *canvas-height* 0 -1 1)
+  (gl:ortho -2 2 -2 2 -2 2)
   
   (gl:matrix-mode :modelview)
   (gl:load-identity)
