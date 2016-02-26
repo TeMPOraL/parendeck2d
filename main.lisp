@@ -10,14 +10,17 @@
 ;;; lifecycle management
 (defmacro with-engine-init (&body body)
   `(progn
-     (init-engine)
+     (with-logging-conditions (init-engine))
      (unwind-protect
-          (sdl2:in-main-thread () ,@body)
-       (sdl2:in-main-thread () (deinit-engine)))))
+          (sdl2:in-main-thread ()
+            (with-logging-conditions ,@body))
+       (sdl2:in-main-thread ()
+         (with-logging-conditions (deinit-engine))))))
 
 (defun run (&optional game)
   "Start the engine. Will load the `GAME' if provided."
   (configure-logger)
+  
   (log-engine-startup-message)
 
   (setf *game* (if game
@@ -95,7 +98,6 @@
   (log:info "Deinitializing the engine.")
   (deinit-main-window)
   (sdl2:quit)
-
   (log:info "Goodbye!"))
 
 ;;; other

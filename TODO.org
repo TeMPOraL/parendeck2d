@@ -6,8 +6,8 @@
 * Things to do
 ** Functionality
 *** Logging
-**** TODO Get the logger to register and log down all conditions.
-**** TODO Get the logger to flush the file ASAP, so that we won't loose data in case of a crash.
+**** DONE Get the logger to register and log down all conditions.
+**** DONE Get the logger to flush the file ASAP, so that we won't loose data in case of a crash.
 
 *** Configuration
     Something to read configs from an external source.
