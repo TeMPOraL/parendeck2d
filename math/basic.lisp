@@ -18,8 +18,8 @@
 (defun clamp-vector-elements (vec a b)
   (map 'vector (rcurry #'clamp a b) vec))
 
-(let ((deg/rad (/ 180 pi))
-      (rad/deg (/ pi 180)))
+(let ((deg/rad (coerce (/ 180 pi) 'standard-float))
+      (rad/deg (coerce (/ pi 180) 'standard-float)))
   (declare (ftype (function (standard-float) standard-float)
                   deg->rad rad->deg)
            (inline deg->rad rad->deg))

@@ -73,6 +73,8 @@
            #:vector-value
            #:normalized-vector
            #:reflect-vector
+           #:rotate-vector-2d
+           #:rotated-vector-2d
            #:cross-product
            #:dot-product
            #:⋅

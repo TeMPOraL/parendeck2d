@@ -105,6 +105,24 @@
   (subtract-vectors vec
                     (scaled-vector normal (* 2 (⋅ vec normal)))))
 
+(defun rotate-vector-2d (vec theta)
+  "Rotates `VEC'by `THETA', CCW."
+  (let ((cos (cos theta))
+        (sin (sin theta)))
+    (psetf (vec-x vec) (- (* (vec-x vec) cos)
+                          (* (vec-y vec) sin))
+           (vec-y vec) (+ (* (vec-x vec) sin)
+                          (* (vec-y vec) cos)))))
+
+(defun rotated-vector-2d (vec theta)
+  "Returns a copy of `VEC' rotated by `THETA', CCW."
+  (let ((cos (cos theta))
+        (sin (sin theta)))
+    (make-vector-2d (- (* (vec-x vec) cos)
+                       (* (vec-y vec) sin))
+                    (+ (* (vec-x vec) sin)
+                          (* (vec-y vec) cos)))))
+
 ;;; TEST
 
 (defun reflect-vector-test ()
