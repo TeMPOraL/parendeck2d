@@ -1,6 +1,9 @@
 (in-package #:parendeck2d)
 
 (defparameter *rotation* 0)
+(defparameter *dg-ticks-start* 0)
+(defparameter *dg-ticks-end* 0)
+(defparameter *dg-n-frames* 0)
 
 (defclass default-game (game)
   ())
@@ -11,10 +14,15 @@
 (defmethod initialize ((game default-game))
   (log:info "Default game init.")
   
-  (setf *rotation* 0))
+  (setf *rotation* 0)
+  (setf *dg-ticks-start* (sdl2:get-ticks)))
 
 (defmethod deinitialize ((game default-game))
-  (log:info "Default game deinit."))
+  (log:info "Default game deinit.")
+  (setf *dg-ticks-end* (sdl2:get-ticks))
+
+  (log:info "Got ~A FPS." (float (/ *dg-n-frames* (/ (- *dg-ticks-end* *dg-ticks-start*) 1000))))
+  )
 
 (defmethod on-mouse-move ((game default-game) x y xrel yrel state))
 
@@ -53,4 +61,6 @@
   (gl:vertex 1.0 -1.0)
   (gl:end)
   (gl:flush)
-  (sdl2:gl-swap-window *main-window*))
+  (sdl2:gl-swap-window *main-window*)
+
+  (incf *dg-n-frames*))
