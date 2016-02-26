@@ -20,7 +20,8 @@
 
 (defmethod on-key-event ((game default-game) key state)
   (log:info "Default game key event.")
-  (log:debug key state))
+  (log:debug key state)
+  (sdl2:push-event :quit))
 
 (defmethod on-idle ((game default-game)))
 
@@ -30,5 +31,7 @@
   (log:info "Default game quit event - quitting.")
   t)
 
-(defmethod on-render ((game default-game)))
-
+(defmethod on-render ((game default-game))
+  (gl:clear :color-buffer)
+  
+  (sdl2:gl-swap-window *main-window*))
