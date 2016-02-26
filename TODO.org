@@ -1,0 +1,54 @@
+#+title: TODO
+#+startup: hidestars
+#+todo: TODO DOING | DONE CANCELLED
+#+todo: BUG FIXING | FIXED CANT_REPRODUCE
+
+* Things to do
+** Functionality
+*** Logging
+**** TODO Get the logger to register and log down all conditions.
+**** TODO Get the logger to flush the file ASAP, so that we won't loose data in case of a crash.
+
+*** Configuration
+    Something to read configs from an external source.
+    Also that would make games avoid writing over global engine variables so much.
+
+*** Asset management
+    Needs to work with both bundled games and ones run interactively from sources.
+
+*** Test scene (default-game)
+
+**** TODO Make it display engine name
+
+**** TODO Make it display engine logo
+
+***** TODO Make a logo
+
+**** TODO Add an FPS counter
+
+*** UI Overlays
+**** TODO FPS counter overlay
+
+**** TODO FPS graph overlay
+
+**** TODO (Maybe) Keyboard/Mouse events overlay
+     (showing last few events that happened)
+
+** Utilities
+*** TODO Color wrapper
+    Something to make using colors better / more convenient.
+
+*** DONE Basic OpenGL shapes in a nicer interface (point-and-draw)
+    Things like: box, square, circles, regular polygons, etc.
+
+*** TODO Basic collision detection utilities
+
+**** TODO Box-box intersection
+**** TODO Box-sphere intersection
+**** TODO Box-line intersection
+**** TODO Sphere-line intersection
+**** TODO Something for more complex shapes
+
+* Bugs
+
+  Stored in issues.

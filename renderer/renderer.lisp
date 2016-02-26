@@ -21,7 +21,8 @@
   (log:info "Acquiing GL context.")
   (setf *gl-context* (sdl2:gl-create-context *main-window*))
   (sdl2:gl-make-current *main-window* *gl-context*)
-  (init-opengl))
+  (log-opengl-info)
+  (init-game-canvas))
 
 (defun deinit-main-window ()
   (log:info "Deleting GL context.")
@@ -30,7 +31,14 @@
   (log:info "Destroying main window.")
   (sdl2:destroy-window *main-window*))
 
-(defun init-opengl ()
+(defun log-opengl-info ()
+  (log:info "GL version: ~A." (gl:get* :version))
+  (log:info "GL vendor: ~A." (gl:get* :vendor))
+  (log:info "GL renderer: ~A." (gl:get* :renderer))
+  (log:info "GLSL version: ~A." (gl:get* :shading-language-version))
+  (log:info "GL extensions: ~A." (gl:get* :extensions)))
+
+(defun init-game-canvas ()
   (gl:viewport 0 0 *window-width* *window-height*)
 
   (gl:matrix-mode :projection)

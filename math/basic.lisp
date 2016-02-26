@@ -5,6 +5,7 @@
 (deftype standard-float () 'single-float)
 
 (define-constant +standard-float-zero+ (coerce 0 'standard-float))
+(define-constant +2pi+ (coerce (* 2 pi) 'standard-float))
 
 (declaim (ftype (function (float) standard-float) square))
 (defun square (x)

@@ -39,6 +39,9 @@
                (:module "renderer"
                         :components ((:file "renderer")))
 
+               (:module "gl-utils"
+                        :components ((:file "shapes")))
+
                (:module "default-game"
                         :components ((:file "main")))
 

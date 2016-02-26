@@ -41,6 +41,7 @@
   (:export #:+epsilon+
            #:standard-float
            #:+standard-float-zero+
+           #:+2pi+
            #:square
            #:clamp
            #:clamp-vector-elements
@@ -80,3 +81,18 @@
            #:dot-product
            #:⋅
            #:×))
+
+(defpackage #:parendeck2d.gl-utils
+  (:nicknames #:p2d.gl-utils #:p2d.glu #:p2dg)
+
+  (:use #:cl
+        #:parendeck2d.math)
+
+  (:export #:draw-circle
+           #:draw-circle-outline
+           #:draw-triangle
+           #:draw-triangle-outline
+           #:draw-square
+           #:draw-square-outline
+           #:draw-regular-polygon
+           #:draw-regular-polygon-outline))

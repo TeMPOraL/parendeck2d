@@ -14,6 +14,8 @@
 
 (defmethod initialize ((game default-game))
   (log:info "Default game init.")
+
+  (gl:clear-color 0.0 0.0 0.0 1.0)
   
   (setf *rotation* 0)
   (setf *dg-ticks-start* (sdl2:get-ticks)))
@@ -39,7 +41,6 @@
 (defmethod on-idle ((game default-game)))
 
 (defmethod on-tick ((game default-game) dt)
-
   (incf *rotation* (* 100 dt))
   (when (> *rotation* 360)
     (decf *rotation* 360)))
@@ -53,15 +54,62 @@
   (gl:matrix-mode :modelview)
   (gl:load-identity)
 
-  (gl:translate 400 300 0)
-  (gl:rotate *rotation* 0 0 1)
-  
-  (gl:begin :triangles)
-  (gl:color 1.0 0.0 0.0)
-  (gl:vertex 0.0 100.0)
-  (gl:vertex -100.0 -100.0)
-  (gl:vertex 100.0 -100.0)
-  (gl:end)
+  (gl:translate 30 50 0)
+
+  (gl:with-pushed-matrix
+    (gl:rotate *rotation* 0 0 1)
+    (gl:scale 10 10 10 )
+    (p2dg:draw-circle))
+
+  (gl:translate 30 0 0)
+
+  (gl:with-pushed-matrix
+    (gl:rotate *rotation* 0 0 1)
+    (gl:scale 10 10 10)
+    (p2dg:draw-circle-outline))
+
+  (gl:translate 30 0 0)
+
+  (gl:with-pushed-matrix
+    (gl:rotate *rotation* 0 0 1)
+    (gl:scale 10 10 10)
+    (p2dg:draw-triangle))
+
+  (gl:translate 30 0 0)
+
+  (gl:with-pushed-matrix
+    (gl:rotate *rotation* 0 0 1)
+    (gl:scale 10 10 10)
+    (p2dg:draw-triangle-outline))
+
+  (gl:translate 30 0 0)
+
+  (gl:with-pushed-matrix
+    (gl:rotate *rotation* 0 0 1)
+    (gl:scale 10 10 10)
+    (p2dg:draw-square))
+
+  (gl:translate 30 0 0)
+
+  (gl:with-pushed-matrix
+    (gl:rotate *rotation* 0 0 1)
+    (gl:scale 10 10 10)
+    (p2dg:draw-square-outline))
+
+  (gl:translate 30 0 0)
+
+  (gl:with-pushed-matrix
+    (gl:rotate *rotation* 0 0 1)
+    (gl:scale 10 10 10)
+    (p2dg:draw-regular-polygon 5))
+
+  (gl:translate 30 0 0)
+
+  (gl:with-pushed-matrix
+    (gl:rotate *rotation* 0 0 1)
+    (gl:scale 10 10 10)
+    (p2dg:draw-regular-polygon-outline 6))
+
   (gl:flush)
   (sdl2:gl-swap-window *main-window*)
 

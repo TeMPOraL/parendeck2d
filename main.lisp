@@ -17,8 +17,8 @@
 
 (defun run (&optional game)
   "Start the engine. Will load the `GAME' if provided."
-  (format t "Hello World~%")
-
+  (configure-logger)
+  (log-engine-startup-message)
 
   (setf *game* (if game
                    game
@@ -36,9 +36,7 @@
 
 (defun init-engine ()
   "Initialize all engine components."
-  (configure-logger)
-  (log-engine-startup-message)
-  
+  (log-sysinfo)
   (sdl2:init :everything))
 
 (defun run-main-loop ()
@@ -102,9 +100,9 @@
 
 ;;; other
 (defun log-engine-startup-message ()
-  (log:info "~A" *engine-hello-message*)
+  (log:info "~A" *engine-hello-message*))
 
-  ;; sysinfo
+(defun log-sysinfo ()
   (log:info "Running on ~A - ~A ~A ~A ~A ~A."
             (uiop/os:hostname)
             (uiop/os:operating-system)
@@ -114,15 +112,16 @@
             (uiop/os:implementation-identifier))
 
   ;; graphics platform info
+
   (log:info "Using SDL version ~A.~A.~A" sdl2-ffi:+sdl-major-version+ sdl2-ffi:+sdl-minor-version+ sdl2-ffi:+sdl-patchlevel+)
-  (log:debug (sdl2:cpu-count))
-  (log:debug (sdl2:cpu-cache-line-size))
-  (log:debug (sdl2:alti-vec-p))
-  (log:debug (sdl2:mmx-p))
-  (log:debug (sdl2:rdtsc-p))
-  (log:debug (sdl2:sse-p))
-  (log:debug (sdl2:sse2-p))
-  (log:debug (sdl2:sse3-p))
-  (log:debug (sdl2:sse41-p))
-  (log:debug (sdl2:sse42-p)))
+  (log:info (sdl2:cpu-count))
+  (log:info (sdl2:cpu-cache-line-size))
+  (log:info (sdl2:alti-vec-p))
+  (log:info (sdl2:mmx-p))
+  (log:info (sdl2:rdtsc-p))
+  (log:info (sdl2:sse-p))
+  (log:info (sdl2:sse2-p))
+  (log:info (sdl2:sse3-p))
+  (log:info (sdl2:sse41-p))
+  (log:info (sdl2:sse42-p)))
 
