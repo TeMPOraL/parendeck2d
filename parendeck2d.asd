@@ -28,6 +28,10 @@
                                      (:file "printers")
                                      (:file "game")))
 
+               (:module "math"
+                        :components ((:file "basic")
+                                     (:file "vector")))
+
                (:module "config"
                         :components ((:file "config")
                                      (:file "program-options")))
