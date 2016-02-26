@@ -52,13 +52,14 @@
   (gl:matrix-mode :modelview)
   (gl:load-identity)
 
+  (gl:translate 400 300 0)
   (gl:rotate *rotation* 0 0 1)
   
   (gl:begin :triangles)
   (gl:color 1.0 0.0 0.0)
-  (gl:vertex 0.0 1.0)
-  (gl:vertex -1.0 -1.0)
-  (gl:vertex 1.0 -1.0)
+  (gl:vertex 0.0 100.0)
+  (gl:vertex -100.0 -100.0)
+  (gl:vertex 100.0 -100.0)
   (gl:end)
   (gl:flush)
   (sdl2:gl-swap-window *main-window*)
