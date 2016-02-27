@@ -8,6 +8,7 @@
 *** Logging
 **** DONE Get the logger to register and log down all conditions.
 **** DONE Get the logger to flush the file ASAP, so that we won't loose data in case of a crash.
+**** DONE Get the logger to log a backtrace in case of a fatal error.
 
 *** Configuration
     Something to read configs from an external source.
@@ -15,6 +16,9 @@
 
 *** Asset management
     Needs to work with both bundled games and ones run interactively from sources.
+
+*** ECS
+    We'll be implementing an entity/component/system architecture for managing the game.
 
 *** Test scene (default-game)
 

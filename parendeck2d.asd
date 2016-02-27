@@ -40,7 +40,9 @@
                         :components ((:file "renderer")))
 
                (:module "gl-utils"
-                        :components ((:file "shapes")))
+                        :components ((:file "color")
+                                     (:file "convenience")
+                                     (:file "shapes")))
 
                (:module "default-game"
                         :components ((:file "main")))

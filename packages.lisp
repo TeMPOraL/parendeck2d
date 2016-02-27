@@ -88,7 +88,20 @@
   (:use #:cl
         #:parendeck2d.math)
 
-  (:export #:draw-circle
+  (:export #:color-4
+           #:col-r
+           #:col-g
+           #:col-b
+           #:col-a
+           #:make-color-4
+
+           #:translate2
+           #:translate3
+           #:scale2-uniform
+           #:scale3-uniform
+           #:color4
+
+           #:draw-circle
            #:draw-circle-outline
            #:draw-triangle
            #:draw-triangle-outline
