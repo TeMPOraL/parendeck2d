@@ -8,14 +8,18 @@
 (defparameter *max-accumulated-timestep* 2.0)
 
 ;;; lifecycle management
-(defmacro with-engine-init (&body body)
-  `(progn
-     (with-logging-conditions (init-engine))
-     (unwind-protect
-          (sdl2:in-main-thread ()
-            (with-logging-conditions ,@body))
+(defun call-with-engine-initialized (func)
+  (with-logging-conditions (init-engine))
+  (unwind-protect
        (sdl2:in-main-thread ()
-         (with-logging-conditions (deinit-engine))))))
+         (with-logging-conditions
+             (funcall func)))
+    (sdl2:in-main-thread ()
+      (with-logging-conditions
+          (deinit-engine)))))
+
+(defmacro with-engine-initialized (&body body)
+  `(call-with-engine-initialized (lambda () ,@body)))
 
 (defun run (&optional game)
   "Start the engine. Will load the `GAME' if provided."
@@ -31,7 +35,7 @@
 
   (preinit *game*)
 
-  (with-engine-init
+  (with-engine-initialized
     (init-main-window)
     (initialize *game*)
     (run-main-loop)

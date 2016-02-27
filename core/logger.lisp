@@ -19,7 +19,10 @@
                   (log:fatal "~A" (with-output-to-string (s)
                                     (uiop/image:print-condition-backtrace condition :stream s)))))))))
 
+(defun call-with-logging-conditions (func)
+  (handler-bind ((t #'log-condition))
+    (funcall func)))
+
 (defmacro with-logging-conditions (&body forms)
   "Set up a passthrough condition handler that will log all signalled conditions."
-  `(handler-bind ((t #'log-condition))
-     ,@forms))
+  `(call-with-logging-conditions (lambda () ,@forms)))
