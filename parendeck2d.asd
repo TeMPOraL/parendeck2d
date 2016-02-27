@@ -44,6 +44,14 @@
                                      (:file "convenience")
                                      (:file "shapes")))
 
+               (:module "ecs"
+                        :components ((:file "entity")
+                                     (:file "component")
+                                     (:file "system")
+                                     (:file "manager")
+                                     ;; later: :module "components" ..., :module "systems" ... for predefined stuff
+                                     ))
+
                (:module "default-game"
                         :components ((:file "main")))
 

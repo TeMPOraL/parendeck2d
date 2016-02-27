@@ -11,3 +11,8 @@ refactor accordingly.
 
 - [[https://github.com/TeMPOraL/tswr-asteroids/][TSW Redux: Asteroids]] (PROTOTYPE) (WIP)
 
+* Credits
+
+** Entity-Component-System
+   The initial concept was copied from [[https://github.com/lispgames/ECS][ECS]] by Michael Fiano.
+   

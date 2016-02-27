@@ -109,3 +109,37 @@
            #:draw-square-outline
            #:draw-regular-polygon
            #:draw-regular-polygon-outline))
+
+(defpackage #:parendeck2d.ecs
+  (:nicknames #:p2d.ecs #:p2de)
+
+  (:use #:cl
+        #:alexandria)
+
+  (:export #:entity
+           #:entity-id
+           #:tag
+           #:components
+           #:component-names
+           #:add-component
+           #:remove-component
+           #:register-entity
+           #:unregister-entity
+           #:unregister-entity*
+           #:tag-entity
+           #:tag-entity*
+           #:make-entity
+           #:batch-make-entities
+           #:entity-by-id
+           #:entity-by-tag
+
+           #:component
+           #:defcomponent
+
+           #:system
+           #:find-system
+           #:defsystem
+           #:do-system
+
+           #:*ecs-manager*
+           #:tick))
