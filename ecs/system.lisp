@@ -20,9 +20,16 @@
      (defclass ,name (system)
        ((name :initform ',name)
         (required :initform ',@required)))
-     (if-let ((s (find-system ',name)))
-       (setf (required s) ',@required)
-       (appendf (systems *ecs-manager*) (list (make-instance ',name))))))
+     (when *ecs-manager*
+      (if-let ((s (find-system ',name)))
+        (setf (required s) ',@required)
+        (appendf (systems *ecs-manager*) (list (make-instance ',name)))))))
+
+(defun register-system (name)
+  (let ((new (make-instance name)))
+   (if-let ((s (find-system name)))
+     (setf (required s) (required new))
+     (appendf (systems *ecs-manager*) (list new)))))
 
 (defmethod do-system (system entity dt)
   (log:trace "Default do-system called."))

@@ -7,6 +7,8 @@
                  :initform 0)
    (entities :accessor entities
              :initform (make-hash-table))
+   (to-delete :accessor to-delete
+              :initform nil)
    (tags :accessor tags
          :initform (make-hash-table))
    (systems :accessor systems
@@ -24,12 +26,18 @@
   "Allocates a new ID for an entity; reuses a freed ID if available, otherwise generates a new one."
   (error "Not yet implemented."))
 
+(defun delete-entities-scheduled-for-deletion ()
+  (dolist (entity (to-delete *ecs-manager*))
+    (delete-entity entity))
+  (setf (to-delete *ecs-manager*) '()))
+
 ;;; FIXME this *needs* to be done differently
 (defun tick (dt)
   "Used to step through all systems each iteration of the game loop."
   (dolist (s (systems *ecs-manager*))
     (dolist (id (entities s))
-      (do-system s (entity-by-id id dt)))))
+      (do-system s (entity-by-id id) dt)))
+  (delete-entities-scheduled-for-deletion))
 
 ;;; different attempt
 (defun tick-simulation-systems (dt)

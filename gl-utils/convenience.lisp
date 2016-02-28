@@ -12,6 +12,10 @@
                 (vec-y vec)
                 (vec-z vec)))
 
+(declaim (inline rotatez))
+(defun rotatez* (angle)
+  (gl:rotate (p2dm:rad->deg angle) 0 0 1))
+
 (declaim (inline scale2-uniform))
 (defun scale2-uniform (scale)
   (gl:scale scale scale 1))

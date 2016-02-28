@@ -97,6 +97,7 @@
 
            #:translate2
            #:translate3
+           #:rotatez*
            #:scale2-uniform
            #:scale3-uniform
            #:color4
@@ -123,12 +124,14 @@
            #:component-names
            #:add-component
            #:remove-component
+           #:find-component
            #:register-entity
            #:unregister-entity
            #:unregister-entity*
            #:tag-entity
            #:tag-entity*
            #:make-entity
+           #:schedule-entity-for-deletion
            #:batch-make-entities
            #:entity-by-id
            #:entity-by-tag
@@ -139,6 +142,7 @@
            #:system
            #:find-system
            #:defsystem
+           #:register-system
            #:do-system
 
            #:*ecs-manager*

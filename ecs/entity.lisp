@@ -32,7 +32,7 @@
   (deletef (components entity) name :key #'name)
   (update-system entity)
   (unless (components entity)
-    (unregister-entity (entity-id entity))))
+    (unregister-entity* (entity-id entity))))
 
 (defun register-entity (entity)         ;TODO move to manager
   "Register an `ENTITY' with the manager."
@@ -40,7 +40,7 @@
 
 (defun unregister-entity (entity)           ;TODO move to manager
   "Unregister an `ENTITY' with the manager."
-  (unregister-entity* (entity-id id)))
+  (unregister-entity* (entity-id entity)))
 
 (defun unregister-entity* (id)           ;TODO move to manager
   "Unregister an entity with a given `ID' with the manager."
@@ -72,6 +72,18 @@
     (when tag
       (tag-entity* (entity-id entity) tag))
     entity))
+
+(defun delete-entity (entity)
+  "Deletes the entity from the ECS manager and all systems. Called
+automatically by the ECS manager. To delete an entity from within the `DO-SYSTEM' code,
+use `SCHEDULE-ENTITY-FOR-DELETION' instead."
+  (dolist (component (copy-list (components entity)))
+    (remove-component entity (name component)))
+  (when (tag entity)
+    (untag-entity entity)))
+
+(defun schedule-entity-for-deletion (entity)
+  (pushnew entity (to-delete *ecs-manager*) :key #'entity-id))
 
 (defmacro batch-make-entities ((&rest items) (&rest components) &body body)
   "Macro for creating multiple entities with the same components."
