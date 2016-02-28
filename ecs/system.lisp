@@ -24,4 +24,5 @@
        (setf (required s) ',@required)
        (appendf (systems *ecs-manager*) (list (make-instance ',name))))))
 
-(defmethod do-system (system entity))
+(defmethod do-system (system entity dt)
+  (log:trace "Default do-system called."))

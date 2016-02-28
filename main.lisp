@@ -44,12 +44,12 @@
 (defun init-engine ()
   "Initialize all engine components."
   (log-sysinfo)
-  (sdl2:init :everything))
+  (sdl2:init :everything)
+  (p2de:init-ecs))
 
 (defun run-main-loop ()
   "Main loop of the engine."
   (log:info "Entering main loop.")
-
 
   (let ((dt 0)
         (dt-accumulator 0)
@@ -87,10 +87,15 @@
                      dt-accumulator (clamp (+ dt-accumulator dt) 0 *max-accumulated-timestep*))
 
                (loop while (> dt-accumulator *update-step*) do
+                    (p2de:tick-simulation-systems *update-step*)
                     (on-tick *game* *update-step*)
                     (decf dt-accumulator *update-step*)))
+
+             ;; TODO clause for non-fixed-timestep systems
              
              (on-idle *game*)
+             (p2de:tick dt)             ;FIXME temporary
+             (p2de:tick-frame-systems dt)
              (on-render *game*))
       (:quit ()
              (on-quit *game*))))
@@ -101,6 +106,7 @@
   "Deinitialize the engine."
   (log:info "Deinitializing the engine.")
   (deinit-main-window)
+  (p2de:deinit-ecs)
   (sdl2:quit)
   (log:info "Goodbye!"))
 

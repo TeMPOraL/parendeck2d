@@ -49,7 +49,10 @@
                                      (:file "component")
                                      (:file "system")
                                      (:file "manager")
-                                     ;; later: :module "components" ..., :module "systems" ... for predefined stuff
+                                     ;; (:module "components"
+                                     ;;          :components ())
+                                     ;; (:module "systems"
+                                     ;;          :components ())
                                      ))
 
                (:module "default-game"

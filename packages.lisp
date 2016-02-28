@@ -142,4 +142,9 @@
            #:do-system
 
            #:*ecs-manager*
-           #:tick))
+           #:init-ecs
+           #:deinit-ecs
+           #:tick
+           #:tick-simulation-systems
+           #:tick-frame-systems
+           #:tick-all-systems))
