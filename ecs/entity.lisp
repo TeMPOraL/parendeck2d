@@ -90,4 +90,4 @@
 
 (defmethod print-object ((object entity) stream)
   (print-unreadable-object (object stream :type t)
-    (format stream "#~A [~A] (~{~S~^ ~})" (component-names object))))
+    (format stream "#~A [~A] (~{~A~^ ~})" (entity-id object) (tag object) (component-names object))))
