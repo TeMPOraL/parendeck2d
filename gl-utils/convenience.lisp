@@ -12,7 +12,7 @@
                 (vec-y vec)
                 (vec-z vec)))
 
-(declaim (inline rotatez))
+(declaim (inline rotatez*))
 (defun rotatez* (angle)
   (gl:rotate (p2dm:rad->deg angle) 0 0 1))
 
