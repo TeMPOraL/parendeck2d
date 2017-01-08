@@ -18,7 +18,8 @@
   
   :depends-on (#:alexandria
                #:log4cl
-               #:sdl2)
+               #:sdl2
+               #:cl-opengl)
 
   :components ((:file "packages")
                (:file "version")
