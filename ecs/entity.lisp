@@ -8,7 +8,6 @@
    (components :accessor components
                :initform nil)))
 
-
 (defun component-names (entity)
   "Return a list of names of the components for an `ENTITY'."
   (mapcar #'name (components entity)))
