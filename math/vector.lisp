@@ -85,8 +85,11 @@
   "Negates current vector."
   (map-into vec1 #'- vec1))
 
+(defun distance-between-vectors-squared (vec1 vec2)
+  (reduce #'+ (map 'vector (lambda (x y) (square (- x y))) vec1 vec2)))
+
 (defun distance-between-vectors (vec1 vec2)
-  (sqrt (reduce #'+ (map 'vector (lambda (x y) (square (- x y))) vec1 vec2))))
+  (sqrt (distance-between-vectors-squared vec1 vec2)))
 
 (defun vector-value-squared (vec1)
   (reduce (lambda (total x) (+ total (square x))) vec1 :initial-value 0.0))

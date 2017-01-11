@@ -70,6 +70,7 @@
            #:scale-vector
            #:negative-vector
            #:negate-vector
+           #:distance-between-vectors-squared
            #:distance-between-vectors
            #:vector-value-squared
            #:vector-value
