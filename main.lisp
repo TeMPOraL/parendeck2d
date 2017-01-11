@@ -94,7 +94,6 @@
              ;; TODO clause for non-fixed-timestep systems
              
              (on-idle *game*)
-             (p2de:tick dt)             ;FIXME temporary
              (p2de:tick-frame-systems dt)
              (on-render *game*))
       (:quit ()

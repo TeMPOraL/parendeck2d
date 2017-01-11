@@ -32,24 +32,26 @@
   (setf (to-delete *ecs-manager*) '()))
 
 ;;; FIXME this *needs* to be done differently
-(defun tick (dt)
-  "Used to step through all systems each iteration of the game loop."
+(defun tick (type dt)
+  "Used to step through all systems of given `TYPE'."
   (dolist (s (systems *ecs-manager*))
-    (dolist (id (entities s))
-      (do-system s (entity-by-id id) dt)))
+    (when (eql (system-type s) type)
+      (dolist (id (entities s))
+        (do-system s (entity-by-id id) dt))))
+  ;; FIXME need one well-defined moment for deleting entities!
+  ;; (right now, entities are deleted at the end of ticking of a particular type of system)
   (delete-entities-scheduled-for-deletion))
 
 ;;; different attempt
 (defun tick-simulation-systems (dt)
   "Ticks all the systems that are supposed to run in simulation time (e.g. logic, physics, etc.)."
-  ;; TODO
-  (declare (ignore dt)))
+  (tick :simulation dt))
 
 (defun tick-frame-systems (dt)
   "Ticks all the systems that are supposed to run in render time."
-  ;; TODO
-  (declare (ignore dt)))
+  (tick :frame dt))
 
 (defun tick-all-systems (dt)
   "Ticks all systems."
-  (declare (ignore dt)))
+  (tick-simulation-systems dt)
+  (tick-frame-systems dt))

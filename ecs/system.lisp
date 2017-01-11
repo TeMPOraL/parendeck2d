@@ -8,12 +8,14 @@
              :initform nil)
    (entities :accessor entities
              :initform nil)
+   (system-type :accessor system-type
+                :initform :simulation) ;can be either :simulation or :frame (FIXME make it an "enumerated type" somehow)
    (priority :accessor priority
              :initform +default-system-priority+)))
 
 (defmethod print-object ((object system) stream)
   (print-unreadable-object (object stream :type t)
-    (format stream "#~A ~A" (priority object) (name object))))
+    (format stream "#~A ~A [~A]" (priority object) (name object) (system-type object))))
 
 (defun find-system (name)
   "Find a system by `NAME'."
@@ -34,14 +36,16 @@
                       #'<
                       :key #'priority))))))
 
-(defun register-system (name &key (priority +default-system-priority+))
+(defun register-system (name &key (priority +default-system-priority+) (type :simulation))
   (let ((new (make-instance name)))
     (if-let ((s (find-system name)))
       (progn (setf (required s) (required new)
-                   (priority s) priority)
+                   (priority s) priority
+                   (system-type s) type)
              (setf (systems *ecs-manager*) (stable-sort (systems *ecs-manager*) #'< :key #'priority)))
       (progn
-        (setf (priority new) priority)
+        (setf (priority new) priority
+              (system-type new) type)
         (setf (systems *ecs-manager*)
               (merge 'list
                      (systems *ecs-manager*)
