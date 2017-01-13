@@ -104,6 +104,11 @@
         (scaled-vector vec1 (/ 1.0 len)))))
 
 (defun reflect-vector (vec normal)
+  "Reflect `VEC' from surface given by `NORMAL'. Modifies the vector."
+  (subtract-from-vector vec
+                        (scaled-vector normal (* 2 (⋅ vec normal)))))
+
+(defun reflected-vector (vec normal)      ;FIXME reflect_ed_ - name convention?
   "Reflect `VEC' from surface given by `NORMAL'."
   (subtract-vectors vec
                     (scaled-vector normal (* 2 (⋅ vec normal)))))
@@ -128,14 +133,14 @@
 
 ;;; TEST
 
-(defun reflect-vector-test ()
+(defun reflected-vector-test ()
   (let ((v1 (make-vector-4d 2 0 0))
         (v2 (make-vector-4d 2 2 0))
         (n1 (make-vector-4d 0 1 0))
         (n2 (normalized-vector (make-vector-4d 1 1 0))))
-    (list (reflect-vector v1 n1)
-          (reflect-vector v2 n1)
-          (reflect-vector v1 n2))))
+    (list (reflected-vector v1 n1)
+          (reflected-vector v2 n1)
+          (reflected-vector v1 n2))))
 
 ;;; /TEST
 

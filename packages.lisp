@@ -12,9 +12,15 @@
 
            ;; some configurables (to be later moved elsewhere)
            #:*window-title*
+           #:*window-width*
+           #:*window-height*
+           #:*canvas-width*
+           #:*canvas-height*
+
            #:*use-fixed-timestep*
            #:*max-accumulated-timestep*
            #:*update-step*
+
 
            ;; game class
            #:game
@@ -76,6 +82,7 @@
            #:vector-value
            #:normalized-vector
            #:reflect-vector
+           #:reflected-vector
            #:rotate-vector-2d
            #:rotated-vector-2d
            #:cross-product
