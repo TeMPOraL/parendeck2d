@@ -16,6 +16,12 @@
   (log:info "Default game init.")
 
   (gl:clear-color 0.0 0.0 0.0 1.0)
+  (gl:blend-func :src-alpha :one-minus-src-alpha)
+  (gl:enable :blend)
+  (gl:enable :line-smooth)
+  (gl:hint :line-smooth-hint :nicest)
+  (gl:enable :polygon-smooth)
+  (gl:hint :polygon-smooth-hint :nicest)
   
   (setf *rotation* 0)
   (setf *dg-ticks-start* (sdl2:get-ticks)))
