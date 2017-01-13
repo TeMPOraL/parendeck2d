@@ -59,56 +59,56 @@
   (gl:with-pushed-matrix
     (gl:rotate *rotation* 0 0 1)
     (gl:scale 10 10 10 )
-    (p2dg:draw-circle))
+    (p2dglu:draw-circle))
 
   (gl:translate 30 0 0)
 
   (gl:with-pushed-matrix
     (gl:rotate *rotation* 0 0 1)
     (gl:scale 10 10 10)
-    (p2dg:draw-circle-outline))
+    (p2dglu:draw-circle-outline))
 
   (gl:translate 30 0 0)
 
   (gl:with-pushed-matrix
     (gl:rotate *rotation* 0 0 1)
     (gl:scale 10 10 10)
-    (p2dg:draw-triangle))
+    (p2dglu:draw-triangle))
 
   (gl:translate 30 0 0)
 
   (gl:with-pushed-matrix
     (gl:rotate *rotation* 0 0 1)
     (gl:scale 10 10 10)
-    (p2dg:draw-triangle-outline))
+    (p2dglu:draw-triangle-outline))
 
   (gl:translate 30 0 0)
 
   (gl:with-pushed-matrix
     (gl:rotate *rotation* 0 0 1)
     (gl:scale 10 10 10)
-    (p2dg:draw-square))
+    (p2dglu:draw-square))
 
   (gl:translate 30 0 0)
 
   (gl:with-pushed-matrix
     (gl:rotate *rotation* 0 0 1)
     (gl:scale 10 10 10)
-    (p2dg:draw-square-outline))
+    (p2dglu:draw-square-outline))
 
   (gl:translate 30 0 0)
 
   (gl:with-pushed-matrix
     (gl:rotate *rotation* 0 0 1)
     (gl:scale 10 10 10)
-    (p2dg:draw-regular-polygon 5))
+    (p2dglu:draw-regular-polygon 5))
 
   (gl:translate 30 0 0)
 
   (gl:with-pushed-matrix
     (gl:rotate *rotation* 0 0 1)
     (gl:scale 10 10 10)
-    (p2dg:draw-regular-polygon-outline 6))
+    (p2dglu:draw-regular-polygon-outline 6))
 
   (gl:flush)
   (sdl2:gl-swap-window *main-window*)

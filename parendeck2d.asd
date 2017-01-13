@@ -40,10 +40,11 @@
                (:module "renderer"
                         :components ((:file "renderer")))
 
-               (:module "gl-utils"
-                        :components ((:file "color")
-                                     (:file "convenience")
-                                     (:file "shapes")))
+               (:module "graphics"
+                        :components ((:module "gl-utils"
+                                              :components ((:file "convenience")
+                                                           (:file "shapes")))
+                                     (:file "color")))
 
                (:module "ecs"
                         :components ((:file "entity")

@@ -1,4 +1,4 @@
-(in-package #:parendeck2d.gl-utils)
+(in-package #:parendeck2d.graphics)
 
 (deftype color-4 () '(simple-array standard-float (4)))
 

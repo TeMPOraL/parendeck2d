@@ -1,4 +1,4 @@
-(in-package #:parendeck2d.gl-utils)
+(in-package #:parendeck2d.graphics.gl-utils)
 
 (defun draw-circle (&key (resolution 64) (textured nil))
   (when textured

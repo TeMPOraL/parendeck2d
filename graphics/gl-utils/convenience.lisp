@@ -1,4 +1,4 @@
-(in-package #:parendeck2d.gl-utils)
+(in-package #:parendeck2d.graphics.gl-utils)
 
 (declaim (inline translate2))
 (defun translate2 (vec)

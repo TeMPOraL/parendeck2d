@@ -90,9 +90,8 @@
            #:⋅
            #:×))
 
-(defpackage #:parendeck2d.gl-utils
-  (:nicknames #:p2d.gl-utils #:p2d.glu #:p2dg)
-
+(defpackage #:parendeck2d.graphics
+  (:nicknames #:p2d.graphics #:p2d.gfx #:p2dg)
   (:use #:cl
         #:parendeck2d.math)
 
@@ -101,9 +100,15 @@
            #:col-g
            #:col-b
            #:col-a
-           #:make-color-4
+           #:make-color-4))
 
-           #:translate2
+(defpackage #:parendeck2d.graphics.gl-utils
+  (:nicknames #:p2d.graphics.gl-utils #:p2d.gfx.glu #:p2dglu)
+
+  (:use #:cl
+        #:parendeck2d.math)
+
+  (:export #:translate2
            #:translate3
            #:rotatez*
            #:scale2-uniform
