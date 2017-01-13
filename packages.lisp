@@ -106,7 +106,8 @@
   (:nicknames #:p2d.graphics.gl-utils #:p2d.gfx.glu #:p2dglu)
 
   (:use #:cl
-        #:parendeck2d.math)
+        #:parendeck2d.math
+        #:parendeck2d.graphics)
 
   (:export #:translate2
            #:translate3
