@@ -3,6 +3,17 @@
 #+todo: TODO DOING | DONE CANCELLED
 #+todo: BUG FIXING | FIXED CANT_REPRODUCE
 
+
+* Design notes
+
+** Error handling policy
+   2 goals:
+   - for development, we want errors to be loud and clear -> log + condition, debugger break
+   - for release, we want errors to be silent (non-crashing) -> log + some default values provided (e.g. default texture)
+
+   Continuable restarts in development mode for things that *can* be fixed - e.g. restart for loading a resource
+   to provide a different path.
+
 * Things to do
 ** Functionality
 *** Matrix operations
@@ -10,6 +21,20 @@
 *** Migrating drawing to OpenGL core profile
 
 *** Drawing textured quads
+**** DONE Load image
+
+**** DONE Draw a textured quad given the image
+
+**** TODO Clean the above up
+
+**** TODO Add error handling
+
+**** TODO Consider splitting up current image class/code into:
+     - image - for image w/ surface data, and/or a render target
+     - texture - just OpenGL texture
+     - drawable image - a textured quad with easy-to-use interface
+
+     Or something like that. May or may not make sense in the future.
 
 *** Writing text
     Need an API proposal.
@@ -45,6 +70,8 @@
     We'll be implementing an entity/component/system architecture for managing the game.
 
 *** Test scene (default-game)
+
+**** TODO (important) ensure it runs on a fixed-step delta and detached rendering
 
 **** TODO Make it display engine name
 
