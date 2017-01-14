@@ -12,6 +12,12 @@
   )
 
 
+
+(defmethod print-object ((image image) stream)
+  (print-unreadable-object (image stream :type t :identity t)
+    (format stream "texture id: ~A; name: ~A" (texture-id image) (p2d::name image))))
+
+
 ;;; 
 
 (defun load-image-from-file (filename)
@@ -51,5 +57,9 @@
 
 (defmethod p2d:unload-resource ((image image))
   (log:debug "Unloading image ~A..." image)
+  (with-slots (p2d:loaded texture-id) image
+    (if p2d:loaded
+        (gl:delete-textures (list texture-id))
+        (log:error "Trying to unload texture that was already unloaded!" image)))
   ;; TODO
   (setf (slot-value image 'p2d:loaded) nil))
