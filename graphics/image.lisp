@@ -18,6 +18,38 @@
     (format stream "texture id: ~A; name: ~A" (texture-id image) (p2d::name image))))
 
 
+
+(defvar *image-cache* (make-hash-table :test 'equal))
+(defvar *texture-cache* (make-hash-table :test 'equal))
+
+(defun clear-image-cache ()
+  (clrhash *image-cache*))
+
+(defun clear-texture-cache ()
+  (clrhash *texture-cache*))
+
+(defun get-image (image-name)
+  (alexandria:if-let ((image (gethash image-name *image-cache*)))
+    image
+    (setf (gethash image-name *image-cache*) (load-image-from-file image-name))))
+
+(defun get-texture (texture-name)
+  (alexandria:if-let ((texture (gethash texture-name *texture-cache*)))
+    texture
+    (setf (gethash texture-name *texture-cache*)
+          ;; FIXME what about evicting unused images from cache when texture is created?
+          ;; maybe a :cache nil keyword param in get-image?
+          (make-texture-from-image (get-image texture-name)))))
+
+
+
+(defun make-texture-from-image (image)
+  "Turns an `IMAGE' resource into a texture resource.
+Image and texture resources are independent, so user is free to discard the `IMAGE' after they're done creating a texture."
+  ;; TODO implement
+  )
+
+
 ;;; 
 
 (defun load-image-from-file (filename)
