@@ -45,6 +45,7 @@
   "Initialize all engine components."
   (log-sysinfo)
   (sdl2:init :everything)
+  (sdl2-image:init '(:png))
   (p2de:init-ecs))
 
 (defun run-main-loop ()
@@ -106,6 +107,7 @@
   (log:info "Deinitializing the engine.")
   (deinit-main-window)
   (p2de:deinit-ecs)
+  (sdl2-image:quit)
   (sdl2:quit)
   (log:info "Goodbye!"))
 

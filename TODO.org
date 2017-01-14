@@ -5,6 +5,30 @@
 
 * Things to do
 ** Functionality
+*** Matrix operations
+
+*** Migrating drawing to OpenGL core profile
+
+*** Drawing textured quads
+
+*** Writing text
+    Need an API proposal.
+
+    Simplest API proposal - direct drawing:
+    #+BEGIN_SRC lisp
+      (draw-text "Hello world" :position position)  ; uses default font and size
+      (draw-text "Hello world" :x x :y y)     ; uses default font and size
+      (draw-text "Hello world" :x x :y y :size size) ; text with non-default size
+      (draw-text "Hello world" :position position :font some-font) ; uses specific font
+    #+END_SRC
+
+
+**** How to draw text
+     - load font
+       font types:
+       - ttf / open font types / etc.
+       - bitmap font (texture)
+
 *** Logging
 **** DONE Get the logger to register and log down all conditions.
 **** DONE Get the logger to flush the file ASAP, so that we won't loose data in case of a crash.
@@ -39,7 +63,7 @@
      (showing last few events that happened)
 
 ** Utilities
-*** TODO Color wrapper
+*** DOING Color wrapper
     Something to make using colors better / more convenient.
 
 *** DONE Basic OpenGL shapes in a nicer interface (point-and-draw)

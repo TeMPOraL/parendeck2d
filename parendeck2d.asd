@@ -19,6 +19,7 @@
   :depends-on (#:alexandria
                #:log4cl
                #:sdl2
+               #:sdl2-image
                #:cl-opengl)
 
   :components ((:file "packages")
@@ -27,7 +28,8 @@
                (:module "core"
                         :components ((:file "logger")
                                      (:file "printers")
-                                     (:file "game")))
+                                     (:file "game")
+                                     (:file "resource")))
 
                (:module "math"
                         :components ((:file "basic")
@@ -44,7 +46,8 @@
                         :components ((:module "gl-utils"
                                               :components ((:file "convenience")
                                                            (:file "shapes")))
-                                     (:file "color")))
+                                     (:file "color")
+                                     (:file "image")))
 
                (:module "ecs"
                         :components ((:file "entity")

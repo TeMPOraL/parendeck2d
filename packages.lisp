@@ -33,7 +33,15 @@
            #:on-idle
            #:on-tick
            #:on-quit
-           #:on-render))
+           #:on-render
+
+           ;; resource
+           :resource
+           :name
+           :loaded
+           :loadedp
+           :unload-resource
+           ))
 
 (defpackage #:parendeck2d.math
   (:nicknames #:p2d.math #:p2dm)
@@ -95,12 +103,24 @@
   (:use #:cl
         #:parendeck2d.math)
 
-  (:export #:color-4
-           #:col-r
-           #:col-g
-           #:col-b
-           #:col-a
-           #:make-color-4))
+  (:export
+   ;; color
+   #:color-4
+   #:col-r
+   #:col-g
+   #:col-b
+   #:col-a
+   #:make-color-4
+
+   ;; text
+   #:+default-text-size+
+   #:*default-font*
+
+   #:font
+   #:font-name
+
+   #:draw-text
+   ))
 
 (defpackage #:parendeck2d.graphics.gl-utils
   (:nicknames #:p2d.graphics.gl-utils #:p2d.gfx.glu #:p2dglu)
