@@ -1,5 +1,7 @@
 (in-package #:parendeck2d)
 
+;;; NOTE The resources API is in total flux and will likely get redesigned soon.
+
 (defclass resource ()
   ((name :initarg :name
          :accessor name

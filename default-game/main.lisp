@@ -5,6 +5,8 @@
 (defparameter *dg-ticks-end* 0)
 (defparameter *dg-n-frames* 0)
 
+(defparameter *logo-image* nil)
+
 (defclass default-game (game)
   ())
 
@@ -22,16 +24,24 @@
   (gl:hint :line-smooth-hint :nicest)
   (gl:enable :polygon-smooth)
   (gl:hint :polygon-smooth-hint :nicest)
+
+  (gl:enable :texture-2d)
   
   (setf *rotation* 0)
-  (setf *dg-ticks-start* (sdl2:get-ticks)))
+  (setf *dg-ticks-start* (sdl2:get-ticks))
+
+  (setf *logo-image* (p2dg::load-image-from-file "trc_tex.png"))
+
+  (log:debug *logo-image* (p2dg::width *logo-image*) (p2dg::height *logo-image*) (p2dg::texture-id *logo-image*)))
 
 (defmethod deinitialize ((game default-game))
   (log:info "Default game deinit.")
+
+  (unload-resource *logo-image*)
+  
   (setf *dg-ticks-end* (sdl2:get-ticks))
 
-  (log:info "Got ~A FPS." (float (/ *dg-n-frames* (/ (- *dg-ticks-end* *dg-ticks-start*) 1000))))
-  )
+  (log:info "Got ~A FPS." (float (/ *dg-n-frames* (/ (- *dg-ticks-end* *dg-ticks-start*) 1000)))))
 
 (defmethod on-mouse-move ((game default-game) x y xrel yrel state))
 
@@ -61,6 +71,8 @@
   (gl:load-identity)
 
   (gl:translate 30 50 0)
+
+  (gl:bind-texture :texture-2d 0)       ;FIXME temporary to disable unwanted texture renders
 
   (gl:with-pushed-matrix
     (gl:rotate *rotation* 0 0 1)
@@ -115,6 +127,13 @@
     (gl:rotate *rotation* 0 0 1)
     (gl:scale 10 10 10)
     (p2dglu:draw-regular-polygon-outline 6))
+
+  (gl:translate 0 200 0)
+
+  (gl:with-pushed-matrix
+    (gl:rotate *rotation* 0 0 1)
+    (gl:scale 100 100 100)
+    (p2dglu:draw-square :texture *logo-image*))
 
   (gl:flush)
   (sdl2:gl-swap-window *main-window*)

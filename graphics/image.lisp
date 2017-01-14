@@ -24,11 +24,23 @@
          (image-format (sdl2:surface-format image-object))
          (image-pixels (sdl2:surface-pixels image-object))
          (new-texture-id (gl:gen-texture)))
+
+    (log:debug image-format)
     ;; TODO error handling - SDL problems
+
+    ;; file open problem: SDL Error
+    ;; <FATAL> [13:32:29] p2d logger.lisp (log-condition) - Lisp condition: SDL Error (#<SDL-SURFACE {#X00000000}>): Couldn't open /home/temporal/repos/lisp-games/tswr-asteroids/trc.png
+    ;; 4: (UIOP/IMAGE:PRINT-CONDITION-BACKTRACE #<SDL2-IMAGE:SDL-IMAGE-ERROR {1002EA6F03}> :STREAM #<SB-IMPL::STRING-OUTPUT-STREAM {1002EAA923}> :COUNT NIL)
+    ;; If there's a problem loading image, we'd like to log it / signal it somehow, but return a default image just in case.
 
     (gl:bind-texture :texture-2d new-texture-id)
     (gl:tex-image-2d :texture-2d 0 :rgba image-width image-height 0 :rgba :unsigned-byte image-pixels) ;FIXME :rgba thing may not be correct
+    (gl:tex-parameter :texture-2d :texture-min-filter :linear)
+    (gl:tex-parameter :texture-2d :texture-mag-filter :linear)
+
     ;; TODO error handling - OpenGL problems
+
+    (log:debug (gl:get-error))
 
     (with-slots (width height texture-id p2d:loaded) resource
       (setf width image-width

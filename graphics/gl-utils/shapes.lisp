@@ -30,14 +30,19 @@
     (gl:vertex -0.8660254 -0.50000006)
     (gl:vertex 0.8660255 -0.49999994)))
 
-(defun draw-square (&key (textured nil))
-  (when textured
-    (error "Textured shapes not yet implemented."))
+(defun draw-square (&key (texture nil))
+  (if texture
+      (gl:bind-texture :texture-2d (p2dg::texture-id texture))
+      (gl:bind-texture :texture-2d 0))
   
   (gl:with-primitive :quads
+    (gl:tex-coord 1.0 0.0)
     (gl:vertex 1.0 -1.0)
+    (gl:tex-coord 1.0 1.0)
     (gl:vertex 1.0 1.0)
+    (gl:tex-coord 0.0 1.0)
     (gl:vertex -1.0 1.0)
+    (gl:tex-coord 0.0 0.0)
     (gl:vertex -1.0 -1.0)))
 
 (defun draw-square-outline ()
