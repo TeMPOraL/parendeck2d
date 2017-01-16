@@ -145,6 +145,14 @@
            #:draw-regular-polygon
            #:draw-regular-polygon-outline))
 
+(defpackage #:parendeck2d.audio
+  (:nicknames #:p2d.audio #:p2d.sfx #:p2da)
+
+  (:use #:cl)
+  (:export #:initialize-audio           ;FIXME technically not public interface outside engine
+           #:deinitialize-audio))
+
+
 (defpackage #:parendeck2d.ecs
   (:nicknames #:p2d.ecs #:p2de)
 

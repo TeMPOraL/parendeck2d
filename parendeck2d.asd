@@ -20,6 +20,7 @@
                #:log4cl
                #:sdl2
                #:sdl2-image
+               #:sdl2-mixer
                #:cl-opengl)
 
   :components ((:file "packages")
@@ -48,6 +49,9 @@
                                                            (:file "shapes")))
                                      (:file "color")
                                      (:file "image")))
+
+               (:module "audio"
+                        :components ((:file "system")))
 
                (:module "ecs"
                         :components ((:file "entity")
