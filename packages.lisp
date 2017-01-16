@@ -28,7 +28,9 @@
            #:preinit
            #:initialize
            #:deinitialize
-           #:on-mouse-event
+           #:on-mouse-move
+           #:on-mouse-button-event
+           #:on-mouse-wheel-event
            #:on-key-event
            #:on-idle
            #:on-tick

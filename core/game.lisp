@@ -22,6 +22,9 @@
 (defgeneric on-mouse-button-event (game x y button state)
   (:documentation "Lets the `GAME' react to mouse button presses."))
 
+(defgeneric on-mouse-wheel-event (game x y)
+  (:documentation "Lets the `GAME' react to mouse wheel events."))
+
 (defgeneric on-key-event (game key state repeat)
   (:documentation "Lets the `GAME' react to the `STATE' of a `KEY' and know if it was a `REPEAT'ed press."))
 
@@ -58,6 +61,10 @@
 (defmethod on-mouse-button-event ((game game) x y button state)
   (declare (ignore game x y button state))
   (log:debug "The game did not specify mouse button event handler."))
+
+(defmethod on-mouse-wheel-event ((game game) x y)
+  (declare (ignore game x y))
+  (log:debug "The game did not specify mouse wheel event handler."))
 
 (defmethod on-key-event ((game game) key state repeat)
   (declare (ignore game key state repeat))

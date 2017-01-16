@@ -43,10 +43,15 @@
 
   (log:info "Got ~A FPS." (float (/ *dg-n-frames* (/ (- *dg-ticks-end* *dg-ticks-start*) 1000)))))
 
-(defmethod on-mouse-move ((game default-game) x y xrel yrel state))
+(defmethod on-mouse-move ((game default-game) x y xrel yrel state)
+  (declare (ignore game x y xrel yrel state)))
+
+(defmethod on-mouse-wheel-event ((game default-game) x y)
+  (log:info "Default game mouse wheel event.")
+  (log:debug x y))
 
 (defmethod on-mouse-button-event ((game default-game) x y button state)
-  (log:info "Default game mouse event.")
+  (log:info "Default game mouse button event.")
   (log:debug x y button state))
 
 (defmethod on-key-event ((game default-game) key state repeat)

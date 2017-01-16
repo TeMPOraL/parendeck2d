@@ -72,12 +72,16 @@
        (on-mouse-move *game* x y xrel yrel state))
 
       (:mousebuttonup
-       (:x x :y y :state state :button button)
+       (:x x :y y :state state :button button) ;:clicks clicks - for SDL >= 2.0.2
        (on-mouse-button-event *game* x y button state))
     
       (:mousebuttondown
-       (:x x :y y :state state :button button)
+       (:x x :y y :state state :button button) ;:clicks clicks - for SDL >= 2.0.2
        (on-mouse-button-event *game* x y button state))
+
+      (:mousewheel
+       (:x x :y y)
+       (on-mouse-wheel-event *game* x y))
 
       (:idle ()
              (when *use-fixed-timestep*
