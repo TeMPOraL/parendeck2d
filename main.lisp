@@ -46,8 +46,7 @@
   (log-sysinfo)
   (sdl2:init :everything)
   (sdl2-image:init '(:png))
-  (p2da:initialize-audio)
-  (p2de:init-ecs))
+  (p2da:initialize-audio))
 
 (defun dispatch-window-event (event window-id data-1 data-2)
   "Get an appropriate callback for window `EVENT'."
@@ -153,7 +152,6 @@
   "Deinitialize the engine."
   (log:info "Deinitializing the engine.")
   (deinit-main-window)
-  (p2de:deinit-ecs)
   (p2da:deinitialize-audio)
   (sdl2-image:quit)
   (sdl2:quit)
