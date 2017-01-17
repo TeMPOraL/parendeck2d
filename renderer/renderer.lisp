@@ -16,7 +16,7 @@
   (setf *main-window* (sdl2:create-window :title *window-title*                                          
                                           :w *window-width*
                                           :h *window-height*
-                                          :flags '(:opengl)))
+                                          :flags '(:opengl))) ;TODO add "resizable" configurable
   
   (log:info "Acquiing GL context.")
   (setf *gl-context* (sdl2:gl-create-context *main-window*))

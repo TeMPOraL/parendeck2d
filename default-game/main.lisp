@@ -59,6 +59,21 @@
   (log:debug key state repeat)
   (when (= repeat 1) (sdl2:push-event :quit)))
 
+(defmethod on-window-resized ((game default-game) new-width new-height)
+  (log:info "Default game window resized event.")
+  (log:debug new-width new-height))
+
+(defmethod on-window-mouse-focus ((game default-game) focusedp)
+  (log:info "Default game mouse focus event.")
+  (log:debug focusedp))
+
+(defmethod on-window-focus ((game default-game) focusedp)
+  (log:info "Default game window focus event.")
+  (log:debug focusedp))
+
+(defmethod on-window-close ((game default-game))
+  (log:info "Default game window close event."))
+
 (defmethod on-idle ((game default-game)))
 
 (defmethod on-tick ((game default-game) dt)

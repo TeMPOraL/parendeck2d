@@ -32,6 +32,10 @@
            #:on-mouse-button-event
            #:on-mouse-wheel-event
            #:on-key-event
+           #:on-window-resized
+           #:on-window-mouse-focus
+           #:on-window-focus
+           #:on-window-close
            #:on-idle
            #:on-tick
            #:on-quit

@@ -49,8 +49,45 @@
   (p2da:initialize-audio)
   (p2de:init-ecs))
 
+(defun dispatch-window-event (event window-id data-1 data-2)
+  "Get an appropriate callback for window `EVENT'."
+  ;; FIXME retyped from SDL library. Make it nicer. Use constants and assocs or macros or sth.
+  ;; FIXME should we use window-id for something?
+  (cond ((= event 1)                    ;SDL_WINDOWEVENT_SHOWN
+         (log:trace "Ignoring WINDOWEVENT_SHOWN." event window-id data-1 data-2))
+        ((= event 2)                    ;SDL_WINDOWEVENT_HIDDEN
+         (log:trace "Ignoring WINDOWEVENT_HIDDEN." event window-id data-1 data-2))
+        ((= event 3)                    ;SDL_WINDOWEVENT_EXPOSED
+         (log:trace "Ignoring WINDOWEVENT_EXPOSED." event window-id data-1 data-2))
+        ((= event 4)                    ;SDL_WINDOWEVENT_MOVED
+         (log:trace "Ignoring WINDOWEVENT_MOVED." event window-id data-1 data-2))
+        ((= event 5)                    ;SDL_WINDOWEVENT_RESIZED
+         (on-window-resized *game* data-1 data-2))
+        ((= event 6)                    ;SDL_WINDOWEVENT_SIZE_CHANGED
+         (log:trace "Ignoring WINDOWEVENT_SIZE_CHANGED." event window-id data-1 data-2))
+        ((= event 7)                    ;SDL_WINDOWEVENT_MINIMIZED
+         (log:trace "Ignoring WINDOWEVENT_MINIMIZED." event window-id data-1 data-2))
+        ((= event 8)                    ;SDL_WINDOWEVENT_MAXIMIZED
+         (log:trace "Ignoring WINDOWEVENT_MAXIMIZED." event window-id data-1 data-2))
+        ((= event 9)                    ;SDL_WINDOWEVENT_RESTORED
+         (log:trace "Ignoring WINDOWEVENT_RESTORED." event window-id data-1 data-2))
+        ((= event 10)                   ;SDL_WINDOWEVENT_ENTER
+         (on-window-mouse-focus *game* t))
+        ((= event 11)                   ;SDL_WINDOWEVENT_LEAVE
+         (on-window-mouse-focus *game* nil))
+        ((= event 12)                   ;SDL_WINDOWEVENT_FOCUS_GAINED
+         (on-window-focus *game* t))
+        ((= event 13)                   ;SDL_WINDOWEVENT_FOCUS_LOST
+         (on-window-focus *game* nil))
+        ((= event 14)                   ;SDL_WINDOWEVENT_CLOSE
+         (on-window-close *game*))
+        (otherwise
+         (log:error "Unknown window event." event)
+         (log:error params))))
+
 (defun run-main-loop ()
   "Main loop of the engine."
+
   (log:info "Entering main loop.")
 
   (let ((dt 0)
@@ -82,6 +119,11 @@
       (:mousewheel
        (:x x :y y)
        (on-mouse-wheel-event *game* x y))
+
+      (:windowevent
+       (:window-id window-id :event event :data1 data-1 :data2 data-2)
+       (dispatch-window-event event window-id data-1 data-2))
+
 
       (:idle ()
              (when *use-fixed-timestep*

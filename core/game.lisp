@@ -28,6 +28,18 @@
 (defgeneric on-key-event (game key state repeat)
   (:documentation "Lets the `GAME' react to the `STATE' of a `KEY' and know if it was a `REPEAT'ed press."))
 
+(defgeneric on-window-resized (game new-width new-height)
+  (:documentation "Called when window was resized to `NEW-WIDTH' x `NEW-HEIGHT'."))
+
+(defgeneric on-window-mouse-focus (game focusedp)
+  (:documentation "Called when mouse pointer gets over or out of the window area."))
+
+(defgeneric on-window-focus (game focusedp)
+  (:documentation "Called when window receives or loses focus."))
+
+(defgeneric on-window-close (game)
+  (:documentation "Called when user requested closing game window."))
+
 (defgeneric on-idle (game)
   (:documentation "Called whenever there are no events to process in the engine. The `GAME' can use it to simulate a frame."))
 
@@ -44,15 +56,15 @@
 
 (defmethod preinit ((game game))
   (declare (ignore game))
-  (log:debug "The game did not specify pre-initialization method."))
+  (log:trace "The game did not specify pre-initialization method."))
 
 (defmethod initialize ((game game))
   (declare (ignore game))
-  (log:debug "The game did not specify initialization method."))
+  (log:trace "The game did not specify initialization method."))
 
 (defmethod deinitialize ((game game))
   (declare (ignore game))
-  (log:debug "The game did not specify deinitialization method."))
+  (log:trace "The game did not specify deinitialization method."))
 
 (defmethod on-mouse-move ((game game) x y xrel yrel state)
   (declare (ignore game x y xrel yrel state))
@@ -60,15 +72,31 @@
 
 (defmethod on-mouse-button-event ((game game) x y button state)
   (declare (ignore game x y button state))
-  (log:debug "The game did not specify mouse button event handler."))
+  (log:trace "The game did not specify mouse button event handler."))
 
 (defmethod on-mouse-wheel-event ((game game) x y)
   (declare (ignore game x y))
-  (log:debug "The game did not specify mouse wheel event handler."))
+  (log:trace "The game did not specify mouse wheel event handler."))
 
 (defmethod on-key-event ((game game) key state repeat)
   (declare (ignore game key state repeat))
-  (log:debug "The game did not specify keyboard event handler."))
+  (log:trace "The game did not specify keyboard event handler."))
+
+(defmethod on-window-resized ((game game) new-width new-height)
+  (declare (ignore new-width new-height))
+  (log:trace "The game did not specify window resized handler."))
+
+(defmethod on-window-mouse-focus ((game game) focusedp)
+  (declare (ignore game focusedp))
+  (log:trace "The game did not specify mouse focus handler."))
+
+(defmethod on-window-focus ((game game) focusedp)
+  (declare (ignore game focusedp))
+  (log:trace "The game did not specify window focus handler."))
+
+(defmethod on-window-close ((game game))
+  (declare (ignore game))
+  (log:trace "The game did not specify window close handler."))
 
 (defmethod on-idle ((game game))
   (declare (ignore game))
@@ -80,11 +108,10 @@
 
 (defmethod on-quit ((game game))
   (declare (ignore game))
-  (log:debug "The game did not specify quit handler.")
+  (log:trace "The game did not specify quit handler.")
   t)
 
 (defmethod on-render ((game game))
   (declare (ignore game))
-  (log:debug "The game did not specify render handler"))
-
+  (log:trace "The game did not specify render handler"))
 
