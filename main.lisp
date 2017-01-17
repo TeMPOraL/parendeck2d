@@ -134,15 +134,11 @@
                      dt-accumulator (clamp (+ dt-accumulator dt) 0 *max-accumulated-timestep*))
 
                (loop while (> dt-accumulator *update-step*) do
-                    (p2de:tick-simulation-systems *update-step*)
                     (on-tick *game* *update-step*)
                     (decf dt-accumulator *update-step*)))
 
-             ;; TODO clause for non-fixed-timestep systems
-             
-             (on-idle *game*)
-             (p2de:tick-frame-systems dt)
-             (on-render *game*))
+             (on-idle *game* dt)
+             (on-render *game* dt))
       (:quit ()
              (on-quit *game*))))
   

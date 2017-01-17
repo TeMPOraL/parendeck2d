@@ -40,7 +40,7 @@
 (defgeneric on-window-close (game)
   (:documentation "Called when user requested closing game window."))
 
-(defgeneric on-idle (game)
+(defgeneric on-idle (game dt)
   (:documentation "Called whenever there are no events to process in the engine. The `GAME' can use it to simulate a frame."))
 
 (defgeneric on-tick (game dt)
@@ -49,7 +49,7 @@
 (defgeneric on-quit (game)
   (:documentation "Called when the main window receives a quit request. Return NIL to ignore, or T to start shutting down the game and the engine."))
 
-(defgeneric on-render (game)
+(defgeneric on-render (game dt)
   (:documentation "Called when it's the best moment for the `GAME' to render its frame."))
 
 ;;; default implementations
@@ -98,8 +98,8 @@
   (declare (ignore game))
   (log:trace "The game did not specify window close handler."))
 
-(defmethod on-idle ((game game))
-  (declare (ignore game))
+(defmethod on-idle ((game game) dt)
+  (declare (ignore game dt))
   (log:trace "The game did not specify idle handler."))
 
 (defmethod on-tick ((game game) dt)
@@ -111,7 +111,7 @@
   (log:trace "The game did not specify quit handler.")
   t)
 
-(defmethod on-render ((game game))
-  (declare (ignore game))
+(defmethod on-render ((game game) dt)
+  (declare (ignore game dt))
   (log:trace "The game did not specify render handler"))
 

@@ -74,7 +74,8 @@
 (defmethod on-window-close ((game default-game))
   (log:info "Default game window close event."))
 
-(defmethod on-idle ((game default-game)))
+(defmethod on-idle ((game default-game) dt)
+  (declare (ignore game dt)))
 
 (defmethod on-tick ((game default-game) dt)
   (incf *rotation* (* 100 dt))
@@ -85,7 +86,8 @@
   (log:info "Default game quit event - quitting.")
   t)
 
-(defmethod on-render ((game default-game))
+(defmethod on-render ((game default-game) dt)
+  (declare (ignore dt))
   (gl:clear :color-buffer)
   (gl:matrix-mode :modelview)
   (gl:load-identity)
