@@ -167,8 +167,10 @@
             (uiop/os:implementation-identifier))
 
   ;; graphics platform info
-
-  (log:info "Using SDL version ~A.~A.~A" sdl2-ffi:+sdl-major-version+ sdl2-ffi:+sdl-minor-version+ sdl2-ffi:+sdl-patchlevel+)
+  (multiple-value-bind (major minor patch) (sdl2:version)
+    (log:info "Using SDL version ~A.~A.~A with wrappings for ~A.~A.~A."
+              major minor patch
+              sdl2-ffi:+sdl-major-version+ sdl2-ffi:+sdl-minor-version+ sdl2-ffi:+sdl-patchlevel+))
   (log:info (sdl2:cpu-count))
   (log:info (sdl2:cpu-cache-line-size))
   (log:info (sdl2:alti-vec-p))
