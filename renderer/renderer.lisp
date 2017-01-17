@@ -7,6 +7,7 @@
 (defparameter *window-width* 800)
 (defparameter *window-height* 600)
 (defparameter *window-title* "Parendeck 2D")
+(defparameter *window-resizable* nil "Whether or not window is created as resizable.")
 
 (defparameter *canvas-width* 800 "Width of the virtual canvas - i.e. GL 'screen space' in ortho mode.")
 (defparameter *canvas-height* 600 "Height of the virtual canvas - i.e. GL 'screen space' in ortho mode.")
@@ -16,7 +17,9 @@
   (setf *main-window* (sdl2:create-window :title *window-title*                                          
                                           :w *window-width*
                                           :h *window-height*
-                                          :flags '(:opengl))) ;TODO add "resizable" configurable
+                                          :flags (if *window-resizable*
+                                                     '(:opengl :resizable)
+                                                     '(:opengl))))
   
   (log:info "Acquiing GL context.")
   (setf *gl-context* (sdl2:gl-create-context *main-window*))

@@ -11,9 +11,10 @@
            #:run
 
            ;; some configurables (to be later moved elsewhere)
-           #:*window-title*
            #:*window-width*
            #:*window-height*
+           #:*window-title*
+           #:*window-resizable*
            #:*canvas-width*
            #:*canvas-height*
 
