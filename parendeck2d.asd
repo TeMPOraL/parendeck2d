@@ -44,11 +44,11 @@
                         :components ((:file "renderer")))
 
                (:module "graphics"
-                        :components ((:module "gl-utils"
+                        :components ((:file "color")
+                                     (:file "texture")
+                                     (:module "gl-utils"
                                               :components ((:file "convenience")
-                                                           (:file "shapes")))
-                                     (:file "color")
-                                     ))
+                                                           (:file "shapes")))))
 
                (:module "audio"
                         :components ((:file "system")))
