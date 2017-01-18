@@ -31,9 +31,9 @@
     (gl:vertex 0.8660255 -0.49999994)))
 
 (defun draw-square (&key (texture nil))
-  (if texture
-      (gl:bind-texture :texture-2d (p2dg::texture-id texture))
-      (gl:bind-texture :texture-2d 0))
+  ;; (if texture
+  ;;     (gl:bind-texture :texture-2d (p2dg::texture-id texture))
+  ;;     (gl:bind-texture :texture-2d 0))
   
   (gl:with-primitive :quads
     (gl:tex-coord 1.0 0.0)

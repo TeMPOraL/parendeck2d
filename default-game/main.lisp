@@ -30,14 +30,14 @@
   (setf *rotation* 0)
   (setf *dg-ticks-start* (sdl2:get-ticks))
 
-  (setf *logo-image* (p2dg::load-image-from-file "trc_tex.png"))
-
-  (log:debug *logo-image* (p2dg::width *logo-image*) (p2dg::height *logo-image*) (p2dg::texture-id *logo-image*)))
+  ;; (setf *logo-image* (p2dg::load-image-from-file "trc_tex.png"))
+  ;; (log:debug *logo-image* (p2dg::width *logo-image*) (p2dg::height *logo-image*) (p2dg::texture-id *logo-image*))
+  )
 
 (defmethod deinitialize ((game default-game))
   (log:info "Default game deinit.")
 
-  (unload-resource *logo-image*)
+  ;; (unload-resource *logo-image*)
   
   (setf *dg-ticks-end* (sdl2:get-ticks))
 
@@ -152,10 +152,10 @@
 
   (gl:translate 0 200 0)
 
-  (gl:with-pushed-matrix
-    (gl:rotate *rotation* 0 0 1)
-    (gl:scale 100 100 100)
-    (p2dglu:draw-square :texture *logo-image*))
+  ;; (gl:with-pushed-matrix
+  ;;   (gl:rotate *rotation* 0 0 1)
+  ;;   (gl:scale 100 100 100)
+  ;;   (p2dglu:draw-square :texture *logo-image*))
 
   (gl:flush)
   (sdl2:gl-swap-window *main-window*)

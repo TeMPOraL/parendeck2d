@@ -27,10 +27,10 @@
                (:file "version")
                
                (:module "core"
-                        :components ((:file "logger")
+                        :components ((:file "dirs")
+                                     (:file "logger")
                                      (:file "printers")
-                                     (:file "game")
-                                     (:file "resource")))
+                                     (:file "game")))
 
                (:module "math"
                         :components ((:file "basic")
@@ -48,7 +48,7 @@
                                               :components ((:file "convenience")
                                                            (:file "shapes")))
                                      (:file "color")
-                                     (:file "image")))
+                                     ))
 
                (:module "audio"
                         :components ((:file "system")))
@@ -57,12 +57,7 @@
                         :components ((:file "entity")
                                      (:file "component")
                                      (:file "system")
-                                     (:file "manager")
-                                     ;; (:module "components"
-                                     ;;          :components ())
-                                     ;; (:module "systems"
-                                     ;;          :components ())
-                                     ))
+                                     (:file "manager")))
 
                (:module "default-game"
                         :components ((:file "main")))
