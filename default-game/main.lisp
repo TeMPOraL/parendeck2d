@@ -44,7 +44,7 @@
   (log:info "Default game deinit.")
 
   (p2dg:free-texture *test-rendered-text*)
-  (p2dg::free-font *test-font*)
+  (p2dg::clear-font-cache)
   
   ;; (p2dg:free-texture *logo-image*)
   (p2dg:clear-texture-cache)

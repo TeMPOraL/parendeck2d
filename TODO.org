@@ -77,6 +77,17 @@
 
 **** TODO Maybe move fonts to font.lisp, or sth.
 
+**** TODO Maybe even s/font/face/, because it seems that our "font" might be a combination of font + size.
+
+**** NOTE RE sizes
+     Maybe we can design the API so that rendered font's size is the "best" size to use,
+     but have the API rescale text automagically to fit in pixel size.
+
+     Also NOTE that while in testing, passed font's height was 42 (pt, but SDL_ttf documentation says
+     it's essentially equivalent to px), the resulting texture was 47px high. Need to find out if this is
+     some kind of border, or overline/underline magic, or what?
+     Checking TTF_FontHeight would be cool, but that might require patching the bindings up.
+
 *** Logging
 **** DONE Get the logger to register and log down all conditions.
 **** DONE Get the logger to flush the file ASAP, so that we won't loose data in case of a crash.
