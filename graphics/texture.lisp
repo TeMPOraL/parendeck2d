@@ -21,17 +21,44 @@
 
 
 ;;; Texture cache
-(defvar *texture-cache* (make-hash-table :test 'equal))
+(defvar *texture-cache* (make-hash-table :test 'equal) "Hashtable mapping texture source filename to texture objects.")
 
-(defun clear-image-cache ()
+(defun clear-texture-cache ()
+  "Clear all cached textures, freeing them."
+  (log:debug "Clearing texture cache." (hash-table-count *texture-cache*))
   (maphash (lambda (name texture)
              (log:debug "Freeing texture ~A - ~A from cache." name texture)
-             (free-texture texture))
+             (%free-texture texture))
            *texture-cache*)
-  (clrhash *image-cache*))
+  (clrhash *texture-cache*))
+
+(defun uncache-texture (texture)
+  (maphash (lambda (name found-texture)
+             (when (eq texture found-texture)
+               (log:debug "Removing texture ~A - ~A from cache." name found-texture)
+               (remhash name *texture-cache*)))
+           *texture-cache*))
+
+
+;;; Binding and other basic texture utilities.
+
+(defun bind-texture (texture)
+  "Bind `TEXTURE' as current in OpenGL."
+  ;; TODO fail when (null (texture-id texture)).
+  (when (texture-valid-p texture)
+    (gl:bind-texture :texture-2d (texture-id texture))))
+
+(defun unbind-current-texture ()
+  "Unbind current OpenGL texture."
+  (gl:bind-texture :texture-2d 0))
+
+(defun texture-valid-p (texture)
+  "T if `TEXTURE' is currently usable with OpenGL, NIL otherwise."
+  (numberp (texture-id texture)))
 
 
 ;;; Convenience getters that caches textures.
+
 (defun get-texture (filename)
   "Get texture from `FILENAME'. Uses a cache to avoid loading the same file data multiple times."
   (alexandria:if-let ((texture (gethash filename *texture-cache*)))
@@ -59,6 +86,8 @@
 
     ;; FIXME calculate image format data properly for maximum portability.
     (gl:tex-image-2d :texture-2d 0 :rgba image-width image-height 0 :rgba :unsigned-byte image-pixels)
+
+    ;; TODO maybe parametrize min/mag filters, and also wraps for creation.
     (gl:tex-parameter :texture-2d :texture-min-filter :linear)
     (gl:tex-parameter :texture-2d :texture-mag-filter :linear)
 
@@ -75,8 +104,17 @@
 
 (defun free-texture (texture)
   "Removes `TEXTURE' from OpenGL. It's no longer valid to use (its `TEXTURE-ID' may be reused)."
+  (uncache-texture texture)
+  (%free-texture texture))
+
+(defun %free-texture (texture)
   (when (texture-id texture)
-    (gl:delete-textures (list (texture-id texture)))))
+    (gl:delete-textures (list (texture-id texture)))
+    (setf (slot-value texture 'texture-id) nil)))
+
+
+;;; Render-to-texture
+;;; TODO at some point in the future.
 
 
 ;;; Printers

@@ -30,13 +30,14 @@
   (setf *rotation* 0)
   (setf *dg-ticks-start* (sdl2:get-ticks))
 
-  (setf *logo-image* (p2dg::make-texture-from-file "trc_tex.png"))
-  (log:debug *logo-image* (p2dg::width *logo-image*) (p2dg::height *logo-image*) (p2dg::texture-id *logo-image*)))
+  (setf *logo-image* (p2dg:get-texture "trc_tex.png"))
+  (log:debug *logo-image* (p2dg:width *logo-image*) (p2dg:height *logo-image*) (p2dg:texture-id *logo-image*)))
 
 (defmethod deinitialize ((game default-game))
   (log:info "Default game deinit.")
 
-  (p2dg::free-texture *logo-image*)
+  ;; (p2dg:free-texture *logo-image*)
+  (p2dg:clear-texture-cache)
   
   (setf *dg-ticks-end* (sdl2:get-ticks))
 

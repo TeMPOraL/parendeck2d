@@ -32,8 +32,8 @@
 
 (defun draw-square (&key (texture nil))
   (if texture
-      (gl:bind-texture :texture-2d (p2dg::texture-id texture))
-      (gl:bind-texture :texture-2d 0))
+      (p2dg:bind-texture texture)
+      (p2dg:unbind-current-texture))
   
   (gl:with-primitive :quads
     (gl:tex-coord 1.0 0.0)

@@ -119,6 +119,21 @@
    #:col-a
    #:make-color-4
 
+   ;; texture
+   #:texture
+   #:width
+   #:height
+   #:texture-id
+   #:clear-texture-cache
+   #:bind-texture
+   #:unbind-current-texture
+   #:texture-valid-p
+   #:get-texture
+   #:make-texture-from-file
+   #:make-texture-from-sdl-surface
+   #:make-blank-texture
+   #:free-texture
+
    ;; text
    #:+default-text-size+
    #:*default-font*
