@@ -6,6 +6,8 @@
 (defparameter *dg-n-frames* 0)
 
 (defparameter *logo-image* nil)
+(defparameter *test-font* nil)
+(defparameter *test-rendered-text* nil)
 
 (defclass default-game (game)
   ())
@@ -31,11 +33,19 @@
   (setf *dg-ticks-start* (sdl2:get-ticks))
 
   (setf *logo-image* (p2dg:get-texture "trc_tex.png"))
-  (log:debug *logo-image* (p2dg:width *logo-image*) (p2dg:height *logo-image*) (p2dg:texture-id *logo-image*)))
+  (log:debug *logo-image* (p2dg:width *logo-image*) (p2dg:height *logo-image*) (p2dg:texture-id *logo-image*))
+
+  (setf *test-font* (p2dg::get-rendered-font "FreeSans.ttf")) ;WARNING, FONT NOT COMMITED TO REPO UNTIL LICENSE ISSUES ARE SORTED OUT.
+  (log:debug *test-font*)
+  (setf *test-rendered-text* (p2dg::test-render-text-to-texture *test-font* "Parendeck 2D"))
+  (log:debug *test-rendered-text*))
 
 (defmethod deinitialize ((game default-game))
   (log:info "Default game deinit.")
 
+  (p2dg:free-texture *test-rendered-text*)
+  (p2dg::free-font *test-font*)
+  
   ;; (p2dg:free-texture *logo-image*)
   (p2dg:clear-texture-cache)
   
@@ -156,6 +166,12 @@
     (gl:rotate *rotation* 0 0 1)
     (gl:scale 100 100 100)
     (p2dglu:draw-square :texture *logo-image*))
+
+  (gl:translate 100 200 0)
+
+  (gl:with-pushed-matrix
+    (gl:scale (p2dg:width *test-rendered-text*) (p2dg:height *test-rendered-text*) 1)
+    (p2dglu:draw-square :texture *test-rendered-text*))
 
   (gl:flush)
   (sdl2:gl-swap-window *main-window*)

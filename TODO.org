@@ -25,16 +25,21 @@
 
 **** DONE Draw a textured quad given the image
 
-**** TODO Clean the above up
+**** DONE Clean the above up
+     CLOSED: [2017-01-19 czw 01:45]
 
 **** TODO Add error handling
 
-**** TODO Consider splitting up current image class/code into:
-     - image - for image w/ surface data, and/or a render target
-     - texture - just OpenGL texture
-     - drawable image - a textured quad with easy-to-use interface
+**** TODO Configurable min/mag filters (and maybe wrap)
 
-     Or something like that. May or may not make sense in the future.
+**** TODO Render-to-texture
+
+**** TODO Make texture loader properly compute texture image data from surface image data
+
+**** TODO Give the ability to somehow flip the texture
+     Either on load or on display.
+     Point being, SDL_ttf seems to render text upside down and in weird format (BGRA maybe?).
+     So this also needs proper handling of SDL_Surface image data.
 
 *** Writing text
     Need an API proposal.
@@ -47,12 +52,30 @@
       (draw-text "Hello world" :position position :font some-font) ; uses specific font
     #+END_SRC
 
-
 **** How to draw text
      - load font
        font types:
        - ttf / open font types / etc.
        - bitmap font (texture)
+
+**** DONE Load a TTF font
+     CLOSED: [2017-01-19 czw 02:37]
+
+**** DOING Code for rendering a text into a texture
+
+**** DOING Code for convenient display of such rendered text
+
+**** TODO (far future) Bitmap font handling under the same abstraction
+
+**** TODO ERROR HANDLING
+
+**** TODO Sort out caching issues for fonts
+
+**** TODO Test performance of rendering some texts each frame
+
+**** TODO Create an object/method structure for the drawable text that font drawing is supposed to return
+
+**** TODO Maybe move fonts to font.lisp, or sth.
 
 *** Logging
 **** DONE Get the logger to register and log down all conditions.
@@ -71,9 +94,10 @@
 
 *** Test scene (default-game)
 
-**** TODO (important) ensure it runs on a fixed-step delta and detached rendering
+**** DONE (important) ensure it runs on a fixed-step delta and detached rendering
+     CLOSED: [2017-01-19 czw 02:43]
 
-**** TODO Make it display engine name
+**** DOING Make it display engine name
 
 **** TODO Make it display engine logo
 

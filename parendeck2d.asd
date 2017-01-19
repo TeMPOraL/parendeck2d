@@ -21,6 +21,7 @@
                #:sdl2
                #:sdl2-image
                #:sdl2-mixer
+               #:sdl2-ttf
                #:cl-opengl)
 
   :components ((:file "packages")
@@ -46,6 +47,7 @@
                (:module "graphics"
                         :components ((:file "color")
                                      (:file "texture")
+                                     (:file "text")
                                      (:module "gl-utils"
                                               :components ((:file "convenience")
                                                            (:file "shapes")))))

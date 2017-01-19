@@ -46,6 +46,7 @@
   (log-sysinfo)
   (sdl2:init :everything)
   (sdl2-image:init '(:png))
+  (sdl2-ttf:init)
   (p2da:initialize-audio))
 
 (defun dispatch-window-event (event window-id data-1 data-2)
@@ -149,6 +150,7 @@
   (log:info "Deinitializing the engine.")
   (deinit-main-window)
   (p2da:deinitialize-audio)
+  (sdl2-ttf:quit)
   (sdl2-image:quit)
   (sdl2:quit)
   (log:info "Goodbye!"))

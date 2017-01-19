@@ -21,7 +21,7 @@
 
 
 ;;; Texture cache
-(defvar *texture-cache* (make-hash-table :test 'equal) "Hashtable mapping texture source filename to texture objects.")
+(defvar *texture-cache* (make-hash-table :test 'equal) "Hashtable mapping texture source filenames to texture objects.")
 
 (defun clear-texture-cache ()
   "Clear all cached textures, freeing them."
@@ -61,6 +61,7 @@
 
 (defun get-texture (filename)
   "Get texture from `FILENAME'. Uses a cache to avoid loading the same file data multiple times."
+  ;; TODO add handling/reporting for (not (texture-valid-p ...)) textures that somehow got stuck in cache. 
   (alexandria:if-let ((texture (gethash filename *texture-cache*)))
     texture
     (setf (gethash filename *texture-cache*)
@@ -104,6 +105,7 @@
 
 (defun free-texture (texture)
   "Removes `TEXTURE' from OpenGL. It's no longer valid to use (its `TEXTURE-ID' may be reused)."
+  (log:debug "Freeing texture ~A." texture)
   (uncache-texture texture)
   (%free-texture texture))
 
