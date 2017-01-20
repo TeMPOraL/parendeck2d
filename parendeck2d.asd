@@ -47,6 +47,7 @@
                (:module "graphics"
                         :components ((:file "color")
                                      (:file "texture")
+                                     (:file "font")
                                      (:file "text")
                                      (:module "gl-utils"
                                               :components ((:file "convenience")
