@@ -145,6 +145,20 @@
 
   Stored in issues.
 
+** BUG Sort out the issue with autowrap finalizers for SDL surfaces.
+
+   I get stuff like this:
+   #+BEGIN_QUOTE
+   WARNING:
+   Error calling finalizer #<CLOSURE (LAMBDA ()
+                                       :IN
+                                       SDL2-TTF:RENDER-TEXT-BLENDED) {1003A3A6FB}>:
+  #<TYPE-ERROR expected-type: "AUTOWRAP:WRAPPER"
+               datum: #.(SB-SYS:INT-SAP #X7FFFE440CE70)>
+   #+END_QUOTE
+
+   As if the surface was meant to be auto-freed by autowrap.
+   So maybe I should skip freeing unused SDL surfaces and just manage OpenGL memory?
 * /b/
 
 ** Notes on converting loaded image surfaces to textures

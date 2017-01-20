@@ -41,10 +41,6 @@
   (gl:clear-color 0.0 0.0 0.0 1.0)
   (gl:blend-func :src-alpha :one-minus-src-alpha)
   (gl:enable :blend)
-  (gl:enable :line-smooth)
-  (gl:hint :line-smooth-hint :nicest)
-  (gl:enable :polygon-smooth)
-  (gl:hint :polygon-smooth-hint :nicest)
 
   (gl:enable :texture-2d)
   

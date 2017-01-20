@@ -35,3 +35,24 @@ Transforms are applied in following order:
     ;; TODO handle transform offset - untranslate maybe?
     (%draw drawable)))
 
+
+;;; Basic drawables
+(defun draw-rectangle (x y width height)
+  "Draws a (potentially textured) rectangle from (x y) to (width height)."
+  (gl:with-primitive :quads           ;FIXME refactor to a generic "draw textured quad" utility
+      (gl:tex-coord 1.0 1.0)
+      (gl:vertex width y)
+      (gl:tex-coord 1.0 0.0)
+      (gl:vertex width height)
+      (gl:tex-coord 0.0 0.0)
+      (gl:vertex x height)
+      (gl:tex-coord 0.0 1.0)
+      (gl:vertex x y)))
+
+(defun draw-rectangle-outline (x y width height)
+  "Draws a (untextured) rectangle outline from (x y) to (width height)."
+  (gl:with-primitive :line-loop
+    (gl:vertex width y.0)
+    (gl:vertex width height)
+    (gl:vertex x height)
+    (gl:vertex x y)))
