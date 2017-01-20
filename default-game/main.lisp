@@ -9,6 +9,59 @@
 (defparameter *test-font* nil)
 (defparameter *test-rendered-text* nil)
 
+(defparameter *debug-texture-names* '("trc_tex.gif"
+                                      "trc_tex.jpg"
+                                      "trc_tex.tga"
+                                      "trc_tex_24bit.bmp"
+                                      "trc_tex_32bit_argb.bmp"
+                                      "trc_tex_32bit_xrgb.bmp"
+                                      "trc_tex_24bit.png"
+                                      "trc_tex_32bit.png"
+                                      "trc_tex_lzw.tiff"
+                                      "trc_tex_packed.tiff"))
+
+(defparameter *debug-textures* '())
+
+(defmacro log-sdl2-surface (logfun surface)
+  `(progn (,logfun (sdl2:surface-width ,surface)
+                   (sdl2:surface-height ,surface)
+                   (sdl2:surface-pitch ,surface)
+                   (sdl2:surface-format-format ,surface))))
+
+;; (log:debug img
+;;            (sdl2:surface-width loaded-img)
+;;            (sdl2:surface-height loaded-img)
+;;            (sdl2:surface-pitch loaded-img)
+;;            (sdl2:surface-format loaded-img)
+;;            (sdl2:surface-format-format loaded-img))
+
+(defun load-debug-images-and-dump-info ()
+  (flet ((load-img-and-dump-info (img)
+           (if (probe-file img)
+               (progn
+                 (let ((loaded-img (sdl2-image:load-image img)))
+                   (if (not loaded-img)
+                       (log:error "Failed to load image ~A." img)
+                       (progn
+                         (log:debug img)
+                         (log-sdl2-surface log:debug loaded-img)
+                         (let ((converted (sdl2:convert-surface-format loaded-img :abgr8888)))
+                           (if (not converted)
+                               (log:error "Failed to convert image ~A." img)
+                               (progn
+                                 (log-sdl2-surface log:debug converted)
+                                 (sdl2:free-surface converted))))
+                         (sdl2:free-surface loaded-img)))))
+               (log:error "Could not find file ~A." img))))
+    (mapc (lambda (file)
+            (load-img-and-dump-info (concatenate 'string "assets/" file)))
+          *debug-texture-names*)))
+
+(defun load-debug-images-as-textures ()
+  (setf *debug-textures* (mapcar (lambda (file)
+                                   (p2dg:get-texture (concatenate 'string "assets/" file)))
+                                 *debug-texture-names*)))
+
 (defclass default-game (game)
   ())
 
@@ -32,13 +85,17 @@
   (setf *rotation* 0)
   (setf *dg-ticks-start* (sdl2:get-ticks))
 
-  (setf *logo-image* (p2dg:get-texture "trc_tex.png"))
+  (setf *logo-image* (p2dg:get-texture "assets/trc_tex.png"))
   (log:debug *logo-image* (p2dg:width *logo-image*) (p2dg:height *logo-image*) (p2dg:texture-id *logo-image*))
 
-  (setf *test-font* (p2dg::get-rendered-font "FreeSans.ttf")) ;WARNING, FONT NOT COMMITED TO REPO UNTIL LICENSE ISSUES ARE SORTED OUT.
+  (setf *test-font* (p2dg::get-rendered-font "assets/FreeSans.ttf")) ;WARNING, FONT NOT COMMITED TO REPO UNTIL LICENSE ISSUES ARE SORTED OUT.
   (log:debug *test-font*)
   (setf *test-rendered-text* (p2dg::test-render-text-to-texture *test-font* "Parendeck 2D"))
-  (log:debug *test-rendered-text*))
+  (log:debug *test-rendered-text*)
+
+  (load-debug-images-and-dump-info)
+  (load-debug-images-as-textures)
+  )
 
 (defmethod deinitialize ((game default-game))
   (log:info "Default game deinit.")
@@ -172,6 +229,16 @@
   (gl:with-pushed-matrix
     (gl:scale (p2dg:width *test-rendered-text*) (p2dg:height *test-rendered-text*) 1)
     (p2dglu:draw-square :texture *test-rendered-text*))
+
+  (gl:translate -200 -300 0)
+  (mapc (lambda (tex)
+          (gl:with-pushed-matrix
+            (gl:scale (float (/ (p2dg:width tex) 4))
+                      (float (/ (p2dg:height tex) 4))
+                      1)
+            (p2dglu:draw-square :texture tex))
+          (gl:translate (float (/ (p2dg:width tex) 2)) 0 0))
+        *debug-textures*)
 
   (gl:flush)
   (sdl2:gl-swap-window *main-window*)
