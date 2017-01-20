@@ -145,6 +145,34 @@
 
 * /b/
 
+** Notes on converting loaded image surfaces to textures
+   Getting texture loading right.
+   - supported pixelformats -> textures
+   - unsupported pixelformats should barf an error
+   - flipping if needed (not sure if it can be determined from surface data though)
+
+   Pixel data types we need to care about: GL_RGB, GL_BGR, GL_RGBA, GL_BGRA.
+   Internal data types we need to care about: GL_RGB, GL_RGBA, and maybe GL_SRGB8 and GL_SRGB8_ALPHA_8
+
+   SDL_ConvertSurface (or rather, SDL_ConvertSurfaceFormat) could be useful to get it into a proper format if it isn't in one. Actually, unless we hit performance limit, this would be preferred solution because of simplicity.
+   (setf use-alpha (ispixelformat-alpha surface->format))
+
+   (if (or (ispixelformat-indexed surface->format)
+   (and (not (= (bytes-per-pixel surface->format 3)))
+   (not (= (bytes-per-pixel surface->format 4)))
+   (convert-surface surface use-alpha)
+   (return (if use-alpha
+   :rgba
+   :rgb)))
+
+   ;; TODO handling of RGB / BGR and RGBA / BGRA
+   has-blue-channel-first --> BGR24 | BGR888 | BGRA8888
+
+   NOTE: X86 is little-endian, FWIW.
+
+   Right now we went the lazy way and did a force-convert with SDL_ConvertSurfaceFormat.
+   Would be cool to replace it in the future because of performance and memory reasons.
+
 ** Piece of log from testing SDL image surface loading
    #+BEGIN_QUOTE
      

@@ -11,7 +11,7 @@
    (texture-id :initarg :texture-id
                :reader texture-id)))
 
-(defclass texture-section ()
+(defclass texture-section ()            ;TODO some implementation that would use this.
   ((start-coords :initarg :start
                  :reader start)
    (end-coords :initarg :end
@@ -111,7 +111,9 @@
 
 (defun make-blank-texture (width height)
   "Creates a blank RGBA texture of size `WIDTH' x `HEIGHT'."
-  (error "Not yet implemented."))
+  (error "Not yet implemented.")
+  ;; TODO to make a blank texture, pass a null pointer to #'gl:tex-image-2d.
+  )
 
 (defun free-texture (texture)
   "Removes `TEXTURE' from OpenGL. It's no longer valid to use (its `TEXTURE-ID' may be reused)."
