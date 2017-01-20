@@ -22,41 +22,6 @@
 
 (defparameter *debug-textures* '())
 
-(defmacro log-sdl2-surface (logfun surface)
-  `(progn (,logfun (sdl2:surface-width ,surface)
-                   (sdl2:surface-height ,surface)
-                   (sdl2:surface-pitch ,surface)
-                   (sdl2:surface-format-format ,surface))))
-
-;; (log:debug img
-;;            (sdl2:surface-width loaded-img)
-;;            (sdl2:surface-height loaded-img)
-;;            (sdl2:surface-pitch loaded-img)
-;;            (sdl2:surface-format loaded-img)
-;;            (sdl2:surface-format-format loaded-img))
-
-(defun load-debug-images-and-dump-info ()
-  (flet ((load-img-and-dump-info (img)
-           (if (probe-file img)
-               (progn
-                 (let ((loaded-img (sdl2-image:load-image img)))
-                   (if (not loaded-img)
-                       (log:error "Failed to load image ~A." img)
-                       (progn
-                         (log:debug img)
-                         (log-sdl2-surface log:debug loaded-img)
-                         (let ((converted (sdl2:convert-surface-format loaded-img :abgr8888)))
-                           (if (not converted)
-                               (log:error "Failed to convert image ~A." img)
-                               (progn
-                                 (log-sdl2-surface log:debug converted)
-                                 (sdl2:free-surface converted))))
-                         (sdl2:free-surface loaded-img)))))
-               (log:error "Could not find file ~A." img))))
-    (mapc (lambda (file)
-            (load-img-and-dump-info (concatenate 'string "assets/" file)))
-          *debug-texture-names*)))
-
 (defun load-debug-images-as-textures ()
   (setf *debug-textures* (mapcar (lambda (file)
                                    (p2dg:get-texture (concatenate 'string "assets/" file)))
@@ -93,9 +58,7 @@
   (setf *test-rendered-text* (p2dg::test-render-text-to-texture *test-font* "Parendeck 2D"))
   (log:debug *test-rendered-text*)
 
-  (load-debug-images-and-dump-info)
-  (load-debug-images-as-textures)
-  )
+  (load-debug-images-as-textures))
 
 (defmethod deinitialize ((game default-game))
   (log:info "Default game deinit.")
@@ -161,7 +124,7 @@
 
   (gl:translate 30 50 0)
 
-  (gl:bind-texture :texture-2d 0)       ;FIXME temporary to disable unwanted texture renders
+  (p2dg:unbind-current-texture)       ;FIXME temporary to disable unwanted texture renders
 
   (gl:with-pushed-matrix
     (gl:rotate *rotation* 0 0 1)
@@ -227,7 +190,9 @@
   (gl:translate 100 200 0)
 
   (gl:with-pushed-matrix
-    (gl:scale (p2dg:width *test-rendered-text*) (p2dg:height *test-rendered-text*) 1)
+    (gl:scale (float (/ (p2dg:width *test-rendered-text*) 2))
+              (float (/ (p2dg:height *test-rendered-text*) 2))
+              1)
     (p2dglu:draw-square :texture *test-rendered-text*))
 
   (gl:translate -200 -300 0)
