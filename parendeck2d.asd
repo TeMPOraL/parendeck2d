@@ -47,11 +47,12 @@
                (:module "graphics"
                         :components ((:file "color")
                                      (:file "texture")
-                                     (:file "font")
-                                     (:file "text")
-                                     (:module "gl-utils"
+                                     (:module "gl-utils" ;TODO consider deprecating this module altogether
                                               :components ((:file "convenience")
-                                                           (:file "shapes")))))
+                                                           (:file "shapes")))
+                                     (:file "font")
+                                     (:file "drawable")
+                                     (:file "text")))
 
                (:module "audio"
                         :components ((:file "system")))

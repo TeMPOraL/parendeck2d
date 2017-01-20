@@ -34,7 +34,8 @@
 
 **** TODO Render-to-texture
 
-**** TODO Make texture loader properly compute texture image data from surface image data
+**** DONE Make texture loader properly compute texture image data from surface image data
+     CLOSED: [2017-01-20 pią 20:31]
 
 **** TODO Give the ability to somehow flip the texture
      Either on load or on display.
@@ -61,7 +62,8 @@
 **** DONE Load a TTF font
      CLOSED: [2017-01-19 czw 02:37]
 
-**** DOING Code for rendering a text into a texture
+**** DONE Code for rendering a text into a texture
+     CLOSED: [2017-01-20 pią 20:31]
 
 **** DOING Code for convenient display of such rendered text
 

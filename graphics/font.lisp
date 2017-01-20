@@ -30,7 +30,9 @@
   (not (null (internal-font-object font))))
 
 (defmethod render-text ((font rendered-font) text)
-  (error "Not yet implemented."))
+  (let ((texture (make-texture-from-sdl-surface (sdl2-ttf:render-text-blended (internal-font-object font) text 255 255 255 255))))
+    (when texture
+      (make-instance 'rendered-text :width (width texture) :height (height texture) :texture texture))))
 
 
 ;;; Bitmap fonts - ones in which text is assembled from textured quads based on a glyph tilemap.

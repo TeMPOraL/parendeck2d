@@ -8,6 +8,7 @@
 (defparameter *logo-image* nil)
 (defparameter *test-font* nil)
 (defparameter *test-rendered-text* nil)
+(defparameter *test-rtext* nil)
 
 (defparameter *debug-texture-names* '("trc_tex.gif"
                                       "trc_tex.jpg"
@@ -58,7 +59,9 @@
   (setf *test-rendered-text* (p2dg::test-render-text-to-texture *test-font* "Parendeck 2D"))
   (log:debug *test-rendered-text*)
 
-  (load-debug-images-as-textures))
+  (load-debug-images-as-textures)
+
+  (setf *test-rtext* (p2dg::render-text *test-font* "hello!")))
 
 (defmethod deinitialize ((game default-game))
   (log:info "Default game deinit.")
@@ -121,6 +124,8 @@
   (gl:clear :color-buffer)
   (gl:matrix-mode :modelview)
   (gl:load-identity)
+
+  (p2dg::draw *test-rtext* :x 100.0 :y 100.0 :rotation *rotation*)
 
   (gl:translate 30 50 0)
 
