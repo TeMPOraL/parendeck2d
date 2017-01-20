@@ -17,3 +17,4 @@
     (bind-texture text-texture)
     (draw-rectangle 0 0 width height)
     (unbind-current-texture)))
+

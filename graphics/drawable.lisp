@@ -26,17 +26,19 @@ Transforms are applied in following order:
     (gl:translate x y 0)
     ;; TODO handle position-anchor (additional translate)
     ;; TODO handle transform offset - translate appropriately
-    (when rotation
-      (gl:rotate rotation 0 0 1))
     (when (or scale-x scale-y)
       (gl:scale (or scale-x 1.0)
                 (or scale-y 1.0)
                 1.0))
+    (when rotation
+      (gl:rotate rotation 0 0 1))
+
     ;; TODO handle transform offset - untranslate maybe?
     (%draw drawable)))
 
 
 ;;; Basic drawables
+
 (defun draw-rectangle (x y width height)
   "Draws a (potentially textured) rectangle from (x y) to (width height)."
   (gl:with-primitive :quads           ;FIXME refactor to a generic "draw textured quad" utility
@@ -52,7 +54,18 @@ Transforms are applied in following order:
 (defun draw-rectangle-outline (x y width height)
   "Draws a (untextured) rectangle outline from (x y) to (width height)."
   (gl:with-primitive :line-loop
-    (gl:vertex width y.0)
+    (gl:vertex width y)
     (gl:vertex width height)
     (gl:vertex x height)
     (gl:vertex x y)))
+
+
+;;; Utils
+
+(defmacro with-color ((r g b &optional (a 1.0)) &body body)
+  "Temporarily change rendering color for operations in `BODY', and then restore the previous one."
+  (alexandria:with-gensyms (old-color)
+    `(let ((,old-color (gl:get-float :current-color)))
+       (gl:color ,r ,g ,b ,a)
+       (progn ,@body)
+       (gl:color (aref ,old-color 0) (aref ,old-color 1) (aref ,old-color 2) (aref ,old-color 3)))))

@@ -133,15 +133,30 @@
    #:make-texture-from-sdl-surface
    #:make-blank-texture
    #:free-texture
+   #:with-texture
+
+   ;; font
+   #:font
+   #:font-valid-p
+   #:render-text
+   #:rendered-font
+   #:bitmap-font
+   #:clear-font-cache
+   #:get-rendered-font
+   #:get-bitmap-font
+   #:make-rendered-font-from-file
+   #:free-font
+
+   ;; drawables
+   #:drawable
+   #:draw
+   #:draw-rectangle
+   #:draw-rectangle-outline
+   #:with-color
 
    ;; text
-   #:+default-text-size+
-   #:*default-font*
-
-   #:font
-   #:font-name
-
-   #:draw-text
+   #:text
+   #:rendered-text
    ))
 
 (defpackage #:parendeck2d.graphics.gl-utils

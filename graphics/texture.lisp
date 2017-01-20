@@ -131,6 +131,16 @@
 ;;; TODO at some point in the future.
 
 
+;;; Utilities
+(defmacro with-texture (texture &body body)
+  "Temporarily bind `TEXTURE', execute `BODY', then restore previously bound texture."
+  (alexandria:with-gensyms (old-texture)
+    `(let ((,old-texture (gl:get-integer :texture-binding-2d)))
+       (bind-texture ,texture)
+       (progn ,@body)
+       (gl:bind-texture :texture-2d ,old-texture))))
+
+
 ;;; Printers
 
 (defmethod print-object ((texture texture) stream)

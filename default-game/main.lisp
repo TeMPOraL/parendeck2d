@@ -47,23 +47,23 @@
   (setf *rotation* 0)
   (setf *dg-ticks-start* (sdl2:get-ticks))
 
-  (setf *logo-image* (p2dg:get-texture "assets/trc_tex.png"))
+  (setf *logo-image* (p2dg:get-texture "assets/trc_tex_transparent.png"))
   (log:debug *logo-image* (p2dg:width *logo-image*) (p2dg:height *logo-image*) (p2dg:texture-id *logo-image*))
 
-  (setf *test-font* (p2dg::get-rendered-font "assets/FreeSans.ttf")) ;WARNING, FONT NOT COMMITED TO REPO UNTIL LICENSE ISSUES ARE SORTED OUT.
+  (setf *test-font* (p2dg:get-rendered-font "assets/FreeSans.ttf")) ;WARNING, FONT NOT COMMITED TO REPO UNTIL LICENSE ISSUES ARE SORTED OUT.
   (log:debug *test-font*)
-  (setf *test-rendered-text* (p2dg::test-render-text-to-texture *test-font* "Parendeck 2D"))
-  (log:debug *test-rendered-text*)
 
   (load-debug-images-as-textures)
 
-  (setf *test-rtext* (p2dg::render-text *test-font* "hello!")))
+  (setf *test-rendered-text* (p2dg:render-text *test-font* "Parendeck 2D"))
+  (setf *test-rtext* (p2dg:render-text *test-font* "hello!"))
+
+  (log:info (gl:get-float :current-color)))
 
 (defmethod deinitialize ((game default-game))
   (log:info "Default game deinit.")
 
-  (p2dg:free-texture *test-rendered-text*)
-  (p2dg::clear-font-cache)
+  (p2dg:clear-font-cache)
   
   ;; (p2dg:free-texture *logo-image*)
   (p2dg:clear-texture-cache)
@@ -121,7 +121,8 @@
   (gl:matrix-mode :modelview)
   (gl:load-identity)
 
-  (p2dg::draw *test-rtext* :x 100.0 :y 100.0 :rotation *rotation*)
+  (p2dg:with-color (0.0 1.0 0.0)
+    (p2dg:draw *test-rendered-text* :x 100.0 :y 300.0 :scale-y 2.0))
 
   (gl:translate 30 50 0)
 
@@ -190,11 +191,9 @@
 
   (gl:translate 100 200 0)
 
-  (gl:with-pushed-matrix
-    (gl:scale (float (/ (p2dg:width *test-rendered-text*) 2))
-              (float (/ (p2dg:height *test-rendered-text*) 2))
-              1)
-    (p2dglu:draw-square :texture *test-rendered-text*))
+  (p2dg:with-color (1.0 0.0 0.0)
+    (p2dg:draw *test-rtext* :x -100.0 :y -400.0 :rotation *rotation*))
+
 
   (gl:translate -200 -300 0)
   (mapc (lambda (tex)
