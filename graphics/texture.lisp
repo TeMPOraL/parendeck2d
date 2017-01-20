@@ -73,13 +73,15 @@
 (defun make-texture-from-file (filename)
   "Read the image in `FILENAME' and turn it into texture."
   ;; TODO handle missing file
-  (make-texture-from-sdl-surface (sdl2-image:load-image filename)))
+  (let ((surface (sdl2-image:load-image filename)))
+    (prog1 (make-texture-from-sdl-surface surface)
+      (sdl2:free-surface surface))))
 
 (defun make-texture-from-sdl-surface (surface)
   "Convert data from `SURFACE' into a texture. Does NOT free the surface."
   (let ((image-width (sdl2:surface-width surface))
         (image-height (sdl2:surface-height surface))
-        (image-format (sdl2:surface-format surface))
+        (image-format (sdl2:surface-format-format surface))
         (image-pixels (sdl2:surface-pixels surface))
         (new-texture-id (gl:gen-texture)))
 
