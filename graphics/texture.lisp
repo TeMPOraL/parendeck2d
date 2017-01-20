@@ -72,7 +72,7 @@
 
 (defun make-texture-from-file (filename)
   "Read the image in `FILENAME' and turn it into texture."
-  ;; TODO handle missing file
+  ;; TODO handle missing file; we might want to return a "default texture" as well.
   (let ((surface (sdl2-image:load-image filename)))
     (prog1 (make-texture-from-sdl-surface surface)
       (sdl2:free-surface surface))))
@@ -88,7 +88,15 @@
     (gl:bind-texture :texture-2d new-texture-id)
 
     ;; FIXME calculate image format data properly for maximum portability.
-    (gl:tex-image-2d :texture-2d 0 :rgba image-width image-height 0 :rgba :unsigned-byte image-pixels)
+
+    ;; HACK now this is just lazy cheating.
+    ;; Replace with optional conversion if/when performance or memory becomes a concern,
+    ;; or you get mighty lazy.
+    (let ((converted-surface (sdl2:convert-surface-format surface :abgr8888)))
+      (gl:tex-image-2d :texture-2d 0 :rgba image-width image-height 0 :rgba :unsigned-byte (sdl2:surface-pixels converted-surface))
+      (sdl2:free-surface converted-surface))
+    
+    ;; (gl:tex-image-2d :texture-2d 0 :rgba image-width image-height 0 :rgba :unsigned-byte image-pixels)
 
     ;; TODO maybe parametrize min/mag filters, and also wraps for creation.
     (gl:tex-parameter :texture-2d :texture-min-filter :linear)
