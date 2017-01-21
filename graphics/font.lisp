@@ -37,7 +37,13 @@
   (not (null (internal-font-object font))))
 
 (defmethod render-text ((font rendered-font) text)
-  (let ((texture (make-texture-from-sdl-surface (sdl2-ttf:render-text-blended (internal-font-object font) text 255 255 255 255))))
+  (let* ((surface (sdl2-ttf:render-text-blended (internal-font-object font) text 255 255 255 255))
+         (texture (make-texture-from-sdl-surface surface)))
+    (when surface
+      ;; cl-sdl2-ttf sets up a finalizer that auto-frees rendered surface when it's garbage collected.
+      ;; We don't want for that data to hang out in memory for that long, so we'll free it ourselves.
+      (tg:cancel-finalization surface)
+      (sdl2:free-surface surface))
     (when texture
       (make-instance 'rendered-text :width (width texture) :height (height texture) :texture texture))))
 

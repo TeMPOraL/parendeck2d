@@ -145,7 +145,8 @@
 
   Stored in issues.
 
-** BUG Sort out the issue with autowrap finalizers for SDL surfaces.
+** FIXED Sort out the issue with autowrap finalizers for SDL surfaces.
+   CLOSED: [2017-01-21 sob 01:47]
 
    I get stuff like this:
    #+BEGIN_QUOTE
@@ -159,6 +160,11 @@
 
    As if the surface was meant to be auto-freed by autowrap.
    So maybe I should skip freeing unused SDL surfaces and just manage OpenGL memory?
+
+   --
+
+   Nah, doing it manually.
+
 * /b/
 
 ** Notes on converting loaded image surfaces to textures
