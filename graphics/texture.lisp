@@ -117,7 +117,7 @@
 
 (defun free-texture (texture)
   "Removes `TEXTURE' from OpenGL. It's no longer valid to use (its `TEXTURE-ID' may be reused)."
-  (log:debug "Freeing texture ~A." texture)
+  (log:trace "Freeing texture ~A." texture)
   (uncache-texture texture)
   (%free-texture texture))
 

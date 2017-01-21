@@ -10,6 +10,8 @@
 (defparameter *test-rendered-text* nil)
 (defparameter *test-rtext* nil)
 
+(defparameter *accumulator* 0.0)
+
 (defparameter *debug-texture-names* '("trc_tex.gif"
                                       "trc_tex.jpg"
                                       "trc_tex.tga"
@@ -116,13 +118,18 @@
   t)
 
 (defmethod on-render ((game default-game) dt)
-  (declare (ignore dt))
+  (declare (ignorable dt))
   (gl:clear :color-buffer)
   (gl:matrix-mode :modelview)
   (gl:load-identity)
 
   (p2dg:with-color (0.0 1.0 0.0)
     (p2dg:draw *test-rendered-text* :x 100.0 :y 300.0 :scale-y 2.0))
+
+  (incf *accumulator* dt)
+  (p2dg:with-color (1.0 1.0 0.0)
+    (p2dg::draw-text (format nil "OH HAI!! ~A" *accumulator*) :font *test-font* :x 200 :y 400)
+    (p2dg::draw-text (format nil "yay instant text ~A" *accumulator*) :font *test-font* :x 150 :y 450 :rotation *rotation*))
 
   (gl:translate 30 50 0)
 

@@ -18,3 +18,6 @@
     (draw-rectangle 0 0 width height)
     (unbind-current-texture)))
 
+(defmethod %free-text ((text rendered-text))
+  (with-slots (text-texture) text
+    (free-texture text-texture)))

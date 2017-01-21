@@ -37,7 +37,7 @@ Transforms are applied in following order:
     (%draw drawable)))
 
 
-;;; Basic drawables
+;;; "Instant" drawables.
 
 (defun draw-rectangle (x y width height)
   "Draws a (potentially textured) rectangle from (x y) to (width height)."
@@ -58,6 +58,15 @@ Transforms are applied in following order:
     (gl:vertex width height)
     (gl:vertex x height)
     (gl:vertex x y)))
+
+(defun draw-text (text &key font (size *default-font-size*) (x 0.0) (y 0.0) rotation scale-x scale-y)
+  (declare (ignore size))
+  (unless font
+    (error "Default/automatic font handling is not available yet."))
+  (let ((rendered-text (render-text font text)))
+    (when rendered-text
+      (draw rendered-text :x x :y y :rotation rotation :scale-x scale-x :scale-y scale-y)
+      (%free-text rendered-text))))
 
 
 ;;; Utils
