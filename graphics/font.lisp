@@ -1,5 +1,8 @@
 (in-package #:parendeck2d.graphics)
 
+(defparameter *default-font-size* 42 "Font size to use for creating rendered fonts. In sorta-pixels.")
+(defvar *font-cache* (make-hash-table :test 'equal) "Hashtable mapping font source filenames to font objects.")
+
 
 ;;; Base class
 
@@ -20,7 +23,11 @@
 
 (defclass rendered-font (font)
   ((internal-font-object :initarg :internal-font-object
-                         :reader internal-font-object)))
+                         :reader internal-font-object)
+   (font-name :initarg :font-name
+              :reader font-name)
+   (font-size :initarg :font-size
+              :reader font-size)))
 
 (defmethod %free-font ((font rendered-font))
   (sdl2-ttf:close-font (internal-font-object font))
@@ -49,7 +56,9 @@
 ;;; FIXME FIXME RENDERED FONTS ARE PROBABLY DEFINED BY THEIR PT SIZE ON LOAD!!
 ;;; May need to do separate caching for rendered and bitmap fonts, and use
 ;;; name + size as a key for rendered font cache.
-(defvar *font-cache* (make-hash-table :test 'equal) "Hashtable mapping font source filenames to font objects.")
+;;;
+;;; TODO Since we don't plan on having very many fonts, we may as well make the cache
+;;; a list, or something.
 
 (defun clear-font-cache ()
   "Clear all cached fonts, freeing them."
@@ -69,15 +78,17 @@
 
 
 ;;; Convenience getters.
-(defun get-rendered-font (filename)
+(defun get-rendered-font (filename &key (size *default-font-size*))
   "Get a rendered font from `FILENAME'. Uses a cache to avoid loading and storing the same font data multiple times."
   ;; FIXME add handling/reporting if:
   ;; - an invalid (e.g. freed) font got somehow stuck in cache
   ;; - cached font is not a RENDERED-FONT
+
+  ;; TODO font cache should distinguish between same rendered fonts of different size
   (alexandria:if-let ((font (gethash filename *font-cache*)))
     font
     (setf (gethash filename *font-cache*)
-          (make-rendered-font-from-file filename))))
+          (make-rendered-font-from-file filename size))))
 
 (defun get-bitmap-font (filename)
   "Get a bitmap font from `FILENAME'. Uses a cache to avoid loading and storing the same font data multiple times."
@@ -86,10 +97,11 @@
 
 
 ;;; Creation / deletion.
-(defun make-rendered-font-from-file (filename)
+(defun make-rendered-font-from-file (filename size)
   "Reads the font file `FILENAME' and creates a `RENDERED-FONT' object."
-  (let ((font-object (sdl2-ttf:open-font filename 42)))
-    (make-instance 'rendered-font :internal-font-object font-object)))
+  ;; TODO maybe we need a pixels -> points conversion based on current DPI?
+  (let ((font-object (sdl2-ttf:open-font filename size)))
+    (make-instance 'rendered-font :internal-font-object font-object :font-name filename :font-size size)))
 
 (defun free-font (font)
   "Frees all resources used by `FONT'. It can no longer be used."
@@ -98,8 +110,8 @@
 
 
 ;;; Printers
-;;; TODO later.
 
-;;; Some test stuff.
-(defun test-render-text-to-texture (rendered-font text)
-  (make-texture-from-sdl-surface (sdl2-ttf:render-text-blended (internal-font-object rendered-font) text 255 0 0 255)))
+(defmethod print-object ((font rendered-font) stream)
+  (print-unreadable-object (font stream :type t :identity t)
+    (format stream "~A; ~Apt" (font-name font) (font-size font))))
+

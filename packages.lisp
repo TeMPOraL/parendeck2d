@@ -136,6 +136,7 @@
    #:with-texture
 
    ;; font
+   #:*default-font-size*
    #:font
    #:font-valid-p
    #:render-text

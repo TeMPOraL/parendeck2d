@@ -50,7 +50,7 @@
   (setf *logo-image* (p2dg:get-texture "assets/trc_tex_transparent.png"))
   (log:debug *logo-image* (p2dg:width *logo-image*) (p2dg:height *logo-image*) (p2dg:texture-id *logo-image*))
 
-  (setf *test-font* (p2dg:get-rendered-font "assets/FreeSans.ttf")) ;WARNING, FONT NOT COMMITED TO REPO UNTIL LICENSE ISSUES ARE SORTED OUT.
+  (setf *test-font* (p2dg:get-rendered-font "assets/FreeSans.ttf" :size 32)) ;WARNING, FONT NOT COMMITED TO REPO UNTIL LICENSE ISSUES ARE SORTED OUT.
   (log:debug *test-font*)
 
   (load-debug-images-as-textures)
