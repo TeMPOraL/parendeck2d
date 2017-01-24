@@ -98,6 +98,7 @@
 
 (defun get-bitmap-font (filename)
   "Get a bitmap font from `FILENAME'. Uses a cache to avoid loading and storing the same font data multiple times."
+  (declare (ignore filename))
   (error "Not yet implemented."))
 
 

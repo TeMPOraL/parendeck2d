@@ -81,8 +81,6 @@
   "Convert data from `SURFACE' into a texture. Does NOT free the surface."
   (let ((image-width (sdl2:surface-width surface))
         (image-height (sdl2:surface-height surface))
-        (image-format (sdl2:surface-format-format surface))
-        (image-pixels (sdl2:surface-pixels surface))
         (new-texture-id (gl:gen-texture)))
 
     (gl:bind-texture :texture-2d new-texture-id)
@@ -111,6 +109,7 @@
 
 (defun make-blank-texture (width height)
   "Creates a blank RGBA texture of size `WIDTH' x `HEIGHT'."
+  (declare (ignore width height))
   (error "Not yet implemented.")
   ;; TODO to make a blank texture, pass a null pointer to #'gl:tex-image-2d.
   )

@@ -22,6 +22,7 @@ Transforms are applied in following order:
 - translation
 - scaling
 - rotation"
+  (declare (ignore transform-offset position-anchor))
   (gl:with-pushed-matrix
     (gl:translate x y 0)
     ;; TODO handle position-anchor (additional translate)
