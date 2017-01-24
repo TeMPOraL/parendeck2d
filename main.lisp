@@ -24,8 +24,10 @@
 
 ;;; Temporary - profiling using sb-sprof
 #+sbcl
+(eval-when (:compile-toplevel :load-toplevel) (require 'sb-sprof))
+
+#+sbcl
 (defun run-with-profiling (&optional game)
-  (require 'sb-sprof)
   (configure-logger)
   
   (log-engine-startup-message)
