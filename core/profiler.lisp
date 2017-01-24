@@ -10,6 +10,21 @@
 (defvar *profiling-metadata* nil "Additional metadata to include with profiling report.")
 
 
+;;; Data format
+(defstruct profiling-sample category name processor-id thread-id timestamp phase args)
+
+(defmethod yason:encode ((sample profiling-sample) &optional stream)
+  (yason:with-output (stream)
+    (yason:with-object ()
+      (yason:encode-object-element "cat" (profiling-sample-category sample))
+      (yason:encode-object-element "name" (profiling-sample-name sample))
+      (yason:encode-object-element "pid" (profiling-sample-processor-id sample))
+      (yason:encode-object-element "tid" (profiling-sample-thread-id sample))
+      (yason:encode-object-element "ts" (profiling-sample-timestamp sample))
+      (yason:encode-object-element "ph" (profiling-sample-phase sample))
+      (yason:encode-object-element "args" (profiling-sample-args sample)))))
+
+
 ;;; Profiler management
 
 (defun start-profiling ()
