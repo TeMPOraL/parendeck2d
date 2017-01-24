@@ -141,29 +141,21 @@
 **** TODO Sphere-line intersection
 **** TODO Something for more complex shapes
 
+*** TODO A simple layout engine for drawables.
+    Something that would let me compose drawables (esp. text) and align them to each other
+    instead of specifying positions manually.
+
+*** DOING Internal profiler with output to chrome://tracing.
+
+** Optimizations
+   
+*** TODO Optimize math library
+    It'll take some serious work (esp. with getting it not to crash or fail on type checks); maybe
+    it's more worth it to switch to [[https://github.com/cbaggers/rtg-math][rtg-math]].
+
 * Bugs
 
   Stored in issues.
-
-** FIXED Sort out the issue with autowrap finalizers for SDL surfaces.
-   CLOSED: [2017-01-21 sob 01:47]
-
-   I get stuff like this:
-   #+BEGIN_QUOTE
-   WARNING:
-   Error calling finalizer #<CLOSURE (LAMBDA ()
-                                       :IN
-                                       SDL2-TTF:RENDER-TEXT-BLENDED) {1003A3A6FB}>:
-  #<TYPE-ERROR expected-type: "AUTOWRAP:WRAPPER"
-               datum: #.(SB-SYS:INT-SAP #X7FFFE440CE70)>
-   #+END_QUOTE
-
-   As if the surface was meant to be auto-freed by autowrap.
-   So maybe I should skip freeing unused SDL surfaces and just manage OpenGL memory?
-
-   --
-
-   Nah, doing it manually.
 
 * /b/
 
