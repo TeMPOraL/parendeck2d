@@ -18,6 +18,6 @@
   (log:debug "~A leaked resources." (hash-table-count *tracked-resources*))
   (let ((now (sdl2:get-ticks)))
     (maphash (lambda (resource timestamp)
-               (let ((seconds-alive (float (- now timestamp))))
+               (let ((seconds-alive (float (/ (- timestamp now) 1000))))
                 (log:debug resource seconds-alive)))
              *tracked-resources*)))
