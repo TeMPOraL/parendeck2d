@@ -4,7 +4,7 @@
   :serial t
   :long-name "Parendeck 2D game engine"
   :author "Jacek Złydach"
-  :version (:read-file-from "version.lisp" :at (1 2 2))
+  :version (:read-file-form "version.lisp" :at (1 2 2))
   :description "An engine for 2D games written in Lisp."
                                         ; :long-description "todo"
 
