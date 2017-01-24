@@ -31,7 +31,8 @@
                         :components ((:file "dirs")
                                      (:file "logger")
                                      (:file "printers")
-                                     (:file "game")))
+                                     (:file "game")
+                                     (:file "resource-tracker")))
 
                (:module "math"
                         :components ((:file "basic")

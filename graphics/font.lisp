@@ -45,7 +45,7 @@
       (tg:cancel-finalization surface)
       (sdl2:free-surface surface))
     (when texture
-      (make-instance 'rendered-text :width (width texture) :height (height texture) :texture texture))))
+      (p2d:track-resource (make-instance 'rendered-text :width (width texture) :height (height texture) :texture texture)))))
 
 
 ;;; Bitmap fonts - ones in which text is assembled from textured quads based on a glyph tilemap.

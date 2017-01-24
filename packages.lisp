@@ -11,6 +11,8 @@
            #:run
            #:run-with-profiling
 
+           #:track-resource
+
            ;; some configurables (to be later moved elsewhere)
            #:*window-width*
            #:*window-height*

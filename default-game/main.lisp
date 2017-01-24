@@ -65,6 +65,9 @@
 (defmethod deinitialize ((game default-game))
   (log:info "Default game deinit.")
 
+  (setf *test-rendered-text* nil)
+  (setf *test-rtext* nil)
+
   (p2dg:clear-font-cache)
   
   ;; (p2dg:free-texture *logo-image*)

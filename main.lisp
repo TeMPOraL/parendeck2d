@@ -81,6 +81,9 @@
 (defun init-engine ()
   "Initialize all engine components."
   (log-sysinfo)
+
+  (clear-resource-tracking)
+  
   (sdl2:init :everything)
   (sdl2-image:init '(:png))
   (sdl2-ttf:init)
@@ -189,6 +192,9 @@
   (sdl2-ttf:quit)
   (sdl2-image:quit)
   (sdl2:quit)
+
+  (tg:gc :full t)
+  (log-tracked-resources-report)
   (log:info "Goodbye!"))
 
 ;;; other
