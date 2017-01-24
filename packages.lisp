@@ -9,6 +9,7 @@
   (:export #:*version*
            #:*main-window*
            #:run
+           #:run-with-profiling
 
            ;; some configurables (to be later moved elsewhere)
            #:*window-width*

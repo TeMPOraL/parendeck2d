@@ -21,6 +21,39 @@
 (defmacro with-engine-initialized (&body body)
   `(call-with-engine-initialized (lambda () ,@body)))
 
+
+;;; Temporary - profiling using sb-sprof
+#+sbcl
+(defun run-with-profiling (&optional game)
+  (require 'sb-sprof)
+  (configure-logger)
+  
+  (log-engine-startup-message)
+
+  (setf *game* (if game
+                   game
+                   (progn
+                     (log:warn "No game registered; will use engine default scene.")
+                     (setf *game* (make-instance 'default-game)))))
+
+  (preinit *game*)
+
+  (with-engine-initialized
+    (init-main-window)
+    (initialize *game*)
+    (sb-sprof:with-profiling (:max-samples 100000
+                                           :reset t
+                                           :report :flat)
+        (run-main-loop))
+    (deinitialize *game*)))
+
+#-sbcl
+(defun run-with-profiling (&optional game)
+  (declare (ignore game))
+  (error "Profiling currently not supported on this Lisp implementation."))
+
+
+
 (defun run (&optional game)
   "Start the engine. Will load the `GAME' if provided."
   (configure-logger)
