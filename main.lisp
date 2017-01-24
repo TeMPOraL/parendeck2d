@@ -43,10 +43,12 @@
   (with-engine-initialized
     (init-main-window)
     (initialize *game*)
-    (sb-sprof:with-profiling (:max-samples 100000
-                                           :reset t
-                                           :report :flat)
-        (run-main-loop))
+    (sb-sprof:reset)
+    (sb-sprof:start-profiling :max-samples 100000)
+    (run-main-loop)
+    (sb-sprof:stop-profiling)
+    (with-open-file (graph-report "sb-sprof.txt" :direction :output :if-exists :supersede)
+      (sb-sprof:report :type :graph :stream graph-report))
     (deinitialize *game*)))
 
 #-sbcl
