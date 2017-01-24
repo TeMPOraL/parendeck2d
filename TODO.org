@@ -145,13 +145,91 @@
     Something that would let me compose drawables (esp. text) and align them to each other
     instead of specifying positions manually.
 
+
+
 *** DOING Internal profiler with output to chrome://tracing.
+    Notes for internal profiler concept:
+
+    - You can probably collect samples in thread-local vars to avoid synchronization issues, and
+      only merge them together when saving to JSON.
+    - Consider creating fixed-length buffers for samples and streaming them to files regularly, to
+      avoid excessive memory usage. Note that 100x 1kb x 60 frames x 60 seconds = 360MB / minute.
+    - Also, fixed-length buffers would be great for avoiding generating lots of additional work for
+      GC.
+    - Consider having start-profiling / stop-profiling functions that will let you start/stop
+      recording, so you only generate samples you're interested in.
+    - Try and not do all of these at once; a profiler like this seems to be a complicated task, and
+      you're supposed to be writing games, not performance debugging tools ;).
+
+*** DOING Tracking of resource leaks
+    Scaffolding is done; what remains is integrating this into some sane resource management framework.
+
+*** TODO Some generalized resource manager
+    Something to free engine user from having to manually free resources (esp. drawables).
+    Not sure if makes sense yet, maybe it's better to stick to manual management for now.
+
+    Probably tracking will get integrated into it.
+
+*** TODO Debug view - basic performance counter graphs
+    I'm interested in following primary performance counters:
+    - average render frame duration
+    - average updates per render frame
+
+    Represented as both number and a graph of change per second.
+    Also I might be interested in graphing the sequence of update and render events in the last second.
+
+    Moreover, in the future, I may be interested in tracking down number of arbitrary events, so a generalized
+    performance counter API could be in order.
+
+    NOTE that performance counters may count some of THE SAME data that will also be collected
+    by the internal profiler (chrome://tracing), so it may be worth to consider to merge the two concepts together.
 
 ** Optimizations
    
 *** TODO Optimize math library
     It'll take some serious work (esp. with getting it not to crash or fail on type checks); maybe
     it's more worth it to switch to [[https://github.com/cbaggers/rtg-math][rtg-math]].
+
+*** TODO Think of some optimizations to ECS - stuff there can be on the critical path
+    In particular, in TSWR: Asteroids I'm using an ECS system for collision detection.
+
+*** TODO Consider running gc in the main loop every now and then
+
+    First, debug the memory profile of the engine / games running on top of it, and then implement
+    it if necessary.
+
+** Far Future (AKA someday/maybe)
+*** Drawing text
+
+    What I want my text to handle, at least in the future:
+    - multiline rendering to a box of given size (in pixels)
+    - alignment within a box of given size (in pixels)
+    - policies for said box (let the text spill out, or actually do overflow: hidden)
+    - colors
+    - bold, italics, underline, overline
+    - being able to access the text and replace some of its parts with a different one
+      (for things like on-hover effects)
+    - all features need to be somewhat supported by both bitmap and rendered fonts transparently,
+      so that - past loading a font - I don't have to care about type of font anymore
+
+    Some DSL like:
+    #+BEGIN_SRC lisp
+      (:align :right :effect :underline "Hello World")
+      (:align :center :color #x11FF11 :id "affaff" "Maka paka")
+      ("Foo" (:on-hover (lambda (_this) "Quux") "Bar"))
+      ("Foo" (:on-hover (lambda (this) (:color "red" (text this))) "Bar!"))
+    #+END_SRC
+
+    Also, aligning/positioning DSL would be cute.
+
+*** Signed distance field text rendering
+    See https://github.com/libgdx/libgdx/wiki/Distance-field-fonts for details.
+
+*** sb-sprof viewer
+    Some nice web-based viewer UI for SBCL's sb-sprof, using https://datatables.net/ to navigate the dump.
+
+*** 9-patch sprite support
+    Useful for e.g. resizable UI elements.
 
 * Bugs
 
@@ -289,3 +367,10 @@
    PARENDECK2D::LOADED-IMG): #.(SB-SYS:INT-SAP #X7FFFDC3FD0E0)
   (SDL2:SURFACE-FORMAT-FORMAT PARENDECK2D::LOADED-IMG): :ABGR8888 
    #+END_QUOTE
+
+
+** Free enough fonts to use
+   Surprisingly difficult to find.
+
+   - (TTF) [[https://www.gnome.org/fonts/][Bitstream Vera]] fonts
+   - (bitmap) [[http://opengameart.org/content/good-neighbors-pixel-font-starlingunity-version-updated][Good Neighbors]] pixel font; link via davexunit (author of Chickadee)
