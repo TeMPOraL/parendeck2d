@@ -152,7 +152,7 @@
     (with-slots (start-coords
                  end-coords
                  texture)
-        instance
+        texture-section
       (format stream "of texture ~A, ~A -> ~A"
               (if texture
                   (concatenate 'string "#"(texture-id texture))

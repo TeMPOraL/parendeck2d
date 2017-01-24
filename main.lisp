@@ -116,9 +116,8 @@
          (on-window-focus *game* nil))
         ((= event 14)                   ;SDL_WINDOWEVENT_CLOSE
          (on-window-close *game*))
-        (otherwise
-         (log:error "Unknown window event." event)
-         (log:error params))))
+        (t
+         (log:error "Unknown window event." event window-id data-1 data-2))))
 
 (defun run-main-loop ()
   "Main loop of the engine."

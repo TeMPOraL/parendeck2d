@@ -79,7 +79,7 @@ use `SCHEDULE-ENTITY-FOR-DELETION' instead."
   (dolist (component (copy-list (components entity)))
     (remove-component entity (name component)))
   (when (tag entity)
-    (untag-entity entity)))
+    (untag-entity* (entity-id entity) (tag entity))))
 
 (defun schedule-entity-for-deletion (entity)
   (pushnew entity (to-delete *ecs-manager*) :key #'entity-id))
