@@ -145,8 +145,6 @@
     Something that would let me compose drawables (esp. text) and align them to each other
     instead of specifying positions manually.
 
-
-
 *** DOING Internal profiler with output to chrome://tracing.
     Notes for internal profiler concept:
 
@@ -183,6 +181,10 @@
 
     NOTE that performance counters may count some of THE SAME data that will also be collected
     by the internal profiler (chrome://tracing), so it may be worth to consider to merge the two concepts together.
+
+*** TODO Performance counters - output to file
+    Instead of in-game graph, consider (maybe as a prototype) simply dumping perf counter data
+    to a file to be graphed later.
 
 ** Optimizations
    
@@ -234,6 +236,22 @@
 * Bugs
 
   Stored in issues.
+
+** BUG Investigate apparent (unexpected) vsync in test run.
+   Debug performance counters keep giving me something like this (with step temporarily limited to 1/50s):
+   #+BEGIN_QUOTE
+   <DEBUG> [00:03:47] p2d main.lisp (run-main-loop) -
+     In last second, executed 50 steps over 16 milliseconds, AVG = 0.32 ms/step.
+   <DEBUG> [00:03:47] p2d main.lisp (run-main-loop) -
+     Rendered 60 frames over 983 milliseconds, AVG = 16.383333 ms/frame.
+   #+END_QUOTE
+
+   It's like there's vsync enabled *somewhere* by default. I want to control that setting.
+
+   NOTE: (sdl2:gl-get-swap-interval) returns 1 - vsync is on, apparently.
+
+** BUG Fix dt values passed to #'on-idle and #'on-render.
+   Right now they'll only work with a fixed step loop.
 
 * /b/
 
