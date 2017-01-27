@@ -55,3 +55,9 @@
   "Ticks all systems."
   (tick-simulation-systems dt)
   (tick-frame-systems dt))
+
+(defun schedule-all-entities-for-deletion ()
+  (maphash (lambda (id entity)
+             (log:trace "Scheduling entity #~A for deletion." id)
+             (schedule-entity-for-deletion entity))
+           (entities *ecs-manager*)))

@@ -234,4 +234,5 @@
            #:tick
            #:tick-simulation-systems
            #:tick-frame-systems
-           #:tick-all-systems))
+           #:tick-all-systems
+           #:schedule-all-entities-for-deletion))
