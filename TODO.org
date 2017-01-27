@@ -16,6 +16,12 @@
 
 * Things to do
 ** Functionality
+
+*** vsync control
+
+**** TODO Make a function for enabling/disabling vsync using #'sdl2:gl-set-swap-interval.
+     NOTE make sure you check error values!
+
 *** Matrix operations
 
 *** Migrating drawing to OpenGL core profile
@@ -237,7 +243,8 @@
 
   Stored in issues.
 
-** BUG Investigate apparent (unexpected) vsync in test run.
+** FIXED Investigate apparent (unexpected) vsync in test run.
+   CLOSED: [2017-01-28 sob 00:27]
    Debug performance counters keep giving me something like this (with step temporarily limited to 1/50s):
    #+BEGIN_QUOTE
    <DEBUG> [00:03:47] p2d main.lisp (run-main-loop) -
@@ -249,9 +256,29 @@
    It's like there's vsync enabled *somewhere* by default. I want to control that setting.
 
    NOTE: (sdl2:gl-get-swap-interval) returns 1 - vsync is on, apparently.
+   NOTE2: (sdl2:gl-set-swap-interval) controls vsync.
 
 ** BUG Fix dt values passed to #'on-idle and #'on-render.
    Right now they'll only work with a fixed step loop.
+
+** BUG (potential) Disabling vsync makes steps run absurdly fast compared to when vsync is enabled
+   #+BEGIN_QUOTE
+   <DEBUG> [00:22:59] p2d main.lisp (run-main-loop) -
+     In last second, executed 60 steps over 6 milliseconds, AVG = 0.1 ms/step.
+   <DEBUG> [00:22:59] p2d main.lisp (run-main-loop) -
+     Rendered 2732 frames over 981 milliseconds, AVG = 0.3590776 ms/frame.
+   #+END_QUOTE
+
+   Compare vs. vsync enabled:
+   #+BEGIN_QUOTE
+   <DEBUG> [00:25:07] p2d main.lisp (run-main-loop) -
+     In last second, executed 60 steps over 50 milliseconds, AVG = 0.8333333 ms/step.
+   <DEBUG> [00:25:07] p2d main.lisp (run-main-loop) -
+     Rendered 60 frames over 949 milliseconds, AVG = 15.816667 ms/frame.
+   #+END_QUOTE
+
+   Might be the artifact of the way I calculate step time though.
+   I.e. bug in the debug counters.
 
 * /b/
 
