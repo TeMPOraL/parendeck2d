@@ -40,7 +40,8 @@
   (log:info "GL renderer: ~A." (gl:get* :renderer))
   (log:info "GLSL version: ~A." (gl:get* :shading-language-version))
   (log:info "GL extensions: ~A." (gl:get* :extensions))
-  (log:info "Swap interval: ~A." (sdl2:gl-get-swap-interval))) ;FIXME log nicer.
+  ; (log:info "Swap interval: ~A." (sdl2:gl-get-swap-interval))  ;FIXME - log nicer; also FIXME - disabled because it crashes on my VM
+  )
 
 (defun init-game-canvas ()
   (gl:viewport 0 0 *window-width* *window-height*)

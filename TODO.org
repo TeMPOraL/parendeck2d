@@ -280,6 +280,11 @@
    Might be the artifact of the way I calculate step time though.
    I.e. bug in the debug counters.
 
+** BUG #'sdl2:gl-get-swap-interval seems to signal a Lisp error on my VM
+   Need to investigate why, and - if necessary - enable/disable vsync functionality based on some
+   system information (e.g. hardcoded if vendor == Chromium). Or maybe trap the error instead and
+   use this as an indicator that vsync functionality is not supported on the platform.
+
 * /b/
 
 ** Notes on converting loaded image surfaces to textures
