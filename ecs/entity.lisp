@@ -17,8 +17,12 @@
    Called when a component is added or removed from an entity."
   (dolist (s (systems *ecs-manager*))
     (if (subsetp (required s) (component-names entity))
-      (pushnew (entity-id entity) (entities s))
-      (deletef (entities s) (entity-id entity)))))
+        (unless (member (entity-id entity) (entities s)) ;FIXME checking twice (1/2)
+          (entity-added s entity)
+          (pushnew (entity-id entity) (entities s)))
+        (when (member (entity-id entity) (entities s)) ;FIXME checking twice (2/2)
+          (entity-removed s entity)
+          (deletef (entities s) (entity-id entity))))))
 
 (defun add-component (entity name &rest args)
   "Add a component by `NAME' to an `ENTITY' and update all systems."

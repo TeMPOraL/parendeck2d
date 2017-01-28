@@ -55,3 +55,13 @@
 
 (defmethod do-system (system entity dt)
   (log:trace "Default do-system called."))
+
+(defmethod entity-added (system entity)
+  "Called when an `ENTITY' is registered with a `SYSTEM'.
+This method is called after adding components that are needed by the system."
+  (log:trace "Default entity-added called."))
+
+(defmethod entity-removed (system entity)
+  "Called when an `ENTITY' is unregistered from a `SYSTEM'.
+This method is called AFTER removing components that are needed by the system, so they're NOT available.."
+  (log:trace "Default entity-removed called."))

@@ -227,6 +227,8 @@
            #:defsystem
            #:register-system
            #:do-system
+           #:entity-added
+           #:entity-removed
 
            #:*ecs-manager*
            #:init-ecs
