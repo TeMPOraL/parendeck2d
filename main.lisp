@@ -132,14 +132,7 @@
   (let ((dt 0)
         (dt-accumulator 0)
         (last-sdl-ticks 0)
-        (current-sdl-ticks 0)
-
-        (debug-num-frames-last-second 0)
-        (debug-total-frame-time-last-second 0)
-        (debug-num-total-steps-last-second 0)
-        (debug-total-step-time-last-second 0)
-        (debug-time-accumulator 0)
-        (debug-time-prev-ticks (sdl2:get-ticks)))
+        (current-sdl-ticks 0))
     (sdl2:with-event-loop (:method :poll)
 
       (:keydown
@@ -172,42 +165,22 @@
 
 
       (:idle ()
-             (let ((dbg-cur-tck (sdl2:get-ticks)))
-               (incf debug-time-accumulator (- dbg-cur-tck debug-time-prev-ticks))
-               (setf debug-time-prev-ticks dbg-cur-tck))
-             
+             ;; TODO add handling for the off chance sdl2:get-ticks returns a negative value
+             (setf current-sdl-ticks (sdl2:get-ticks)
+                   dt (max 0 (float (/ (- current-sdl-ticks last-sdl-ticks)
+                                       1000)))
+                   last-sdl-ticks current-sdl-ticks)
+
              (when *use-fixed-timestep*
                ;; fixed-step game loop
-               (setf current-sdl-ticks (sdl2:get-ticks)
-                     dt (max 0 (float (/ (- current-sdl-ticks last-sdl-ticks)
-                                         1000)))
-                     last-sdl-ticks current-sdl-ticks
-                     dt-accumulator (clamp (+ dt-accumulator dt) 0 *max-accumulated-timestep*))
+               (setf dt-accumulator (clamp (+ dt-accumulator dt) 0 *max-accumulated-timestep*))
 
                (loop while (> dt-accumulator *update-step*) do
                     (on-tick *game* *update-step*)
-                    (incf debug-num-total-steps-last-second)  ;<--- DEBUG - pseudo performance counters
                     (decf dt-accumulator *update-step*)))
 
-             (incf debug-total-step-time-last-second (- (sdl2:get-ticks) debug-time-prev-ticks))
-             (on-idle *game* dt)        ;FIXME this dt value is invalid!
-             (let ((debug-pre-render-ticks (sdl2:get-ticks)))
-               (on-render *game* dt) ;FIXME this dt value is invalid!
-               (incf debug-num-frames-last-second)
-               (incf debug-total-frame-time-last-second (- (sdl2:get-ticks) debug-pre-render-ticks)))   
-
-             ;; DEBUG - pseudo performance counters
-             (when (> debug-time-accumulator 1000)
-
-               (log:debug "In last second, executed ~A steps over ~A milliseconds, AVG = ~A ms/step." debug-num-total-steps-last-second debug-total-step-time-last-second (float (/ debug-total-step-time-last-second debug-num-total-steps-last-second)))
-               (log:debug "Rendered ~A frames over ~A milliseconds, AVG = ~A ms/frame." debug-num-frames-last-second debug-total-frame-time-last-second (float (/ debug-total-frame-time-last-second debug-num-frames-last-second)))
-               
-               (setf debug-num-frames-last-second 0
-                     debug-total-frame-time-last-second 0
-                     debug-num-total-steps-last-second 0
-                     debug-total-step-time-last-second 0
-                     debug-time-accumulator 0)))
-      
+             (on-idle *game* dt)
+             (on-render *game* dt))
       (:quit ()
              (on-quit *game*))))
   
