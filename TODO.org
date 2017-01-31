@@ -239,6 +239,30 @@
 *** 9-patch sprite support
     Useful for e.g. resizable UI elements.
 
+*** Consider something like AntTweakBar for manipulating engine/game params at runtime
+    http://anttweakbar.sourceforge.net/doc/
+
+    Or maybe integrating with precisely it!
+
+    Bonus feature: I'd like to be able to dump the changes to string / file, so that I could use it to experiment with stuff at runtime,
+    and then easily list changes to introduce to code.
+
+*** Make SLIME/SWANK work correctly with the engine
+
+*** SLIME/SWANK-based console (or maybe just in-game Lisp console)
+    Either way, that would need to have some utilities for discovery.
+    Maybe we should map things available for cmdlist / cvarlist with annotations in code?
+    Actually, that could also make sense with the GUI AntTweakBar idea.
+
+    Something like:
+    #+BEGIN_SRC lisp
+      @Tweakable (:type :color)
+      (defparameter +default-enemy-color+ (make-color "#11FF11") "Default enemy color.")
+    #+END_SRC
+
+    Leading to both it being available as cvar, and as a color gauge in the Tweak Bar,
+    with the description taken from the docstring.
+
 * Bugs
 
   Stored in issues.
