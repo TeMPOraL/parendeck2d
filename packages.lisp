@@ -55,6 +55,7 @@
            ;; time
            #:get-current-milliseconds
            #:get-current-seconds
+           #:msec-delta-in-seconds
            ))
 
 (defpackage #:parendeck2d.profiler

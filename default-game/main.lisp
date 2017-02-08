@@ -47,7 +47,7 @@
   (gl:enable :texture-2d)
   
   (setf *rotation* 0)
-  (setf *dg-ticks-start* (sdl2:get-ticks))
+  (setf *dg-ticks-start* (get-current-milliseconds))
 
   (setf *logo-image* (p2dg:get-texture "assets/trc_tex_transparent.png"))
   (log:debug *logo-image* (p2dg:width *logo-image*) (p2dg:height *logo-image*) (p2dg:texture-id *logo-image*))
@@ -73,9 +73,9 @@
   ;; (p2dg:free-texture *logo-image*)
   (p2dg:clear-texture-cache)
   
-  (setf *dg-ticks-end* (sdl2:get-ticks))
+  (setf *dg-ticks-end* (get-current-milliseconds))
 
-  (log:info "Got ~A FPS." (float (/ *dg-n-frames* (/ (- *dg-ticks-end* *dg-ticks-start*) 1000)))))
+  (log:info "Got ~A FPS." (/ *dg-n-frames* (msec-delta-in-seconds *dg-ticks-start* *dg-ticks-end*))))
 
 (defmethod on-mouse-move ((game default-game) x y xrel yrel state)
   (declare (ignore game x y xrel yrel state)))

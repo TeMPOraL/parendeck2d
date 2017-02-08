@@ -7,6 +7,9 @@
 (defun get-current-milliseconds ()
   "Gets a high-resolution time as an integer in milliseconds since some arbitrary point in time.
 To be used to compute differences."
+  ;; NOTE we don't worry about sdl2:get-ticks wrapping around, since the documentation says
+  ;; it returns an uint32 counting milliseconds from library initialization, which gives us
+  ;; around 72 days before wrap-around.
   (sdl2:get-ticks))
 
 (declaim (inline get-current-seconds))
@@ -17,4 +20,8 @@ To be used to compute differences."
             1000)))
 
 
-;;; Maybe, in the future, additional time-related utils will go here.
+;;; Additional time-related utils will go here.
+(declaim (inline msec-delta-in-seconds))
+(defun msec-delta-in-seconds (start end)
+  "Gets the time passed between `START' msec and `END' msec, converting to seconds."
+  (float (/ (- end start) 1000)))

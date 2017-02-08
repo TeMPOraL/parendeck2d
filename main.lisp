@@ -131,8 +131,8 @@
 
   (let ((dt 0)
         (dt-accumulator 0)
-        (last-sdl-ticks 0)
-        (current-sdl-ticks 0))
+        (last-ticks 0)
+        (current-ticks 0))
     (sdl2:with-event-loop (:method :poll)
 
       (:keydown
@@ -165,11 +165,9 @@
 
 
       (:idle ()
-             ;; TODO add handling for the off chance sdl2:get-ticks returns a negative value
-             (setf current-sdl-ticks (sdl2:get-ticks)
-                   dt (max 0 (float (/ (- current-sdl-ticks last-sdl-ticks)
-                                       1000)))
-                   last-sdl-ticks current-sdl-ticks)
+             (setf current-ticks (get-current-milliseconds)
+                   dt (max 0 (msec-delta-in-seconds last-ticks current-ticks))
+                   last-ticks current-ticks)
 
              (when *use-fixed-timestep*
                ;; fixed-step game loop

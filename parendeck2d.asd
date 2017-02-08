@@ -32,9 +32,9 @@
                         :components ((:file "dirs")
                                      (:file "logger")
                                      (:file "printers")
+                                     (:file "time")
                                      (:file "game")
                                      (:file "resource-tracker")
-                                     (:file "time")
                                      (:module "profiler"
                                               :components ((:file "counters")
                                                            (:file "counter-manager")
