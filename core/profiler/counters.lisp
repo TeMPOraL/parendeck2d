@@ -1,8 +1,9 @@
-(in-package #:parendeck2d)              ;FIXME maybe move to a subpackage?
+(in-package #:parendeck2d.profiler)
 
-(defun get-current-time ()              ;FIXME replace with P2D core time provider function (probably SDL2 ticks)
-  (float (/ (get-internal-real-time)
-            internal-time-units-per-second)))
+;;; A low-level performance counters implementation.
+;;; Implements a stand-alone performance counter; meant as a base
+;;; for a system managing those counters.
+
 
 ;;; A ring buffer
 (defparameter +default-counter-samples-ring-buffer-size+ 64)
@@ -114,7 +115,7 @@
     (incf current-increments)))
 
 (defun sample-counter (counter)
-  (let ((current-time (get-current-time)))
+  (let ((current-time (p2d:get-current-seconds))) ;TODO maybe replace w/ a function parameter to ensure all counters get sampled as if simultaneously
     (with-slots (current-sample
                  samples-global-min
                  samples-global-max

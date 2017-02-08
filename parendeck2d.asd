@@ -22,7 +22,8 @@
                #:sdl2-image
                #:sdl2-mixer
                #:sdl2-ttf
-               #:cl-opengl)
+               #:cl-opengl
+               #:yason)
 
   :components ((:file "packages")
                (:file "version")
@@ -32,7 +33,13 @@
                                      (:file "logger")
                                      (:file "printers")
                                      (:file "game")
-                                     (:file "resource-tracker")))
+                                     (:file "resource-tracker")
+                                     (:file "time")
+                                     (:module "profiler"
+                                              :components ((:file "counters")
+                                                           (:file "counter-manager")
+                                                           (:file "tracing")
+                                                           (:file "profiler")))))
 
                (:module "math"
                         :components ((:file "basic")

@@ -51,7 +51,16 @@
            :loaded
            :loadedp
            :unload-resource
+
+           ;; time
+           #:get-current-milliseconds
+           #:get-current-seconds
            ))
+
+(defpackage #:parendeck2d.profiler
+  (:nicknames #:p2d.prof #:p2dprof)
+
+  (:use #:cl))
 
 (defpackage #:parendeck2d.math
   (:nicknames #:p2d.math #:p2dm)

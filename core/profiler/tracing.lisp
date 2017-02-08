@@ -1,4 +1,4 @@
-(in-package #:parendeck2d)
+(in-package #:parendeck2d.profiler)
 
 ;;; A simple inline profiler with output to a format viewable in Google Chrome's chrome://tracing.
 ;;; Inspired by following articles:
@@ -14,14 +14,14 @@
 ;;; FIXME redo as defclass or whatevs.
 (defstruct tracing-sample category name processor-id thread-id timestamp phase args)
 
-(defmethod yason:encode ((sample profiling-sample) &optional stream)
+(defmethod yason:encode ((sample tracing-sample) &optional stream)
   (yason:with-output (stream)
     (yason:with-object ()
-      (yason:encode-object-element "cat" (profiling-sample-category sample))
-      (yason:encode-object-element "name" (profiling-sample-name sample))
-      (yason:encode-object-element "pid" (profiling-sample-processor-id sample))
-      (yason:encode-object-element "tid" (profiling-sample-thread-id sample))
-      (yason:encode-object-element "ts" (profiling-sample-timestamp sample))
-      (yason:encode-object-element "ph" (profiling-sample-phase sample))
-      (yason:encode-object-element "args" (profiling-sample-args sample)))))
+      (yason:encode-object-element "cat" (tracing-sample-category sample))
+      (yason:encode-object-element "name" (tracing-sample-name sample))
+      (yason:encode-object-element "pid" (tracing-sample-processor-id sample))
+      (yason:encode-object-element "tid" (tracing-sample-thread-id sample))
+      (yason:encode-object-element "ts" (tracing-sample-timestamp sample))
+      (yason:encode-object-element "ph" (tracing-sample-phase sample))
+      (yason:encode-object-element "args" (tracing-sample-args sample)))))
 
