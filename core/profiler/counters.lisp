@@ -105,7 +105,7 @@
                  :name name
                  :description desc
                  :sampling-interval interval
-                 :history-size 64))
+                 :history-size 64))     ;FIXME parametrize history size instead of hardcoding it
 
 (defun increment-counter (counter &optional (value 1.0))
   (with-slots (current-sample
