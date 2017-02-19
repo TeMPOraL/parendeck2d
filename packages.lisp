@@ -1,4 +1,4 @@
-;;; packages.lisp
+;;;; packages.lisp
 
 (defpackage #:parendeck2d
   (:nicknames #:p2d)
@@ -61,7 +61,16 @@
 (defpackage #:parendeck2d.profiler
   (:nicknames #:p2d.prof #:p2dprof)
 
-  (:use #:cl))
+  (:use #:cl)
+
+  (:export #:counter
+           #:increment-counter
+           
+           #:register-counter
+           #:get-counter
+           #:sample-appropriate-counters)
+
+  )
 
 (defpackage #:parendeck2d.math
   (:nicknames #:p2d.math #:p2dm)

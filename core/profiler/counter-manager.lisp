@@ -12,14 +12,17 @@
   (setf (gethash name *counters*)
         (make-counter name description interval)))
 
-(defun get-counter (name)
+(defun get-counter (name &key (description "") (interval 0))
   (let ((counter (gethash name *counters*)))
     (or counter
-        (register-counter name "" 0)))  ;FIXME magic?
-  )
+        (register-counter :name name :description description :interval interval))))
 
 (defun sample-appropriate-counters (current-time)
   (maphash (lambda (name counter)
              (when (counter-ripe-for-sampling-p counter current-time)
                (sample-counter counter)))
            *counters*))
+
+(defun clear-all-counters ()
+  "Removes all managed counters."
+  (clrhash *counters*))

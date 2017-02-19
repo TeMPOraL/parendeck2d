@@ -1,12 +1,12 @@
 (in-package #:parendeck2d.profiler)
 
-;;; A low-level performance counters implementation.
-;;; Implements a stand-alone performance counter; meant as a base
-;;; for a system managing those counters.
+;;;; A low-level performance counters implementation.
+;;;; Implements a stand-alone performance counter; meant as a base
+;;;; for a system managing those counters.
 
 
-;;; A ring buffer
-(defparameter +default-counter-samples-ring-buffer-size+ 64)
+;;; A ring buffer.
+(defparameter +default-counter-samples-ring-buffer-size+ 32)
 
 (defclass counter-samples-ring-buffer ()
   ((store :type vector)
@@ -61,7 +61,7 @@
       (format stream "~A: ~A" size store))))
 
 
-
+;;; A performance counter.
 (defclass counter ()
   ((name :initarg :name
          :reader counter-name)
@@ -100,12 +100,12 @@
   (setf (slot-value counter 'last-n-samples) (make-instance 'counter-samples-ring-buffer :size (coerce history-size 'fixnum))
         (slot-value counter 'last-n-increments) (make-instance 'counter-samples-ring-buffer :size (coerce history-size 'fixnum))))
 
-(defun make-counter (name desc interval)
+(defun make-counter (name desc interval) ;FIXME maybe parametrized size instead of hardcoded?
   (make-instance 'counter
                  :name name
                  :description desc
                  :sampling-interval interval
-                 :history-size 64))     ;FIXME parametrize history size instead of hardcoding it
+                 :history-size +default-counter-samples-ring-buffer-size+))
 
 (defun increment-counter (counter &optional (value 1.0))
   (with-slots (current-sample
@@ -167,3 +167,9 @@
   (> (- current-time
         (slot-value counter 'last-sampling-time))
      (slot-value counter 'sampling-interval)))
+
+(defmethod print-object ((counter counter) stream)
+  (print-unreadable-object (counter stream :type t :identity t)
+    (with-slots (name description sampling-interval)
+        counter
+      (format stream "~A (~A) sampled every ~A second~:p" name description sampling-interval))))
