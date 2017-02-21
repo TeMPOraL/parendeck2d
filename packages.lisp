@@ -68,9 +68,9 @@
            
            #:register-counter
            #:get-counter
-           #:sample-appropriate-counters)
+           #:sample-appropriate-counters
 
-  )
+           #:with-profiling))
 
 (defpackage #:parendeck2d.math
   (:nicknames #:p2d.math #:p2dm)

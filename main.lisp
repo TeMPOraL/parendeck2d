@@ -134,7 +134,6 @@
         (last-ticks 0)
         (current-ticks 0)
         (frames-counter (p2dprof:get-counter :p2d-frames :interval 1))
-        (tick-counter (p2dprof:get-counter :p2d-ticks :interval 1))
         (dt-acc-counter (p2dprof:get-counter :p2d-dtacc :interval 0)))
     (sdl2:with-event-loop (:method :poll)
 
@@ -178,15 +177,14 @@
                (p2dprof:increment-counter dt-acc-counter dt-accumulator)
 
                (loop while (> dt-accumulator *update-step*) do
-                    (on-tick *game* *update-step*)
-                    (p2dprof:increment-counter tick-counter)
+                    (p2dprof:with-profiling (:game-tick :description "main loop single tick" :interval 1)
+                        (on-tick *game* *update-step*))
                     (decf dt-accumulator *update-step*)))
 
              (on-idle *game* dt)
-             (let ((mspf (get-current-milliseconds))) ;FIXME replace w/ profiling macro
-               (on-render *game* dt)
-               ;; FIXME note bug, mspf is (maybe?) probably more useful if measured per frame, not per second (sampling period).
-               (p2dprof:increment-counter frames-counter (- (get-current-milliseconds) mspf)))
+             (p2dprof:with-profiling (:on-render :description "main loop on-render" :interval 1)
+              (on-render *game* dt))
+             (p2dprof:increment-counter frames-counter)
 
              (p2dprof:sample-appropriate-counters (get-current-seconds)))
       
