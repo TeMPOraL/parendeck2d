@@ -19,6 +19,7 @@
 
 (defun sample-appropriate-counters (current-time)
   (maphash (lambda (name counter)
+             (declare (ignore name))
              (when (counter-ripe-for-sampling-p counter current-time)
                (sample-counter counter)))
            *counters*))
