@@ -282,7 +282,8 @@
    NOTE: (sdl2:gl-get-swap-interval) returns 1 - vsync is on, apparently.
    NOTE2: (sdl2:gl-set-swap-interval) controls vsync.
 
-** BUG Fix dt values passed to #'on-idle and #'on-render.
+** FIXED Fix dt values passed to #'on-idle and #'on-render.
+   CLOSED: [2017-02-21 wto 03:59]
    Right now they'll only work with a fixed step loop.
 
 ** BUG (potential) Disabling vsync makes steps run absurdly fast compared to when vsync is enabled
