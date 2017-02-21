@@ -133,6 +133,42 @@
      (showing last few events that happened)
 
 ** Utilities
+
+*** TODO [#A] Performance counters improvements
+
+**** DONE Make sampler use current time passed as argument, instead of calling #'get-seconds by itself.
+     CLOSED: [2017-02-21 wto 05:56]
+
+**** DONE Add a counter definition facility that could be used to override counters on startup
+     CLOSED: [2017-02-21 wto 05:49]
+     Or maybe clrhash.
+
+     Yeah, clrhash for now should do the trick.
+
+**** DONE Clear counters on game start
+     CLOSED: [2017-02-21 wto 05:54]
+
+**** DOING Maybe automatically dump counters to file for later analysis
+
+**** TODO Consider adding "sampling time designators"
+     - :frame - sample every full frame
+     - :tick - sample every game tick (including every full frame if not in fixed-timestep mode)
+       Or maybe just have the user use :frame when they know their game is not using a fixed timestep.
+
+**** DONE [#B] Make "min" and "max" values *always* meaningful
+     CLOSED: [2017-02-21 wto 06:12]
+     I.e. do not start them set to 0, but make it so that they reflect real minimum and maximum
+     values actually registered. Try to think of something more efficient than initial NIL
+     and a branch in sampling, though.
+
+     Done, but the most straightforward way.
+
+**** TODO [#C] Make ring buffers return only real values
+     Not that important, but useful for long sampling intervals and quick profiling sessions.
+
+**** TODO [#C] Make running average ignore initial zeroes
+     Not that important, but useful for long sampling intervals and quick profiling sessions.
+
 *** DOING Color wrapper
     Something to make using colors better / more convenient.
 
@@ -449,3 +485,12 @@
 
    - (TTF) [[https://www.gnome.org/fonts/][Bitstream Vera]] fonts
    - (bitmap) [[http://opengameart.org/content/good-neighbors-pixel-font-starlingunity-version-updated][Good Neighbors]] pixel font; link via davexunit (author of Chickadee)
+
+** Inlining
+   Important observation - if you change an inlined function, best recompile the whole project; otherwise,
+   Quicklisp / ASDF won't pick it up by itself and you may end up with outdated code here and there, doing weird stuff.
+
+** Recompilation
+   #+BEGIN_SRC lisp
+   (asdf:load-system :parendeck2d :force t :force-not t)
+   #+END_SRC

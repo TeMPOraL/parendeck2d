@@ -69,6 +69,8 @@
            #:register-counter
            #:get-counter
            #:sample-appropriate-counters
+           #:clear-all-counters
+           #:write-counter-report
 
            #:with-profiling))
 

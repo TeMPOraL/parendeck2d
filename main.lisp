@@ -82,6 +82,7 @@
   "Initialize all engine components."
   (log-sysinfo)
 
+  (p2dprof:clear-all-counters)
   (clear-resource-tracking)
   
   (sdl2:init :everything)
@@ -194,6 +195,9 @@
 (defun deinit-engine ()
   "Deinitialize the engine."
   (log:info "Deinitializing the engine.")
+
+  (p2dprof:write-counter-report "perf-report.html") ;TODO need a debug/config flag for that at some point, to not dump that on unsuspecting users
+  
   (deinit-main-window)
   (p2da:deinitialize-audio)
   (sdl2-ttf:quit)

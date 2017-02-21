@@ -21,9 +21,18 @@
   (maphash (lambda (name counter)
              (declare (ignore name))
              (when (counter-ripe-for-sampling-p counter current-time)
-               (sample-counter counter)))
+               (sample-counter counter current-time)))
            *counters*))
 
 (defun clear-all-counters ()
   "Removes all managed counters."
   (clrhash *counters*))
+
+
+;;; Counter reporter
+
+(defun write-counter-report (filename)
+  "Writes current state of all counters to a report file named `FILENAME'."
+  (declare (ignore filename))
+  ;; TODO a nice HTML report, maybe? :)
+  )

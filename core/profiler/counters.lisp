@@ -81,17 +81,17 @@
    
    (last-n-samples :reader counter-last-n-samples)
    (samples-global-min :reader counter-samples-global-min
-                       :initform 0)
+                       :initform nil)
    (samples-global-max :reader counter-samples-global-max
-                       :initform 0)
+                       :initform nil)
    (samples-running-avg :reader counter-samples-running-avg
                         :initform 0)
    
    (last-n-increments :reader counter-last-n-increments)
    (increments-global-min :reader counter-increments-global-min
-                          :initform 0)
+                          :initform nil)
    (increments-global-max :reader counter-increments-global-max
-                          :initform 0)
+                          :initform nil)
    (increments-running-avg :reader counter-increments-running-avg
                            :initform 0)))
 
@@ -114,54 +114,59 @@
     (incf current-sample value)
     (incf current-increments)))
 
-(defun sample-counter (counter)
-  (let ((current-time (p2d:get-current-seconds))) ;TODO maybe replace w/ a function parameter to ensure all counters get sampled as if simultaneously
-    (with-slots (current-sample
-                 samples-global-min
-                 samples-global-max
-                 last-n-samples
-                 samples-running-avg)
-        counter
-      ;; handle sample value
-      ;; - adjust global min/max
-      (when (< current-sample samples-global-min)
-        (setf samples-global-min current-sample))
-      (when (> current-sample samples-global-max)
-        (setf samples-global-max current-sample))
-      
-      ;; - push value into buffer
-      (let ((oldest-sample (csrb-push-value last-n-samples current-sample)))
-        ;; - adjust running avg
-        (incf samples-running-avg (+ (/ current-sample (csrb-size last-n-samples))
-                                     (- (/ oldest-sample (csrb-size last-n-samples))))))
-      ;; - clear current sample
-      (setf current-sample 0)
-      )
+(defun sample-counter (counter current-time)
+  (with-slots (current-sample
+               samples-global-min
+               samples-global-max
+               last-n-samples
+               samples-running-avg)
+      counter
+    ;; handle sample value
+    ;; - adjust global min/max
+    (when (or (null samples-global-min)
+              (< current-sample samples-global-min))
+      (setf samples-global-min current-sample))
+    (when (or (null samples-global-max)
+              (> current-sample samples-global-max))
+      (setf samples-global-max current-sample))
+    
+    ;; - push value into buffer
+    (let ((oldest-sample (csrb-push-value last-n-samples current-sample)))
+      ;; - adjust running avg
+      (incf samples-running-avg (+ (/ current-sample (csrb-size last-n-samples))
+                                   (- (/ oldest-sample (csrb-size last-n-samples))))))
+    ;; - clear current sample
+    (setf current-sample 0)
+    )
 
-    ;; handle sample increments
-    (with-slots (current-increments
-                 increments-global-min
-                 increments-global-max
-                 last-n-increments
-                 increments-running-avg)
-        counter
-      ;; - adjust global min/max
-      (when (< current-increments increments-global-min)
-        (setf increments-global-min current-increments))
-      (when (> current-increments increments-global-max)
-        (setf increments-global-max current-increments))
+  ;; handle sample increments
 
-      ;; - push value into buffer
-      (let ((oldest-increment (csrb-push-value last-n-increments current-increments)))
-        ;; - adjust running avg
-        (incf increments-running-avg (+ (/ current-increments (csrb-size last-n-increments))
-                                        (- (/ oldest-increment (csrb-size last-n-increments))))))
+  (with-slots (current-increments
+               increments-global-min
+               increments-global-max
+               last-n-increments
+               increments-running-avg)
+      counter
+    ;; - adjust global min/max
+    (when (or (null increments-global-min)
+              (< current-increments increments-global-min))
+      (setf increments-global-min current-increments))
+    (when (or (null increments-global-max)
+              (> current-increments increments-global-max))
+      (setf increments-global-max current-increments))
 
-      ;; - clear current increments
-      (setf current-increments 0))
+    ;; - push value into buffer
+    (let ((oldest-increment (csrb-push-value last-n-increments current-increments)))
+      ;; - adjust running avg
+      (incf increments-running-avg (+ (/ current-increments (csrb-size last-n-increments))
+                                      (- (/ oldest-increment (csrb-size last-n-increments))))))
 
-    ;; set last sampling time to appropriate value
-    (setf (slot-value counter 'last-sampling-time) current-time)))
+    ;; - clear current increments
+    (setf current-increments 0))
+
+  ;; set last sampling time to appropriate value
+
+  (setf (slot-value counter 'last-sampling-time) current-time))
 
 (defun counter-ripe-for-sampling-p (counter current-time)
   (> (- current-time
