@@ -163,6 +163,8 @@
 
      Done, but the most straightforward way.
 
+**** TODO [#B] Make performance counters have independent buffer sizes
+
 **** TODO [#C] Make ring buffers return only real values
      Not that important, but useful for long sampling intervals and quick profiling sessions.
 

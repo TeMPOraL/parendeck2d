@@ -72,7 +72,8 @@
            #:clear-all-counters
            #:write-counter-report
 
-           #:with-profiling))
+           #:with-profiling
+           #:with-counter))
 
 (defpackage #:parendeck2d.math
   (:nicknames #:p2d.math #:p2dm)

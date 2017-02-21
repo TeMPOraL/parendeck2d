@@ -18,3 +18,9 @@ of this macro, as counters currently do not support redefinition."
        (prog1
            (progn ,@body)
          (increment-counter ,counter (- (p2d:get-current-milliseconds) ,now))))))
+
+(defmacro with-counter ((counter-symbol counter-name &key (description "") (interval 0)) &body body)
+  "Bind a counter `COUNTER-NAME' to a variable `COUNTER-SYMBOL'.
+Basically a shorthand to avoid typing a let."
+  `(let ((,counter-symbol (get-counter ,counter-name :description ,description :interval ,interval)))
+     ,@body))
