@@ -79,7 +79,8 @@
 
   ;; high-level profiler interface
   (:export #:with-profiling
-           #:with-counter))
+           #:with-counter
+           #:count-value))
 
 
 

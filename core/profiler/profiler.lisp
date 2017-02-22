@@ -24,3 +24,10 @@ of this macro, as counters currently do not support redefinition."
 Basically a shorthand to avoid typing a let."
   `(let ((,counter-symbol (get-counter ,counter-name :description ,description :interval ,interval)))
      ,@body))
+
+(defun count-value (value counter-name &key (description "") (interval 0))
+  "Increment counter `COUNTER-NAME' by `VALUE'.
+An utility function to save one from additional nesting level using `WITH-COUNTER'
+when a simple increment-by-value is intended."
+  (with-counter (counter counter-name :description description :interval interval)
+    (increment-counter counter value)))
