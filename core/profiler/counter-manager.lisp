@@ -49,7 +49,48 @@
      (:meta :charset "UTF-8")
      (:title "P2D performance counters report")
      ;; TODO helper styles and JS
-     )))
+     (:script :type "text/javascript" :src "https://www.gstatic.com/charts/loader.js")
+     (:script :type "text/javascript" "google.charts.load('current', {packages: ['corechart', 'line']});
+google.charts.setOnLoadCallback(drawAllCharts);
+
+function drawSingleChart(data, where, title, subtitle) {
+  var chartData = google.visualization.arrayToDataTable([['time', 'increments', 'samples', 'spi']].concat(data));
+  var options = {
+    chart: {
+      title: title,
+      subtitle: subtitle
+    },
+    width: 900,
+    height: 500,
+    series: {
+      0 : {axis: 'increments'},
+      1 : {axis: 'samples'},
+      2 : {axis: 'spi'}
+    },
+    axes: {
+      y: {
+        increments: { label: 'Increments' },
+        samples: { label: 'Samples' },
+        spi: { label: 'Samples per Increment'}
+      }
+    },
+    focusTarget: 'category',
+    selectionMode: 'multiple'
+  };
+
+  var chart = new google.charts.Line(document.getElementById(where));
+  chart.draw(chartData, options);
+}
+
+function drawAllCharts() {"
+              (maphash (lambda (name counter)
+                         (who:fmt "~&drawSingleChart(~A, '~A-chart', '~A', '~A');"
+                                  (make-combined-json-dataset counter)
+                                  (counter-name counter)
+                                  (counter-name counter)
+                                  (counter-description counter))) ;TODO escape
+                       *counters*)
+              "}"))))
 
 (defun write-counter-details (stream counter)
   (who:with-html-output (stream)
@@ -71,6 +112,17 @@
                                    (coerce (counter-samples-global-min counter) 'double-float)
                                    (coerce (counter-samples-running-avg counter) 'double-float)
                                    (coerce (counter-samples-global-max counter) 'double-float))))))
-          ;; TODO bulk of data as charts w/ clickable values
+          (:div :id (concatenate 'string (princ-to-string (counter-name counter)) "-chart"))
           ;; TODO bulk of data as exportable data
-          )))
+          (:div :id (concatenate 'string (princ-to-string (counter-name counter)) "-data")))))
+
+(defun make-combined-json-dataset (counter)
+  (let ((last-n-samples (csrb-values (counter-last-n-samples counter)))
+        (last-n-increments (csrb-values (counter-last-n-increments counter))))
+    (with-output-to-string (str)
+      (format str "[")
+      (loop for n from 1
+         for sample across last-n-samples
+         for increment across last-n-increments
+         do (format str "[~F, ~F, ~F, ~F]," n increment sample (if (= 0 sample) 0 (/ sample increment))))
+      (format str "]"))))
