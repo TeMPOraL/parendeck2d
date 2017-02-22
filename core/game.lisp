@@ -115,3 +115,16 @@
   (declare (ignore game dt))
   (log:trace "The game did not specify render handler"))
 
+
+;;; Code (meant to be) common across all games.
+
+(defmethod on-render :before ((game game) dt)
+  (declare (ignore game dt))
+  (gl:clear :color-buffer)
+  (gl:matrix-mode :modelview)
+  (gl:load-identity))
+
+(defmethod on-render :after ((game game) dt)
+  (declare (ignore game dt))
+  (gl:flush)
+  (sdl2:gl-swap-window *main-window*))

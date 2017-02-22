@@ -27,21 +27,12 @@
 *** Migrating drawing to OpenGL core profile
 
 *** Drawing textured quads
-**** DONE Load image
-
-**** DONE Draw a textured quad given the image
-
-**** DONE Clean the above up
-     CLOSED: [2017-01-19 czw 01:45]
 
 **** TODO Add error handling
 
 **** TODO Configurable min/mag filters (and maybe wrap)
 
 **** TODO Render-to-texture
-
-**** DONE Make texture loader properly compute texture image data from surface image data
-     CLOSED: [2017-01-20 pią 20:31]
 
 **** TODO Give the ability to somehow flip the texture
      Either on load or on display.
@@ -65,13 +56,7 @@
        - ttf / open font types / etc.
        - bitmap font (texture)
 
-**** DONE Load a TTF font
-     CLOSED: [2017-01-19 czw 02:37]
-
-**** DONE Code for rendering a text into a texture
-     CLOSED: [2017-01-20 pią 20:31]
-
-**** DOING Code for convenient display of such rendered text
+**** DOING Code for convenient display of text rendered to texture
 
 **** TODO (far future) Bitmap font handling under the same abstraction
 
@@ -97,9 +82,6 @@
      Checking TTF_FontHeight would be cool, but that might require patching the bindings up.
 
 *** Logging
-**** DONE Get the logger to register and log down all conditions.
-**** DONE Get the logger to flush the file ASAP, so that we won't loose data in case of a crash.
-**** DONE Get the logger to log a backtrace in case of a fatal error.
 
 *** Configuration
     Something to read configs from an external source.
@@ -112,9 +94,6 @@
     We'll be implementing an entity/component/system architecture for managing the game.
 
 *** Test scene (default-game)
-
-**** DONE (important) ensure it runs on a fixed-step delta and detached rendering
-     CLOSED: [2017-01-19 czw 02:43]
 
 **** DOING Make it display engine name
 
@@ -136,36 +115,20 @@
 
 *** TODO [#A] Performance counters improvements
 
-**** DONE Make sampler use current time passed as argument, instead of calling #'get-seconds by itself.
-     CLOSED: [2017-02-21 wto 05:56]
-
-**** DONE Add a counter definition facility that could be used to override counters on startup
-     CLOSED: [2017-02-21 wto 05:49]
-     Or maybe clrhash.
-
-     Yeah, clrhash for now should do the trick.
-
-**** DONE Clear counters on game start
-     CLOSED: [2017-02-21 wto 05:54]
-
-**** DONE Maybe automatically dump counters to file for later analysis
-     CLOSED: [2017-02-22 śro 04:17]
-
 **** TODO Consider adding "sampling time designators"
      - :frame - sample every full frame
      - :tick - sample every game tick (including every full frame if not in fixed-timestep mode)
        Or maybe just have the user use :frame when they know their game is not using a fixed timestep.
 
-**** DONE [#B] Make "min" and "max" values *always* meaningful
-     CLOSED: [2017-02-21 wto 06:12]
-     I.e. do not start them set to 0, but make it so that they reflect real minimum and maximum
-     values actually registered. Try to think of something more efficient than initial NIL
-     and a branch in sampling, though.
+**** TODO [#C] Find a way to unify horizontal scale of counters for readability.
 
-     Done, but the most straightforward way.
+**** TODO [#B] Maybe make a way to "snapshot" counters?
+     Either deep-copy, or add a function that'll dump the state of counters at runtime
+     to a uniquely-named file, in order to save the "context" when game starts to lag.
 
-**** DONE [#B] Make performance counters have independent buffer sizes
-     CLOSED: [2017-02-22 śro 04:17]
+     Actually, binding write-counter-report (+ name generation) to a keypress event should be enough.
+
+**** TODO [#C] Maybe make counters auto-dump a report if game crashes for some reason
 
 **** TODO [#C] Make ring buffers return only real values
      Not that important, but useful for long sampling intervals and quick profiling sessions.
@@ -175,9 +138,6 @@
 
 *** DOING Color wrapper
     Something to make using colors better / more convenient.
-
-*** DONE Basic OpenGL shapes in a nicer interface (point-and-draw)
-    Things like: box, square, circles, regular polygons, etc.
 
 *** TODO Basic collision detection utilities
 

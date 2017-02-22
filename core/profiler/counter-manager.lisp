@@ -42,7 +42,8 @@
         (maphash (lambda (name counter)
                    (declare (ignore name))
                    (write-counter-details file counter))
-                 *counters*))))))
+                 *counters*)))))
+  (log:info "Performance counters report written to file." filename))
 
 (defun write-report-header (stream)
   (who:with-html-output (stream)

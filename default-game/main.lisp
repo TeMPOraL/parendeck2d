@@ -122,9 +122,6 @@
 
 (defmethod on-render ((game default-game) dt)
   (declare (ignorable dt))
-  (gl:clear :color-buffer)
-  (gl:matrix-mode :modelview)
-  (gl:load-identity)
 
   (p2dg:with-color (0.0 1.0 0.0)
     (p2dg:draw *test-rendered-text* :x 100.0 :y 300.0 :scale-y 2.0))
@@ -214,8 +211,5 @@
             (p2dglu:draw-square :texture tex))
           (gl:translate (float (/ (p2dg:width tex) 2)) 0 0))
         *debug-textures*)
-
-  (gl:flush)
-  (sdl2:gl-swap-window *main-window*)
 
   (incf *dg-n-frames*))
