@@ -148,7 +148,8 @@
 **** DONE Clear counters on game start
      CLOSED: [2017-02-21 wto 05:54]
 
-**** DOING Maybe automatically dump counters to file for later analysis
+**** DONE Maybe automatically dump counters to file for later analysis
+     CLOSED: [2017-02-22 śro 04:17]
 
 **** TODO Consider adding "sampling time designators"
      - :frame - sample every full frame
@@ -163,7 +164,8 @@
 
      Done, but the most straightforward way.
 
-**** TODO [#B] Make performance counters have independent buffer sizes
+**** DONE [#B] Make performance counters have independent buffer sizes
+     CLOSED: [2017-02-22 śro 04:17]
 
 **** TODO [#C] Make ring buffers return only real values
      Not that important, but useful for long sampling intervals and quick profiling sessions.

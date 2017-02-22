@@ -6,7 +6,7 @@
 
 
 ;;; A ring buffer.
-(defparameter +default-counter-samples-ring-buffer-size+ 32)
+(defparameter +default-counter-history-size+ 32)
 
 (defclass counter-samples-ring-buffer ()
   ((store :type vector)
@@ -15,7 +15,7 @@
    (size :type fixnum
          :reader csrb-size)))
 
-(defmethod initialize-instance :after ((buffer counter-samples-ring-buffer) &rest initargs &key (size +default-counter-samples-ring-buffer-size+))
+(defmethod initialize-instance :after ((buffer counter-samples-ring-buffer) &rest initargs &key (size +default-counter-history-size+))
   (declare (ignore initargs)
            (fixnum size))
   (setf (slot-value buffer 'store) (make-array size)
@@ -100,12 +100,12 @@
   (setf (slot-value counter 'last-n-samples) (make-instance 'counter-samples-ring-buffer :size (coerce history-size 'fixnum))
         (slot-value counter 'last-n-increments) (make-instance 'counter-samples-ring-buffer :size (coerce history-size 'fixnum))))
 
-(defun make-counter (name desc interval) ;FIXME maybe parametrized size instead of hardcoded?
+(defun make-counter (name desc interval &optional (history-size +default-counter-history-size+))
   (make-instance 'counter
                  :name name
                  :description desc
                  :sampling-interval interval
-                 :history-size +default-counter-samples-ring-buffer-size+))
+                 :history-size history-size))
 
 (defun increment-counter (counter &optional (value 1.0))
   (with-slots (current-sample
@@ -113,6 +113,15 @@
       counter
     (incf current-sample value)
     (incf current-increments)))
+
+(defun counter-samples (counter)
+  (csrb-values (counter-last-n-samples counter)))
+
+(defun counter-increments (counter)
+  (csrb-values (counter-last-n-increments counter)))
+
+(defun counter-history-size (counter)
+  (csrb-size (counter-last-n-samples counter)))
 
 (defun sample-counter (counter current-time)
   (with-slots (current-sample

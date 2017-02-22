@@ -7,15 +7,16 @@
 
 (defvar *counters* (make-hash-table) "A hash table storing all existing counters in a (counter-name counter) -> counter mapping.")
 
-(defun register-counter (&key name description interval) ;FIXME history-size
+(defun register-counter (&key name description interval (history-size +default-counter-history-size+))
   "Register a new coutner under given `NAME'."
+  (log:info history-size)
   (setf (gethash name *counters*)
-        (make-counter name description interval)))
+        (make-counter name description interval history-size)))
 
-(defun get-counter (name &key (description "") (interval 0))
+(defun get-counter (name &key (description "") (interval 0) (history-size +default-counter-history-size+))
   (let ((counter (gethash name *counters*)))
     (or counter
-        (register-counter :name name :description description :interval interval))))
+        (register-counter :name name :description description :interval interval :history-size history-size))))
 
 (defun sample-appropriate-counters (current-time)
   (maphash (lambda (name counter)
@@ -86,8 +87,8 @@ function drawAllCharts() {"
               (maphash (lambda (name counter)
                          (who:fmt "~&drawSingleChart(~A, '~A-chart', '~A', '~A');"
                                   (make-combined-json-dataset counter)
-                                  (counter-name counter)
-                                  (counter-name counter)
+                                  (package-qualify-symbol-for-html-id (counter-name counter))
+                                  (package-qualify-symbol-for-title (counter-name counter))
                                   (counter-description counter))) ;TODO escape
                        *counters*)
               "}"))))
@@ -95,10 +96,10 @@ function drawAllCharts() {"
 (defun write-counter-details (stream counter)
   (who:with-html-output (stream)
     (:div :class "counter-report"
-          (:h2 (who:str (counter-name counter)))
+          (:h2 (who:str (package-qualify-symbol-for-title (counter-name counter))))
           (:p (who:esc (counter-description counter)))
           (:ul
-           (:li "Buffer size: TODO")
+           (:li (who:fmt "Buffer size: ~A" (counter-history-size counter)))
            (:li (who:fmt "Sampling every ~A second~:P" (counter-sampling-interval counter)))
            (:li "Last recorded value"
                 (:ul (:li "Increments: " (who:str (counter-current-increments counter)))
@@ -112,9 +113,9 @@ function drawAllCharts() {"
                                    (coerce (counter-samples-global-min counter) 'double-float)
                                    (coerce (counter-samples-running-avg counter) 'double-float)
                                    (coerce (counter-samples-global-max counter) 'double-float))))))
-          (:div :id (concatenate 'string (princ-to-string (counter-name counter)) "-chart"))
+          (:div :id (concatenate 'string (package-qualify-symbol-for-html-id (counter-name counter)) "-chart"))
           ;; TODO bulk of data as exportable data
-          (:div :id (concatenate 'string (princ-to-string (counter-name counter)) "-data")))))
+          (:div :id (concatenate 'string (package-qualify-symbol-for-html-id (counter-name counter)) "-data")))))
 
 (defun make-combined-json-dataset (counter)
   (let ((last-n-samples (csrb-values (counter-last-n-samples counter)))
@@ -126,3 +127,9 @@ function drawAllCharts() {"
          for increment across last-n-increments
          do (format str "[~F, ~F, ~F, ~F]," n increment sample (if (= 0 sample) 0 (/ sample increment))))
       (format str "]"))))
+
+(defun package-qualify-symbol-for-html-id (symbol)
+  (format nil "~A--~A" (package-name (symbol-package symbol)) (symbol-name symbol)))
+
+(defun package-qualify-symbol-for-title (symbol)
+  (prin1-to-string symbol))

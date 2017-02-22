@@ -68,7 +68,11 @@
 
   ;; base counter
   (:export #:counter
-           #:increment-counter)
+           #:increment-counter
+           #:counter-samples
+           #:counter-increments
+           #:counter-history-size
+           #:+default-counter-history-size+)
   
   ;; counter manager
   (:export #:register-counter
