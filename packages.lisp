@@ -1,5 +1,7 @@
 ;;;; packages.lisp
 
+
+
 (defpackage #:parendeck2d
   (:nicknames #:p2d)
   
@@ -9,12 +11,12 @@
   (:export #:*version*
            #:*main-window*
            #:run
-           #:run-with-profiling
+           #:run-with-profiling)
 
-           #:track-resource
+  (:export #:track-resource)
 
-           ;; some configurables (to be later moved elsewhere)
-           #:*window-width*
+  ;; some configurables (to be later moved elsewhere)
+  (:export #:*window-width*
            #:*window-height*
            #:*window-title*
            #:*window-resizable*
@@ -23,11 +25,11 @@
 
            #:*use-fixed-timestep*
            #:*max-accumulated-timestep*
-           #:*update-step*
+           #:*update-step*)
 
 
-           ;; game class
-           #:game
+  ;; game class
+  (:export #:game
 
            #:preinit
            #:initialize
@@ -43,37 +45,43 @@
            #:on-idle
            #:on-tick
            #:on-quit
-           #:on-render
+           #:on-render)
 
-           ;; resource
-           :resource
+  ;; resource
+  (:export :resource
            :name
            :loaded
            :loadedp
-           :unload-resource
+           :unload-resource)
 
-           ;; time
-           #:get-current-milliseconds
+  ;; time
+  (:export #:get-current-milliseconds
            #:get-current-seconds
-           #:msec-delta-in-seconds
-           ))
+           #:msec-delta-in-seconds))
+
+
 
 (defpackage #:parendeck2d.profiler
   (:nicknames #:p2d.prof #:p2dprof)
 
   (:use #:cl)
 
+  ;; base counter
   (:export #:counter
-           #:increment-counter
-           
-           #:register-counter
+           #:increment-counter)
+  
+  ;; counter manager
+  (:export #:register-counter
            #:get-counter
            #:sample-appropriate-counters
            #:clear-all-counters
-           #:write-counter-report
+           #:write-counter-report)
 
-           #:with-profiling
+  ;; high-level profiler interface
+  (:export #:with-profiling
            #:with-counter))
+
+
 
 (defpackage #:parendeck2d.math
   (:nicknames #:p2d.math #:p2dm)
@@ -84,6 +92,7 @@
                 #:clamp
                 #:rcurry)
 
+  ;; generic math utilities
   (:export #:+epsilon+
            #:standard-float
            #:+standard-float-zero+
@@ -93,9 +102,10 @@
            #:clamp-vector-elements
            #:deg->rad
            #:rad->deg
-           #:random-float
+           #:random-float)
 
-           #:vector-2d
+  ;; vectors
+  (:export #:vector-2d
            #:vector-3d
            #:vector-4d
            #:vec-x
@@ -130,60 +140,62 @@
            #:⋅
            #:×))
 
+
+
 (defpackage #:parendeck2d.graphics
   (:nicknames #:p2d.graphics #:p2d.gfx #:p2dg)
   (:use #:cl
         #:parendeck2d.math)
 
-  (:export
-   ;; color
-   #:color-4
-   #:col-r
-   #:col-g
-   #:col-b
-   #:col-a
-   #:make-color-4
+  ;; color
+  (:export #:color-4
+           #:col-r
+           #:col-g
+           #:col-b
+           #:col-a
+           #:make-color-4)
 
-   ;; texture
-   #:texture
-   #:width
-   #:height
-   #:texture-id
-   #:clear-texture-cache
-   #:bind-texture
-   #:unbind-current-texture
-   #:texture-valid-p
-   #:get-texture
-   #:make-texture-from-file
-   #:make-texture-from-sdl-surface
-   #:make-blank-texture
-   #:free-texture
-   #:with-texture
+  ;; texture
+  (:export #:texture
+           #:width
+           #:height
+           #:texture-id
+           #:clear-texture-cache
+           #:bind-texture
+           #:unbind-current-texture
+           #:texture-valid-p
+           #:get-texture
+           #:make-texture-from-file
+           #:make-texture-from-sdl-surface
+           #:make-blank-texture
+           #:free-texture
+           #:with-texture)
 
-   ;; font
-   #:*default-font-size*
-   #:font
-   #:font-valid-p
-   #:render-text
-   #:rendered-font
-   #:bitmap-font
-   #:clear-font-cache
-   #:get-rendered-font
-   #:get-bitmap-font
-   #:make-rendered-font-from-file
-   #:free-font
+  ;; font
+  (:export #:*default-font-size*
+           #:font
+           #:font-valid-p
+           #:render-text
+           #:rendered-font
+           #:bitmap-font
+           #:clear-font-cache
+           #:get-rendered-font
+           #:get-bitmap-font
+           #:make-rendered-font-from-file
+           #:free-font)
 
-   ;; drawables
-   #:drawable
-   #:draw
-   #:draw-rectangle
-   #:draw-rectangle-outline
-   #:with-color
+  ;; drawables
+  (:export #:drawable
+           #:draw
+           #:draw-rectangle
+           #:draw-rectangle-outline
+           #:with-color)
 
-   ;; text
-   #:text
-   #:rendered-text
-   ))
+  ;; text
+  (:export #:text
+           #:rendered-text))
+
+
 
 (defpackage #:parendeck2d.graphics.gl-utils
   (:nicknames #:p2d.graphics.gl-utils #:p2d.gfx.glu #:p2dglu)
@@ -192,14 +204,16 @@
         #:parendeck2d.math
         #:parendeck2d.graphics)
 
+  ;; generic GL utilities
   (:export #:translate2
            #:translate3
            #:rotatez*
            #:scale2-uniform
            #:scale3-uniform
-           #:color4
+           #:color4)
 
-           #:draw-circle
+  ;; shapes
+  (:export #:draw-circle
            #:draw-circle-outline
            #:draw-triangle
            #:draw-triangle-outline
@@ -208,6 +222,8 @@
            #:draw-regular-polygon
            #:draw-regular-polygon-outline))
 
+
+
 (defpackage #:parendeck2d.audio
   (:nicknames #:p2d.audio #:p2d.sfx #:p2da)
 
@@ -215,6 +231,7 @@
   (:export #:initialize-audio           ;FIXME technically not public interface outside engine
            #:deinitialize-audio))
 
+
 
 (defpackage #:parendeck2d.ecs
   (:nicknames #:p2d.ecs #:p2de)
@@ -222,6 +239,8 @@
   (:use #:cl
         #:alexandria)
 
+  ;; ECS stuff
+  ;; FIXME some of these are implementation details and should be hidden
   (:export #:entity
            #:entity-id
            #:tag
@@ -250,9 +269,10 @@
            #:register-system
            #:do-system
            #:entity-added
-           #:entity-removed
+           #:entity-removed)
 
-           #:*ecs-manager*
+  ;; ECS manager
+  (:export #:*ecs-manager*
            #:init-ecs
            #:deinit-ecs
            #:tick
