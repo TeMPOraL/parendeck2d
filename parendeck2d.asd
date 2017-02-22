@@ -23,7 +23,8 @@
                #:sdl2-mixer
                #:sdl2-ttf
                #:cl-opengl
-               #:yason)
+               #:yason
+               #:cl-who)
 
   :components ((:file "packages")
                (:file "version")
