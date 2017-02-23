@@ -36,8 +36,9 @@
   "Used to step through all systems of given `TYPE'."
   (dolist (s (systems *ecs-manager*))
     (when (eql (system-type s) type)
-      (dolist (id (entities s))
-        (do-system s (entity-by-id id) dt))))
+      (p2dprof:with-profiling ((alexandria:symbolicate "ECS-TICK-" (class-name (class-of s))) :description "ECS total system ticks per frame")
+       (dolist (id (entities s))
+         (do-system s (entity-by-id id) dt)))))
   ;; FIXME need one well-defined moment for deleting entities!
   ;; (right now, entities are deleted at the end of ticking of a particular type of system)
   (delete-entities-scheduled-for-deletion))
