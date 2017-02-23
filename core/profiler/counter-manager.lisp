@@ -39,10 +39,8 @@
       (:html
        (write-report-header file)
        (:body
-        (maphash (lambda (name counter)
-                   (declare (ignore name))
-                   (write-counter-details file counter))
-                 *counters*)))))
+        (write-counters-summary file)
+        (write-counters-full-data file)))))
   (log:info "Performance counters report written to file." filename))
 
 (defun write-report-header (stream)
@@ -52,11 +50,11 @@
      (:title "P2D performance counters report")
      ;; TODO helper styles and JS
      (:script :type "text/javascript" :src "https://www.gstatic.com/charts/loader.js")
-     (:script :type "text/javascript" "google.charts.load('current', {packages: ['corechart', 'line']});
-google.charts.setOnLoadCallback(drawAllCharts);
+     (:script :type "text/javascript" "google.charts.load('current', {packages: ['corechart', 'line', 'table']});
+google.charts.setOnLoadCallback(drawAll);
 
 function drawSingleChart(data, where, title, subtitle) {
-  var chartData = google.visualization.arrayToDataTable([['time', 'increments', 'samples', 'spi']].concat(data));
+  var chartData = google.visualization.arrayToDataTable([['nth sampling', 'increments', 'samples', 'spi']].concat(data));
   var options = {
     chart: {
       title: title,
@@ -65,26 +63,57 @@ function drawSingleChart(data, where, title, subtitle) {
     width: 900,
     height: 500,
     series: {
-      0 : {axis: 'increments'},
-      1 : {axis: 'samples'},
-      2 : {axis: 'spi'}
+      0 : {targetAxisIndex: 0},
+      1 : {targetAxisIndex: 1},
+      2 : {targetAxisIndex: 2}
     },
-    axes: {
-      y: {
-        increments: { label: 'Increments' },
-        samples: { label: 'Samples' },
-        spi: { label: 'Samples per Increment'}
-      }
+    vAxes: {
+      0: { title: 'Increments' },
+      1: { title: 'Samples' },
+      2: { title: 'Samples per increment' }
     },
     focusTarget: 'category',
     selectionMode: 'multiple'
   };
 
-  var chart = new google.charts.Line(document.getElementById(where));
+  var chart = new google.visualization.LineChart(document.getElementById(where));
   chart.draw(chartData, options);
 }
 
-function drawAllCharts() {"
+function drawTable(data) {
+  var tableData = new google.visualization.DataTable();
+  tableData.addColumn('string', 'Counter name');
+  tableData.addColumn('string', 'Counter description');
+  tableData.addColumn('string', 'Sampling interval');
+  tableData.addColumn('number', 'Increments min');
+  tableData.addColumn('number', 'Increments running avg');
+  tableData.addColumn('number', 'Increments max');
+  tableData.addColumn('number', 'Samples min');
+  tableData.addColumn('number', 'Samples running avg');
+  tableData.addColumn('number', 'Samples max');
+  tableData.addRows(data);
+
+  var view = new google.visualization.DataView(tableData);
+  var table = new google.visualization.Table(document.getElementById('counters-table'));
+  table.draw(view);
+}
+
+function drawAll() {
+drawTable(["              
+              (maphash (lambda (name counter)
+                         (who:fmt "['~A', '~A', '~A', ~F, ~F, ~F, ~F, ~F, ~F],"
+                                  (package-qualify-symbol-for-title (counter-name counter))
+                                  (counter-description counter)
+                                  (describe-sampling-interval (counter-sampling-interval counter))
+                                  (coerce (counter-increments-global-min counter) 'double-float)
+                                  (coerce (counter-increments-running-avg counter) 'double-float)
+                                  (coerce (counter-increments-global-max counter) 'double-float)
+                                  (coerce (counter-samples-global-min counter) 'double-float)
+                                  (coerce (counter-samples-running-avg counter) 'double-float)
+                                  (coerce (counter-samples-global-max counter) 'double-float)))
+                       *counters*)
+              "]);
+"
               (maphash (lambda (name counter)
                          (who:fmt "~&drawSingleChart(~A, '~A-chart', '~A', '~A');"
                                   (make-combined-json-dataset counter)
@@ -93,6 +122,19 @@ function drawAllCharts() {"
                                   (counter-description counter))) ;TODO escape
                        *counters*)
               "}"))))
+
+(defun write-counters-summary (stream)
+  (who:with-html-output (stream)
+    (:div :class "counter-summary"
+          (:h2 "Counters")
+          (:div :id "counters-table"))))
+
+(defun write-counters-full-data (stream)
+  (who:with-html-output (stream)
+    (maphash (lambda (name counter)
+               (declare (ignore name))
+               (write-counter-details stream counter))
+             *counters*)))
 
 (defun write-counter-details (stream counter)
   (who:with-html-output (stream)
