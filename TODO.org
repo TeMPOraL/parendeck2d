@@ -16,6 +16,8 @@
 
 * Things to do
 ** Functionality
+*** Generic debugging switch
+    Something to use to toggle profiling, auto-saving perf counters, engine-level debug keys, etc.
 
 *** vsync control
 
@@ -123,11 +125,14 @@
 
 **** TODO [#C] Find a way to unify horizontal scale of counters for readability.
 
-**** TODO [#B] Maybe make a way to "snapshot" counters?
+**** DONE [#B] Maybe make a way to "snapshot" counters?
+     CLOSED: [2017-02-23 czw 04:14]
      Either deep-copy, or add a function that'll dump the state of counters at runtime
      to a uniquely-named file, in order to save the "context" when game starts to lag.
 
      Actually, binding write-counter-report (+ name generation) to a keypress event should be enough.
+
+     Done; :after methods FTW.
 
 **** DONE [#B] Add a more convenient counter summary - a sortable table maybe, w/ stat values visible
      CLOSED: [2017-02-23 czw 03:59]

@@ -118,6 +118,16 @@
 
 ;;; Code (meant to be) common across all games.
 
+(defmethod on-key-event :after ((game game) key state repeat)
+  (declare (ignore game repeat))
+  (let ((key-code (sdl2:scancode-symbol (sdl2:scancode-value key))))
+    ;; DEBUG - snapshot all counters
+    (when (and (eql key-code :scancode-f9)
+               (sdl2:key-down-p state))
+      (log:info "Writing snapshot of all performance counters on user request.")
+      (multiple-value-bind (s m h day month year) (decode-universal-time (get-universal-time))
+        (p2dprof:write-counter-report (format nil "perf-report-snapshot-~A-~A-~A_~A_~A_~A.html" year month day h m s))))))
+
 (defmethod on-render :before ((game game) dt)
   (declare (ignore game dt))
   (gl:clear :color-buffer)
