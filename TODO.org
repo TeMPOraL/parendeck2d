@@ -129,7 +129,8 @@
 
      Actually, binding write-counter-report (+ name generation) to a keypress event should be enough.
 
-**** TODO [#B] Add a more convenient counter summary - a sortable table maybe, w/ stat values visible
+**** DONE [#B] Add a more convenient counter summary - a sortable table maybe, w/ stat values visible
+     CLOSED: [2017-02-23 czw 03:59]
      Something like:
      | Counter name | Interval | Increments         | Sample              |
      |              |          | MIN / RAVG / MAX   | MIN / RAVG / MAX    |
