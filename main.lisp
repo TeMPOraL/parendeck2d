@@ -176,16 +176,18 @@
                (setf dt-accumulator (clamp (+ dt-accumulator dt) 0 *max-accumulated-timestep*))
 
                (loop while (> dt-accumulator *update-step*) do
-                    (p2dprof:with-profiling ('p2d-game-tick :description "main loop single tick (msec/frame)" :interval 0 :history-size 128)
-                        (on-tick *game* *update-step*))
+                    (p2dprof:with-profiling ('p2d-game-tick :description "main loop single tick (msec/frame)" :history-size 128)
+                      (on-tick *game* *update-step*))
+
+                    (p2dprof:sample-appropriate-counters (get-current-seconds) :tick)
                     (decf dt-accumulator *update-step*)))
 
              (on-idle *game* dt)
-             (p2dprof:with-profiling ('p2d-on-render :description "main loop on-render (msec/frame)" :interval 0 :history-size 64)
-              (on-render *game* dt))
+             (p2dprof:with-profiling ('p2d-on-render :description "main loop on-render (msec/frame)" :interval :frame :history-size 64)
+               (on-render *game* dt))
              (p2dprof:increment-counter frames-counter)
 
-             (p2dprof:sample-appropriate-counters (get-current-seconds)))
+             (p2dprof:sample-appropriate-counters (get-current-seconds) :frame))
       
       (:quit ()
              (on-quit *game*))))

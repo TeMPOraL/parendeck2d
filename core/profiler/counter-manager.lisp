@@ -18,10 +18,10 @@
     (or counter
         (register-counter :name name :description description :interval interval :history-size history-size))))
 
-(defun sample-appropriate-counters (current-time)
+(defun sample-appropriate-counters (current-time &optional sampling-time-designator)
   (maphash (lambda (name counter)
              (declare (ignore name))
-             (when (counter-ripe-for-sampling-p counter current-time)
+             (when (counter-ripe-for-sampling-p counter current-time sampling-time-designator)
                (sample-counter counter current-time)))
            *counters*))
 
@@ -101,11 +101,12 @@ function drawAllCharts() {"
           (:p (who:esc (counter-description counter)))
           (:ul
            (:li (who:fmt "Buffer size: ~A" (counter-history-size counter)))
-           (:li (who:fmt "Sampling every ~A second~:P" (counter-sampling-interval counter)))
+           (:li (who:str (describe-sampling-interval (counter-sampling-interval counter))))
            (:li "Last recorded value"
                 (:ul (:li "Increments: " (who:str (counter-current-increments counter)))
                      (:li "Sample: " (who:str (counter-current-sample counter)))))
            (:li "Stats"
+                ;; FIXME all those coerces will fail if relevant values are NIL
                 (:ul (:li (who:fmt "Increments (min/running avg/max): ~A/~A/~A"
                                    (coerce (counter-increments-global-min counter) 'double-float)
                                    (coerce (counter-increments-running-avg counter) 'double-float)
@@ -134,3 +135,8 @@ function drawAllCharts() {"
 
 (defun package-qualify-symbol-for-title (symbol)
   (prin1-to-string symbol))
+
+(defun describe-sampling-interval (sampling-interval)
+  (if (numberp sampling-interval)
+      (format nil "Sampling every ~A second~:P" sampling-interval)
+      (format nil "Sampling every ~A" (string-downcase (string sampling-interval)))))

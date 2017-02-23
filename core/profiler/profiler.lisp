@@ -6,7 +6,7 @@
 ;;; with-profiling -> frame (or second) counter for time / calls (increments) + notes (with metadata) to tracing if enabled
 ;;; register-event -> frame (or second) counter for event invocations + note (with metadata) to tracing if enabled
 
-(defmacro with-profiling ((counter-name &key (description "") (interval 0) (history-size +default-counter-history-size+)) &body body)
+(defmacro with-profiling ((counter-name &key (description "") (interval :tick) (history-size +default-counter-history-size+)) &body body)
   "Measure the execution time and count of a block of code using a counter named `COUNTER-NAME'.
 Use `INTERVAL' to determine how often a counter should be sampled (in seconds).
 
@@ -19,13 +19,13 @@ of this macro, as counters currently do not support redefinition."
            (progn ,@body)
          (increment-counter ,counter (- (p2d:get-current-milliseconds) ,now))))))
 
-(defmacro with-counter ((counter-symbol counter-name &key (description "") (interval 0) (history-size +default-counter-history-size+)) &body body)
+(defmacro with-counter ((counter-symbol counter-name &key (description "") (interval :tick) (history-size +default-counter-history-size+)) &body body)
   "Bind a counter `COUNTER-NAME' to a variable `COUNTER-SYMBOL'.
 Basically a shorthand to avoid typing a let."
   `(let ((,counter-symbol (get-counter ,counter-name :description ,description :interval ,interval :history-size ,history-size)))
      ,@body))
 
-(defun count-value (value counter-name &key (description "") (interval 0) (history-size +default-counter-history-size+))
+(defun count-value (value counter-name &key (description "") (interval :tick) (history-size +default-counter-history-size+))
   "Increment counter `COUNTER-NAME' by `VALUE'.
 An utility function to save one from additional nesting level using `WITH-COUNTER'
 when a simple increment-by-value is intended."

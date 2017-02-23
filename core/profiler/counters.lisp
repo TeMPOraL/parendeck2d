@@ -177,13 +177,25 @@
 
   (setf (slot-value counter 'last-sampling-time) current-time))
 
-(defun counter-ripe-for-sampling-p (counter current-time)
-  (> (- current-time
-        (slot-value counter 'last-sampling-time))
-     (slot-value counter 'sampling-interval)))
+(defun counter-ripe-for-sampling-p (counter current-time &optional sampling-time-designator)
+  (let ((sampling-interval (slot-value counter 'sampling-interval)))
+    (or (eql sampling-interval
+             sampling-time-designator)
+        (and (numberp sampling-interval)
+             (> (- current-time
+                   (slot-value counter 'last-sampling-time))
+                (slot-value counter 'sampling-interval))))))
 
 (defmethod print-object ((counter counter) stream)
   (print-unreadable-object (counter stream :type t :identity t)
     (with-slots (name description sampling-interval)
         counter
-      (format stream "~A (~A) sampled every ~A second~:p" name description sampling-interval))))
+      (format stream "~A (~A) sampled every ~A"
+              name
+              description
+              (cond ((eql sampling-interval :frame)
+                     "frame")
+                    ((eql sampling-interval :tick)
+                     "tick")
+                    (t
+                     (format nil "~A second~:P" sampling-interval)))))))

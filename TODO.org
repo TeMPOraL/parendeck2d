@@ -115,7 +115,8 @@
 
 *** TODO [#A] Performance counters improvements
 
-**** TODO Consider adding "sampling time designators"
+**** DONE Consider adding "sampling time designators"
+     CLOSED: [2017-02-23 czw 02:41]
      - :frame - sample every full frame
      - :tick - sample every game tick (including every full frame if not in fixed-timestep mode)
        Or maybe just have the user use :frame when they know their game is not using a fixed timestep.
@@ -128,6 +129,15 @@
 
      Actually, binding write-counter-report (+ name generation) to a keypress event should be enough.
 
+**** TODO [#B] Add a more convenient counter summary - a sortable table maybe, w/ stat values visible
+     Something like:
+     | Counter name | Interval | Increments         | Sample              |
+     |              |          | MIN / RAVG / MAX   | MIN / RAVG / MAX    |
+     |--------------+----------+--------------------+---------------------|
+     | Counter 1    | frame    | 1.0 / 10.0 / 100.0 | 1.23 / 12.3 / 123.0 |
+     | ...          | ...      | ...                | ...                 |
+
+  
 **** TODO [#C] Maybe make counters auto-dump a report if game crashes for some reason
 
 **** TODO [#C] Make ring buffers return only real values
