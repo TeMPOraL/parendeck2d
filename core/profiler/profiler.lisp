@@ -53,3 +53,4 @@ when a simple increment-by-value is intended."
              (with-open-file (,graph-report ,file-name :direction :output :if-exists :supersede)
                (sb-sprof:report :type :graph :stream ,graph-report)))))
   #-sbcl(error "Statistical profiling is not available on this Lisp implementation."))
+

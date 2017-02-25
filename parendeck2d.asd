@@ -40,6 +40,7 @@
                                               :components ((:file "counters")
                                                            (:file "counter-manager")
                                                            (:file "tracing")
+                                                           (:file "gc")
                                                            (:file "profiler")))))
 
                (:module "math"

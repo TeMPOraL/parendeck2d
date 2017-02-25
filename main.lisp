@@ -51,6 +51,7 @@ The `PROFILING' parameter does NOT affect engine's internal profiling and debugg
   (log-sysinfo)
 
   (p2dprof:clear-all-counters)
+  (p2dprof:install-gc-tracker)
   (clear-resource-tracking)
   
   (sdl2:init :everything)
@@ -170,7 +171,9 @@ The `PROFILING' parameter does NOT affect engine's internal profiling and debugg
   "Deinitialize the engine."
   (log:info "Deinitializing the engine.")
 
+  (p2dprof:uninstall-gc-tracker)
   (p2dprof:write-counter-report "perf-report.html") ;TODO need a debug/config flag for that at some point, to not dump that on unsuspecting users
+
   
   (deinit-main-window)
   (p2da:deinitialize-audio)

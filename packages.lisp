@@ -80,6 +80,10 @@
            #:clear-all-counters
            #:write-counter-report)
 
+  ;; GC utilities
+  (:export #:install-gc-tracker
+           #:uninstall-gc-tracker)
+
   ;; high-level profiler interface
   (:export #:with-profiling
            #:with-counter
