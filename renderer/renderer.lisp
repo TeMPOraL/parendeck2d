@@ -21,7 +21,7 @@
                                                      '(:opengl :resizable)
                                                      '(:opengl))))
   
-  (log:info "Acquiing GL context.")
+  (log:info "Acquiring GL context.")
   (setf *gl-context* (sdl2:gl-create-context *main-window*))
   (sdl2:gl-make-current *main-window* *gl-context*)
   (log-opengl-info)

@@ -60,7 +60,7 @@ function drawSingleChart(data, where, title, subtitle) {
       title: title,
       subtitle: subtitle
     },
-    width: 900,
+    width: 1600,
     height: 500,
     series: {
       0 : {targetAxisIndex: 0},
@@ -101,6 +101,7 @@ function drawTable(data) {
 function drawAll() {
 drawTable(["              
               (maphash (lambda (name counter)
+                         (declare (ignore name))
                          (who:fmt "['~A', '~A', '~A', ~F, ~F, ~F, ~F, ~F, ~F],"
                                   (package-qualify-symbol-for-title (counter-name counter))
                                   (counter-description counter)
@@ -115,6 +116,7 @@ drawTable(["
               "]);
 "
               (maphash (lambda (name counter)
+                         (declare (ignore name))
                          (who:fmt "~&drawSingleChart(~A, '~A-chart', '~A', '~A');"
                                   (make-combined-json-dataset counter)
                                   (package-qualify-symbol-for-html-id (counter-name counter))

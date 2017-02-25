@@ -39,7 +39,8 @@
       (p2dprof:with-profiling ((alexandria:ensure-symbol (alexandria:symbolicate "ECS-TICK-" (class-name (class-of s)))
                                                          :parendeck2d.ecs)
                                :description "ECS system ticks/frame (msec/frame)"
-                               :interval :frame)
+                               :interval :frame
+                               :history-size 600)
        (dolist (id (entities s))
          (do-system s (entity-by-id id) dt)))))
   ;; FIXME need one well-defined moment for deleting entities!

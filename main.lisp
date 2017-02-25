@@ -22,18 +22,16 @@
   `(call-with-engine-initialized (lambda () ,@body)))
 
 
-;;; Temporary - profiling using sb-sprof
-#+sbcl
-(eval-when (:compile-toplevel :load-toplevel) (require 'sb-sprof))
 
-#+sbcl
-(defun run-with-profiling (&optional game)
+(defun run (&key game profiling)
+  "Start the engine. Will load the `GAME' if provided.
+If `PROFILING' is T, run the game loop under a statistical profiler.
+The `PROFILING' parameter does NOT affect engine's internal profiling and debugging tools."
   (configure-logger)
   
   (log-engine-startup-message)
 
-  (setf *game* (if game
-                   game
+  (setf *game* (or game
                    (progn
                      (log:warn "No game registered; will use engine default scene.")
                      (setf *game* (make-instance 'default-game)))))
@@ -43,39 +41,9 @@
   (with-engine-initialized
     (init-main-window)
     (initialize *game*)
-    (sb-sprof:reset)
-    (sb-sprof:start-profiling :max-samples 100000)
-    (run-main-loop)
-    (sb-sprof:stop-profiling)
-    (with-open-file (graph-report "sb-sprof.txt" :direction :output :if-exists :supersede)
-      (sb-sprof:report :type :graph :stream graph-report))
-    (deinitialize *game*)))
-
-#-sbcl
-(defun run-with-profiling (&optional game)
-  (declare (ignore game))
-  (error "Profiling currently not supported on this Lisp implementation."))
-
-
-
-(defun run (&optional game)
-  "Start the engine. Will load the `GAME' if provided."
-  (configure-logger)
-  
-  (log-engine-startup-message)
-
-  (setf *game* (if game
-                   game
-                   (progn
-                     (log:warn "No game registered; will use engine default scene.")
-                     (setf *game* (make-instance 'default-game)))))
-
-  (preinit *game*)
-
-  (with-engine-initialized
-    (init-main-window)
-    (initialize *game*)
-    (run-main-loop)
+    (if profiling
+        (run-profiled-main-loop)
+        (run-main-loop))
     (deinitialize *game*)))
 
 (defun init-engine ()
@@ -124,6 +92,10 @@
          (on-window-close *game*))
         (t
          (log:error "Unknown window event." event window-id data-1 data-2))))
+
+(defun run-profiled-main-loop ()
+  (p2dprof:with-statistical-profiling ()
+    (run-main-loop)))
 
 (defun run-main-loop ()
   "Main loop of the engine."

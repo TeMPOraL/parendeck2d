@@ -10,8 +10,7 @@
   
   (:export #:*version*
            #:*main-window*
-           #:run
-           #:run-with-profiling)
+           #:run)
 
   (:export #:track-resource)
 
@@ -84,7 +83,8 @@
   ;; high-level profiler interface
   (:export #:with-profiling
            #:with-counter
-           #:count-value))
+           #:count-value
+           #:with-statistical-profiling))
 
 
 

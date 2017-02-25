@@ -31,3 +31,25 @@ An utility function to save one from additional nesting level using `WITH-COUNTE
 when a simple increment-by-value is intended."
   (with-counter (counter counter-name :description description :interval interval :history-size history-size)
     (increment-counter counter value)))
+
+
+
+#+sbcl
+(eval-when (:compile-toplevel :load-toplevel) (require 'sb-sprof))
+
+(defmacro with-statistical-profiling ((&key (file-name "sb-sprof.txt") (max-samples 100000)) &body body)
+  "Run `BODY' under statistical profiling, if available. Set sample limit to `MAX-SAMPLES'. Save report to `FILE-NAME'."
+  #+sbcl(alexandria:with-gensyms
+         (graph-report)
+         (alexandria:once-only
+          (file-name max-samples)
+          `(progn
+             (sb-sprof:reset)
+             (log:info "Starting statistical profiler. Max samples = ~A." ,max-samples)
+             (sb-sprof:start-profiling :max-samples ,max-samples)
+             ,@body
+             (sb-sprof:stop-profiling)
+             (log:info "Saving profiler report to file ~A." ,file-name)
+             (with-open-file (,graph-report ,file-name :direction :output :if-exists :supersede)
+               (sb-sprof:report :type :graph :stream ,graph-report)))))
+  #-sbcl(error "Statistical profiling is not available on this Lisp implementation."))
