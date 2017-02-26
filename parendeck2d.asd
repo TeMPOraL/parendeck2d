@@ -30,7 +30,8 @@
                (:file "version")
                
                (:module "core"
-                        :components ((:file "dirs")
+                        :components ((:file "fixes")
+                                     (:file "dirs")
                                      (:file "logger")
                                      (:file "printers")
                                      (:file "time")
