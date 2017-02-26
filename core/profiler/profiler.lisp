@@ -37,8 +37,9 @@ when a simple increment-by-value is intended."
 #+sbcl
 (eval-when (:compile-toplevel :load-toplevel) (require 'sb-sprof))
 
-(defmacro with-statistical-profiling ((&key (file-name "sb-sprof.txt") (max-samples 100000)) &body body)
-  "Run `BODY' under statistical profiling, if available. Set sample limit to `MAX-SAMPLES'. Save report to `FILE-NAME'."
+(defmacro with-statistical-profiling ((&key (file-name "sb-sprof.txt") (max-samples 100000) (mode :cpu)) &body body)
+  "Run `BODY' under statistical profiling, if available. Set sample limit to `MAX-SAMPLES'. Save report to `FILE-NAME'.
+If `MODE' is set to :CPU, sample CPU time. If set to :ALLOC, sample memory usage."
   #+sbcl(alexandria:with-gensyms
          (graph-report)
          (alexandria:once-only
@@ -46,7 +47,7 @@ when a simple increment-by-value is intended."
           `(progn
              (sb-sprof:reset)
              (log:info "Starting statistical profiler. Max samples = ~A." ,max-samples)
-             (sb-sprof:start-profiling :max-samples ,max-samples)
+             (sb-sprof:start-profiling :max-samples ,max-samples :mode ,mode)
              ,@body
              (sb-sprof:stop-profiling)
              (log:info "Saving profiler report to file ~A." ,file-name)

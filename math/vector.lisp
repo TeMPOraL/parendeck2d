@@ -86,7 +86,9 @@
   (map-into vec1 #'- vec1))
 
 (defun distance-between-vectors-squared (vec1 vec2)
-  (reduce #'+ (map 'vector (lambda (x y) (square (- x y))) vec1 vec2)))
+  (loop for x across vec1
+     for y across vec2
+     summing (square (- x y))))
 
 (defun distance-between-vectors (vec1 vec2)
   (sqrt (distance-between-vectors-squared vec1 vec2)))

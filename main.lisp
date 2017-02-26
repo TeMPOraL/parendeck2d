@@ -23,10 +23,10 @@
 
 
 
-(defun run (&key game profiling)
+(defun run (&key game profiling-mode)
   "Start the engine. Will load the `GAME' if provided.
-If `PROFILING' is T, run the game loop under a statistical profiler.
-The `PROFILING' parameter does NOT affect engine's internal profiling and debugging tools."
+If `PROFILING-MODE' is :CPU or :ALLOC, run the game loop under a statistical profiler.
+The `PROFILING-MODE' parameter does NOT affect engine's internal profiling and debugging tools."
   (configure-logger)
   
   (log-engine-startup-message)
@@ -41,8 +41,8 @@ The `PROFILING' parameter does NOT affect engine's internal profiling and debugg
   (with-engine-initialized
     (init-main-window)
     (initialize *game*)
-    (if profiling
-        (run-profiled-main-loop)
+    (if profiling-mode
+        (run-profiled-main-loop profiling-mode)
         (run-main-loop))
     (deinitialize *game*)))
 
@@ -94,8 +94,8 @@ The `PROFILING' parameter does NOT affect engine's internal profiling and debugg
         (t
          (log:error "Unknown window event." event window-id data-1 data-2))))
 
-(defun run-profiled-main-loop ()
-  (p2dprof:with-statistical-profiling ()
+(defun run-profiled-main-loop (&optional (mode :cpu))
+  (p2dprof:with-statistical-profiling (:mode mode)
     (run-main-loop)))
 
 (defun run-main-loop ()
