@@ -8,10 +8,10 @@
   (with-gensyms (rc)
     `(let ((,rc ,form))
        (when (< ,rc ,lower-limit)
-         (error 'sdl-rc-error :rc ,rc :string (sdl2-ffi.functions:sdl-get-error)))
+         (error 'sdl2::sdl-rc-error :rc ,rc :string (sdl2-ffi.functions:sdl-get-error)))
        ,rc)))
 
 ;; SDL_GL_GetSwapInterval() can return -1 as a valid value; currently, CL-SDL restricts
 ;; the return value to >= 0, which is incorrect.
 (defun sdl2:gl-get-swap-interval ()
-  (check-not-below -1 (sdl2-ffi.functions:sdl-gl-get-swap-interval)))
+  (check-not-below (sdl2-ffi.functions:sdl-gl-get-swap-interval) -1))
