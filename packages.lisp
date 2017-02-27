@@ -7,6 +7,8 @@
   
   (:use #:cl
         #:alexandria)
+
+  (:export #:ignore-and-log-errors)
   
   (:export #:*version*
            #:*main-window*

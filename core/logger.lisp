@@ -26,3 +26,12 @@
 (defmacro with-logging-conditions (&body forms)
   "Set up a passthrough condition handler that will log all signalled conditions."
   `(call-with-logging-conditions (lambda () ,@forms)))
+
+(defmacro ignore-and-log-errors (&body forms)
+  "A replacement for `IGNORE-ERRORS' that also logs the condition.
+Log entry will display the location in which this macro was expanded."
+  `(handler-case
+       (progn ,@forms)
+     (t (condition) (progn
+                      (log:warn "Caught and ignored a condition." condition)))))
+

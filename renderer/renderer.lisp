@@ -4,10 +4,12 @@
 (defparameter *gl-context* nil)
 
 ;;; configurables
+;;; TODO maybe don't export configurables but instead export getters and setters (that can modify params at runtime if required)
 (defparameter *window-width* 800)
 (defparameter *window-height* 600)
 (defparameter *window-title* "Parendeck 2D")
 (defparameter *window-resizable* nil "Whether or not window is created as resizable.")
+;;; TODO vsync param
 
 (defparameter *canvas-width* 800 "Width of the virtual canvas - i.e. GL 'screen space' in ortho mode.")
 (defparameter *canvas-height* 600 "Height of the virtual canvas - i.e. GL 'screen space' in ortho mode.")
