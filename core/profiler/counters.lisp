@@ -54,6 +54,11 @@
               (aref store (the fixnum (mod (+ write i) size)))))
       result)))
 
+(defun csrb-last-value (buffer)
+  (declare (optimize (speed 3) (debug 0) (safety 0)))
+  (aref (slot-value buffer 'store)
+        (slot-value buffer 'write)))
+
 (defmethod print-object ((buffer counter-samples-ring-buffer) stream)
   (print-unreadable-object (buffer stream :type t :identity t)
     (with-slots (size store)
@@ -113,6 +118,9 @@
       counter
     (incf current-sample value)
     (incf current-increments)))
+
+(defun counter-last-sample (counter)
+  (csrb-last-value (counter-last-n-samples counter))) ;FIXME IT'S WRONG
 
 (defun counter-samples (counter)
   (csrb-values (counter-last-n-samples counter)))

@@ -1,11 +1,14 @@
 (in-package #:parendeck2d)
 
-(defparameter *engine-hello-message* (concatenate 'string "Parendeck 2D Engine, version " *version*))
+(defparameter +engine-hello-message+ (concatenate 'string "Parendeck 2D Engine, version " *version*))
 (defparameter *game* nil "Game to be run.")
 
 (defparameter *use-fixed-timestep* t)
 (defparameter *update-step* (float (/ 1 60)))
-(defparameter *max-accumulated-timestep* 2.0)
+
+(defparameter +max-accumulated-timestep+ 2.0)
+
+(defvar *fps-counter* nil "Counter used to determine running FPS value.")
 
 ;;; lifecycle management
 (defun call-with-engine-initialized (func)
@@ -108,6 +111,7 @@ The `PROFILING-MODE' parameter does NOT affect engine's internal profiling and d
         (last-ticks (get-current-milliseconds))
         (current-ticks (get-current-milliseconds))
         (frames-counter (p2dprof:get-counter 'p2d-frames :interval 1 :description "full frames per second" :history-size 10)))
+    (setf *fps-counter* frames-counter)
     (sdl2:with-event-loop (:method :poll)
 
       (:keydown
@@ -146,7 +150,7 @@ The `PROFILING-MODE' parameter does NOT affect engine's internal profiling and d
 
              (when *use-fixed-timestep*
                ;; fixed-step game loop
-               (setf dt-accumulator (clamp (+ dt-accumulator dt) 0 *max-accumulated-timestep*))
+               (setf dt-accumulator (clamp (+ dt-accumulator dt) 0 +max-accumulated-timestep+))
 
                (loop while (> dt-accumulator *update-step*) do
                     (p2dprof:with-profiling ('p2d-game-tick :description "main loop single tick (msec/frame)" :history-size 128)
@@ -185,9 +189,29 @@ The `PROFILING-MODE' parameter does NOT affect engine's internal profiling and d
   (log-tracked-resources-report)
   (log:info "Goodbye!"))
 
+
+;;; FPS
+(defun current-fps ()
+  "Return last recorded frames per second value."
+  (if *fps-counter*
+      (p2dprof:counter-last-sample *fps-counter*) ;FIXME WRONG VALUE
+      0.0))
+
+(defun average-fps ()
+  "Returns the running averge of last few frames per second."
+  (if *fps-counter*
+      (p2dprof:counter-samples-running-avg *fps-counter*)
+      0.0))
+
+(defun fps-counter ()
+  "Returns the performance counter used to count frames per second."
+  *fps-counter*)
+
+
 ;;; other
+
 (defun log-engine-startup-message ()
-  (log:info "~A" *engine-hello-message*))
+  (log:info "~A" +engine-hello-message+))
 
 (defun log-sysinfo ()
   (log:info "Running on ~A - ~A ~A ~A ~A ~A."

@@ -71,6 +71,8 @@
   (:export #:counter
            #:increment-counter
            #:counter-samples
+           #:counter-samples-running-avg
+           #:counter-last-sample
            #:counter-increments
            #:counter-history-size
            #:+default-counter-history-size+)
