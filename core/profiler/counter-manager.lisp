@@ -9,7 +9,7 @@
 
 (defun register-counter (&key name description interval (history-size +default-counter-history-size+))
   "Register a new coutner under given `NAME'."
-  (log:info history-size)
+  (log:debug name description interval history-size)
   (setf (gethash name *counters*)
         (make-counter name description interval history-size)))
 
