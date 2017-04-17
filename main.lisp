@@ -194,7 +194,7 @@ The `PROFILING-MODE' parameter does NOT affect engine's internal profiling and d
 (defun current-fps ()
   "Return last recorded frames per second value."
   (if *fps-counter*
-      (p2dprof:counter-last-sample *fps-counter*) ;FIXME WRONG VALUE
+      (p2dprof:counter-last-sample *fps-counter*)
       0.0))
 
 (defun average-fps ()
