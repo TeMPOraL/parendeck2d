@@ -55,3 +55,17 @@
 
   (gl:clear-color 1 0 1 1)
   (gl:clear :color-buffer))
+
+
+;;; Utils
+;;; FIXME move elsewhere?
+
+(defun window->canvas (x y)
+  "Translate coordinates from window space to canvas space."
+  (values (float (* p2d:*canvas-width* (/ x p2d:*window-width*)))
+          (float (* p2d:*canvas-height* (/ y p2d:*window-height*)))))
+
+(defun canvas->window (x y)
+  "Translate coordinates from canvas space to window space."
+  (values (float (* p2d:*window-width* (/ x p2d:*canvas-width*)))
+          (float (* p2d:*window-height* (/ y p2d:*canvas-height*)))))

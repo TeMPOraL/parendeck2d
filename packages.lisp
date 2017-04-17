@@ -48,6 +48,10 @@
            #:on-quit
            #:on-render)
 
+  ;; renderer
+  (:export #:window->canvas
+           #:canvas->window)
+
   ;; resource
   (:export :resource
            :name
