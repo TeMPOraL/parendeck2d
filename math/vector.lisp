@@ -105,6 +105,21 @@
         (scaled-vector vec1 0)
         (scaled-vector vec1 (/ 1.0 len)))))
 
+(defun vector-of-length (vec1 len)
+  (scaled-vector (normalized-vector vec1) len))
+
+(defun clamp-vector (vec1 max-length)
+  (let ((length (vector-value vec1)))
+    (when (> length max-length)
+      (scale-vector vec1 (/ max-length length)))))
+
+(defun clamped-vector (vec1 max-length)
+  (let ((length (vector-value vec1)))
+    (if (> length max-length)
+        (scaled-vector vec1 (/ max-length length))
+        (scaled-vector vec1 1.0)        ;FIXME make a separate "copy vector" function
+        )))
+
 (defun reflect-vector (vec normal)
   "Reflect `VEC' from surface given by `NORMAL'. Modifies the vector."
   (subtract-from-vector vec

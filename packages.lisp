@@ -148,6 +148,9 @@
            #:vector-value-squared
            #:vector-value
            #:normalized-vector
+           #:vector-of-length
+           #:clamp-vector
+           #:clamped-vector
            #:reflect-vector
            #:reflected-vector
            #:rotate-vector-2d
