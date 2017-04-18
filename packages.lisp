@@ -155,6 +155,7 @@
            #:reflected-vector
            #:rotate-vector-2d
            #:rotated-vector-2d
+           #:vector-angle-2d
            #:cross-product
            #:dot-product
            #:⋅

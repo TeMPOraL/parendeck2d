@@ -146,7 +146,11 @@
     (make-vector-2d (- (* (vec-x vec) cos)
                        (* (vec-y vec) sin))
                     (+ (* (vec-x vec) sin)
-                          (* (vec-y vec) cos)))))
+                       (* (vec-y vec) cos)))))
+
+(defun vector-angle-2d (vec2d)          ;FIXME maybe better name?
+  "Returns the angle between `VEC2D' and the X axis."
+  (atan (vec-y vec2d) (vec-x vec2d)))
 
 ;;; TEST
 
