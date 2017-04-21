@@ -35,3 +35,6 @@
                                                                       (coerce g 'standard-float)
                                                                       (coerce b 'standard-float)
                                                                       (coerce a 'standard-float))))
+
+(defun lerp-color (v color-a color-b)
+  (map 'vector (alexandria:curry #'alexandria:lerp v) color-a color-b))

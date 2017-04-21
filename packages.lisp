@@ -113,6 +113,7 @@
   (:export #:+epsilon+
            #:standard-float
            #:+standard-float-zero+
+           #:+pi+
            #:+2pi+
            #:square
            #:clamp
@@ -174,7 +175,8 @@
            #:col-g
            #:col-b
            #:col-a
-           #:make-color-4)
+           #:make-color-4
+           #:lerp-color)
 
   ;; texture
   (:export #:texture
