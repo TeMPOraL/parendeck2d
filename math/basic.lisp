@@ -12,10 +12,9 @@
 (defun square (x)
   (the standard-float (* x x)))
 
-;; (defun clamp (what a b)
-;;   (if (< what a) a
-;;       (if (> what b) b
-;;           what)))
+(define-modify-macro clampf (min max) clamp
+  "Modify macro for `CLAMP'. Clamps the value of the place designated by the first argument
+to the range [`MIN', `MAX'].")
 
 (defun clamp-vector-elements (vec a b)
   (map 'vector (rcurry #'clamp a b) vec))

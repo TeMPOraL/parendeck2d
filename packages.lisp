@@ -116,7 +116,8 @@
            #:+pi+
            #:+2pi+
            #:square
-           #:clamp
+           #:clamp                      ; re-exported from Alexandria
+           #:clampf
            #:clamp-vector-elements
            #:deg->rad
            #:rad->deg
