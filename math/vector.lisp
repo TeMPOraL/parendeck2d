@@ -99,6 +99,9 @@
 (defun vector-value (vec1)
   (sqrt (vector-value-squared vec1)))
 
+(defun (setf vector-value) (new-val vec)
+  (scale-vector vec (/ new-val (vector-value vec)))) ;NOTE division by 0 (possibly)
+
 (defun normalized-vector (vec1)
   (let ((len (vector-value vec1)))
     (if (< (abs len) +epsilon+)
@@ -106,7 +109,7 @@
         (scaled-vector vec1 (/ 1.0 len)))))
 
 (defun vector-of-length (vec1 len)
-  (scaled-vector (normalized-vector vec1) len))
+  (scaled-vector (normalized-vector vec1) len)) ;NOTE division by 0 (possibly), also DRY implementation with (setf vector-value)
 
 (defun clamp-vector (vec1 max-length)
   (let ((length (vector-value vec1)))
