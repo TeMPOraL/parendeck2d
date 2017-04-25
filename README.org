@@ -10,6 +10,7 @@ refactor accordingly.
 * Games currently using the engine
 
 - [[https://github.com/TeMPOraL/tswr-asteroids/][TSW Redux: Asteroids]] (PROTOTYPE) (WIP)
+- [[https://github.com/TeMPOraL/lispjam-2017-04][Sheeps!]]
 
 * Credits
 
