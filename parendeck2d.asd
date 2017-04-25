@@ -20,7 +20,7 @@
                #:log4cl
                #:sdl2
                #:sdl2-image
-               #:sdl2-mixer
+               ;; #:sdl2-mixer -- temporarily disabled
                #:sdl2-ttf
                #:cl-opengl
                #:yason
