@@ -61,7 +61,6 @@
   (let ((dummy (cons nil nil)))
     (tg:finalize dummy (lambda ()
                          (when *gc-hook-installed*
-                           (count-value 1 'garbage-collector :description "Garbage collector invocations per frame." :interval :frame :history-size 600)
                            (record-gc-used)
                            (trap-next-gc))))
     (values)))
