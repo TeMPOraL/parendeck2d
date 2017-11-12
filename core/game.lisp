@@ -28,6 +28,10 @@
 (defgeneric on-key-event (game key state repeat)
   (:documentation "Lets the `GAME' react to the `STATE' of a `KEY' and know if it was a `REPEAT'ed press."))
 
+(defgeneric on-touch-event (game touch-id finger-id direction x y dx dy pressure)
+  (:documentation "Lets the `GAME' react to touch events. `finger-id' lets track multiple fingers simultaneously. `x', `y', `dx' and `dy' are normalized
+to <0..1> range."))
+
 (defgeneric on-window-resized (game new-width new-height)
   (:documentation "Called when window was resized to `NEW-WIDTH' x `NEW-HEIGHT'."))
 
@@ -81,6 +85,10 @@
 (defmethod on-key-event ((game game) key state repeat)
   (declare (ignore game key state repeat))
   (log:trace "The game did not specify keyboard event handler."))
+
+(defmethod on-touch-event ((game game) touch-id finger-id direction x y dx dy pressure)
+  (declare (ignore game touch-id finger-id direction x y dx dy pressure))
+  (log:trace "The game did not specify touch event handler."))
 
 (defmethod on-window-resized ((game game) new-width new-height)
   (declare (ignore new-width new-height))

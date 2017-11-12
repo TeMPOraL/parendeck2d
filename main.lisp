@@ -142,6 +142,18 @@ The `PROFILING-MODE' parameter does NOT affect engine's internal profiling and d
        (:window-id window-id :event event :data1 data-1 :data2 data-2)
        (dispatch-window-event event window-id data-1 data-2))
 
+      (:fingermotion
+       (:touch-id touch-id :finger-id finger-id :x x :y y :dx dx :dy dy :pressure pressure)
+       (on-touch-event *game* touch-id finger-id :move x y dx dy pressure))
+
+      (:fingerdown
+       (:touch-id touch-id :finger-id finger-id :x x :y y :dx dx :dy dy :pressure pressure)
+       (on-touch-event *game* touch-id finger-id :down x y dx dy pressure))
+
+      (:fingerup
+       (:touch-id touch-id :finger-id finger-id :x x :y y :dx dx :dy dy :pressure pressure)
+       (on-touch-event *game* touch-id finger-id :up x y dx dy pressure))
+
 
       (:idle ()
              (setf current-ticks (get-current-milliseconds)

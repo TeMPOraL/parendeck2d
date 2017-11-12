@@ -12,6 +12,9 @@
 
 (defparameter *accumulator* 0.0)
 
+(defparameter *touch-marker-position* (p2dm:make-vector-2d 100.0 100.0))
+(defparameter *last-touch-pressure* 0.0)
+
 (defparameter *debug-texture-names* '("trc_tex.gif"
                                       "trc_tex.jpg"
                                       "trc_tex.tga"
@@ -93,6 +96,14 @@
   (log:debug key state repeat)
   (when (= repeat 1) (sdl2:push-event :quit)))
 
+(defmethod on-touch-event ((game default-game) touch-id finger-id direction x y dx dy pressure)
+  (log:info "Default game touch event.")
+  (when (eq direction :down)
+    (setf *touch-marker-position* (p2dm:make-vector-2d (* x *canvas-width*)
+                                                       (* y *canvas-height*))
+          *last-touch-pressure* pressure)
+    (log:info *touch-marker-position* *last-touch-pressure*)))
+
 (defmethod on-window-resized ((game default-game) new-width new-height)
   (log:info "Default game window resized event.")
   (log:debug new-width new-height))
@@ -122,6 +133,18 @@
 
 (defmethod on-render ((game default-game) dt)
   (declare (ignorable dt))
+
+  (p2dg:unbind-current-texture)
+
+  (p2dg:with-color (1.0 1.0 1.0)
+    (gl:with-pushed-matrix
+      (gl:translate (p2dm:vec-x *touch-marker-position*)
+                    (p2dm:vec-y *touch-marker-position*)
+                    0.0)
+      (gl:scale (+ 20 (* 20 *last-touch-pressure*))
+                (+ 20 (* 20 *last-touch-pressure*))
+                0)
+      (p2dglu:draw-circle)))
 
   (p2dg:with-color (0.0 1.0 0.0)
     (p2dg:draw *test-rendered-text* :x 100.0 :y 300.0 :scale-y 2.0))
