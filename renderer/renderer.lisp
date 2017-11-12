@@ -22,6 +22,15 @@
                                           :flags (if *window-resizable*
                                                      '(:opengl :resizable)
                                                      '(:opengl))))
+
+  ;; A hack to make the main window show up when using SBCL under SLIME on Windows.
+  ;; Borrowed from https://github.com/cbaggers/cepl.sdl2/pull/1
+  ;; See also: https://github.com/lispgames/cl-sdl2/issues/23
+  #+(and windows sbcl)
+  (progn
+    (log:info "Performing Windows hack.")
+    (sdl2:hide-window *main-window*)
+    (sdl2:show-window *main-window*))
   
   (log:info "Acquiring GL context.")
   (setf *gl-context* (sdl2:gl-create-context *main-window*))
