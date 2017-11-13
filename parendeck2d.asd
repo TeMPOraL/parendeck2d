@@ -32,6 +32,7 @@
                (:module "core"
                         :components ((:file "fixes")
                                      (:file "dirs")
+                                     (:file "assets")
                                      (:file "logger")
                                      (:file "printers")
                                      (:file "time")

@@ -16,6 +16,9 @@
 
   (:export #:track-resource)
 
+  ;; assets
+  (:export #:resolve-asset-path)
+
   ;; some configurables (to be later moved elsewhere)
   (:export #:*window-width*
            #:*window-height*
