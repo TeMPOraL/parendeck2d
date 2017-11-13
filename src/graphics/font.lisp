@@ -91,16 +91,16 @@
   ;; - cached font is not a RENDERED-FONT
 
   ;; TODO font cache should distinguish between same rendered fonts of different size
-  (alexandria:if-let ((font (gethash filename *font-cache*)))
-    font
-    (setf (gethash filename *font-cache*)
-          (make-rendered-font-from-file filename size))))
+  (let ((asset-path (p2d:resolve-asset-path filename)))
+    (alexandria:if-let ((font (gethash asset-path *font-cache*)))
+      font
+      (setf (gethash asset-path *font-cache*)
+            (make-rendered-font-from-file asset-path size)))))
 
 (defun get-bitmap-font (filename)
   "Get a bitmap font from `FILENAME'. Uses a cache to avoid loading and storing the same font data multiple times."
   (declare (ignore filename))
   (error "Not yet implemented."))
-
 
 
 ;;; Creation / deletion.

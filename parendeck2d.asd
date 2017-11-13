@@ -4,7 +4,7 @@
   :serial t
   :long-name "Parendeck 2D game engine"
   :author "Jacek Złydach"
-  :version (:read-file-form "version.lisp" :at (1 2 2))
+  :version (:read-file-form "src/version.lisp" :at (1 2 2))
   :description "An engine for 2D games written in Lisp."
                                         ; :long-description "todo"
 
@@ -26,56 +26,60 @@
                #:yason
                #:cl-who)
 
-  :components ((:file "packages")
-               (:file "version")
+  :components
+  
+  ((:module "src"
+            :components
+            ((:file "packages")
+             (:file "version")
                
-               (:module "core"
-                        :components ((:file "fixes")
-                                     (:file "dirs")
-                                     (:file "assets")
-                                     (:file "logger")
-                                     (:file "printers")
-                                     (:file "time")
-                                     (:file "game")
-                                     (:file "resource-tracker")
-                                     (:module "profiler"
-                                              :components ((:file "counters")
-                                                           (:file "counter-manager")
-                                                           (:file "tracing")
-                                                           (:file "gc")
-                                                           (:file "profiler")))))
+             (:module "core"
+                      :components ((:file "fixes")
+                                   (:file "dirs")
+                                   (:file "assets")
+                                   (:file "logger")
+                                   (:file "printers")
+                                   (:file "time")
+                                   (:file "game")
+                                   (:file "resource-tracker")
+                                   (:module "profiler"
+                                            :components ((:file "counters")
+                                                         (:file "counter-manager")
+                                                         (:file "tracing")
+                                                         (:file "gc")
+                                                         (:file "profiler")))))
 
-               (:module "math"
-                        :components ((:file "basic")
-                                     (:file "vector")))
+             (:module "math"
+                      :components ((:file "basic")
+                                   (:file "vector")))
 
-               (:module "config"
-                        :components ((:file "config")
-                                     (:file "program-options")))
+             (:module "config"
+                      :components ((:file "config")
+                                   (:file "program-options")))
 
-               (:module "renderer"
-                        :components ((:file "renderer")))
+             (:module "renderer"
+                      :components ((:file "renderer")))
 
-               (:module "graphics"
-                        :components ((:file "color")
-                                     (:file "texture")
-                                     (:module "gl-utils" ;TODO consider deprecating this module altogether
-                                              :components ((:file "convenience")
-                                                           (:file "shapes")))
-                                     (:file "font")
-                                     (:file "drawable")
-                                     (:file "text")))
+             (:module "graphics"
+                      :components ((:file "color")
+                                   (:file "texture")
+                                   (:module "gl-utils" ;TODO consider deprecating this module altogether
+                                            :components ((:file "convenience")
+                                                         (:file "shapes")))
+                                   (:file "font")
+                                   (:file "drawable")
+                                   (:file "text")))
 
-               (:module "audio"
-                        :components ((:file "system")))
+             (:module "audio"
+                      :components ((:file "system")))
 
-               (:module "ecs"
-                        :components ((:file "entity")
-                                     (:file "component")
-                                     (:file "system")
-                                     (:file "manager")))
+             (:module "ecs"
+                      :components ((:file "entity")
+                                   (:file "component")
+                                   (:file "system")
+                                   (:file "manager")))
 
-               (:module "default-game"
-                        :components ((:file "main")))
+             (:module "default-game"
+                      :components ((:file "main")))
 
-               (:file "main")))
+             (:file "main")))))

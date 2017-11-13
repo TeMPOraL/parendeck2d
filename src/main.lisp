@@ -55,6 +55,7 @@ The `PROFILING-MODE' parameter does NOT affect engine's internal profiling and d
 
   (p2dprof:clear-all-counters)
   (p2dprof:install-gc-tracker)
+  (install-default-asset-search-paths)
   (clear-resource-tracking)
   
   (sdl2:init :everything)

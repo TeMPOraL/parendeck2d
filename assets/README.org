@@ -1,0 +1,4 @@
+#+title: Engine Default Assets
+#+startup: hidestars
+
+This folder stores all assets provided by Parendeck 2D engine by default.

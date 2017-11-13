@@ -30,7 +30,7 @@
 
 (defun load-debug-images-as-textures ()
   (setf *debug-textures* (mapcar (lambda (file)
-                                   (p2dg:get-texture (concatenate 'string "assets/" file)))
+                                   (p2dg:get-texture (concatenate 'string "default-game/" file)))
                                  *debug-texture-names*)))
 
 (defclass default-game (game)
@@ -52,10 +52,10 @@
   (setf *rotation* 0)
   (setf *dg-ticks-start* (get-current-milliseconds))
 
-  (setf *logo-image* (p2dg:get-texture "assets/trc_tex_transparent.png"))
+  (setf *logo-image* (p2dg:get-texture "default-game/trc_tex_transparent.png"))
   (log:debug *logo-image* (p2dg:width *logo-image*) (p2dg:height *logo-image*) (p2dg:texture-id *logo-image*))
 
-  (setf *test-font* (p2dg:get-rendered-font "assets/fonts/Vera.ttf" :size 32))
+  (setf *test-font* (p2dg:get-rendered-font "fonts/Vera/Vera.ttf" :size 32))
   (log:debug *test-font*)
 
   (load-debug-images-as-textures)

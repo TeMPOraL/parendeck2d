@@ -17,7 +17,8 @@
   (:export #:track-resource)
 
   ;; assets
-  (:export #:resolve-asset-path)
+  (:export #:add-asset-search-path
+           #:resolve-asset-path)
 
   ;; some configurables (to be later moved elsewhere)
   (:export #:*window-width*

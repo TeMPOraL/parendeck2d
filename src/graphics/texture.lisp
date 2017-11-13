@@ -61,11 +61,12 @@
 
 (defun get-texture (filename)
   "Get texture from `FILENAME'. Uses a cache to avoid loading the same file data multiple times."
-  ;; TODO add handling/reporting for (not (texture-valid-p ...)) textures that somehow got stuck in cache. 
-  (alexandria:if-let ((texture (gethash filename *texture-cache*)))
-    texture
-    (setf (gethash filename *texture-cache*)
-          (make-texture-from-file filename))))
+  ;; TODO add handling/reporting for (not (texture-valid-p ...)) textures that somehow got stuck in cache.
+  (let ((asset-name (p2d:resolve-asset-path filename)))
+    (alexandria:if-let ((texture (gethash asset-name *texture-cache*)))
+      texture
+      (setf (gethash asset-name *texture-cache*)
+            (make-texture-from-file asset-name)))))
 
 
 ;;; Creation / deletion functions
