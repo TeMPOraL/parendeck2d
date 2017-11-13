@@ -33,6 +33,7 @@ Directories in `SEARCH-PATHS' are searched left-to-right. Files or directories f
 (defun install-default-asset-search-paths ()
   "Installs appropriate base paths for searching assets, depending whether we're in a development or production environment."
   (add-asset-search-path (merge-pathnames "assets/" (engine-base-directory)))
+  (add-asset-search-path (merge-pathnames "assets/" (working-directory)))
   ;; TODO handle production environment (dumped image)
   
   (log:debug "Installed default asset search paths." *asset-search-paths*))

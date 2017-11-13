@@ -7,9 +7,10 @@
 
 (defun working-directory ()
   "Get current working directory"
-  (error "Not yet implemented."))
+  (uiop/os:getcwd))
 
 (defun temporary-directory ()
+  "Get the path to a directory, which one can use for throwaway computation."
   (uiop:temporary-directory))
 
 (defun engine-base-directory ()
