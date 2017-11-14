@@ -30,6 +30,7 @@
               :reader font-size)))
 
 (defmethod %free-font ((font rendered-font))
+  (log:debug "Freeing font" font (internal-font-object font))
   (sdl2-ttf:close-font (internal-font-object font))
   (setf (slot-value font 'internal-font-object) nil))
 
@@ -76,10 +77,10 @@
   (clrhash *font-cache*))
 
 (defun uncache-font (font)
-  (maphash (lambda (name found-font)
+  (maphash (lambda (key found-font)
              (when (eq font found-font)
-               (log:debug "Removing font ~A - ~A from cache." name found-font)
-               (remhash name *font-cache*)))
+               (log:debug "Removing font ~A - ~A from cache." key found-font)
+               (remhash key *font-cache*)))
            *font-cache*))
 
 
@@ -89,12 +90,13 @@
   ;; FIXME add handling/reporting if:
   ;; - an invalid (e.g. freed) font got somehow stuck in cache
   ;; - cached font is not a RENDERED-FONT
+  (log:trace filename size)
 
-  ;; TODO font cache should distinguish between same rendered fonts of different size
-  (let ((asset-path (p2d:resolve-asset-path filename)))
-    (alexandria:if-let ((font (gethash asset-path *font-cache*)))
+  (let* ((asset-path (p2d:resolve-asset-path filename))
+         (font-key (cons asset-path size)))
+    (alexandria:if-let ((font (gethash font-key *font-cache*)))
       font
-      (setf (gethash asset-path *font-cache*)
+      (setf (gethash font-key *font-cache*)
             (make-rendered-font-from-file asset-path size)))))
 
 (defun get-bitmap-font (filename)
@@ -107,8 +109,10 @@
 (defun make-rendered-font-from-file (filename size)
   "Reads the font file `FILENAME' and creates a `RENDERED-FONT' object."
   ;; TODO maybe we need a pixels -> points conversion based on current DPI?
-  (let ((font-object (sdl2-ttf:open-font filename size)))
-    (make-instance 'rendered-font :internal-font-object font-object :font-name filename :font-size size)))
+  (let* ((font-object (sdl2-ttf:open-font filename size))
+         (rendered-font (make-instance 'rendered-font :internal-font-object font-object :font-name filename :font-size size)))
+    (log:debug rendered-font font-object)
+    rendered-font))
 
 (defun free-font (font)
   "Frees all resources used by `FONT'. It can no longer be used."
