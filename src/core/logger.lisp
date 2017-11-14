@@ -15,9 +15,10 @@
     (let ((*logging-condition* t))
       (typecase condition
         (warning (log:warn "Lisp warning: ~A." condition))
-        (t (progn (log:fatal "Lisp condition: ~A" condition)
-                  (log:fatal "~A" (with-output-to-string (s)
-                                    (uiop/image:print-condition-backtrace condition :stream s)))))))))
+        (t (let ((backtrace (with-output-to-string (s)
+                              (uiop/image:print-condition-backtrace condition :stream s))))
+             (log:fatal "Lisp condition: ~A" condition)
+             (log:fatal "~A" backtrace)))))))
 
 (defun call-with-logging-conditions (func)
   (handler-bind ((t #'log-condition))
