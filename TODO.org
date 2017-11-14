@@ -6,6 +6,72 @@
 
 * Design notes
 
+** Immediate / object-based drawing APIs
+   I want to support both easy immediate drawing API (like src_lisp[]{(draw-text "foo" :font +font+ :x 100 :y 100)})
+   and an object-like one that's maximally efficient:
+
+   #+BEGIN_SRC lisp
+     (let ((text (render-text "foo" :font +font+)))
+       (loop for i from 0 to 10
+            do (draw text :x 100 :y (+ 100 (* 10 i)))))
+   #+END_SRC
+   i.e. it computes all the expensive but constant values once, and caches them.
+
+   It feels like the immediate-mode API could actually be implemented efficiently in terms of object-mode API,
+   with caching management behind the back. The generic principle would be:
+
+   #+BEGIN_SRC lisp
+     (defun draw-immediate (stuff)
+       (let ((object (get-from-cache-or-compute-and-put-there-if-doesnt-exist stuff)))
+         (draw object)))
+   #+END_SRC
+
+   We could even make src_lisp[]{(draw-immediate ...)} calls return an object, which can later be used
+   with calls to src_lisp[]{(draw ...)}, only specifying data that changes.
+
+   There needs to be some sort of cache-control exposed.
+   - The game might want to signal that this drawing call might be producing a different graphic every time
+     (e.g. rendering a different text every frame), so that a lot of such objects could accumulate over time,
+     and it makes little sense to pay the price of storing them.
+   - There might need to be a feedback about memory use, in order not to hit some memory use limit.
+
+   We might also want to expose some batch-drawing primitives, that would translate into efficient
+   code using e.g. VBAs.
+
+   Under the hood, we also might want to support some implicit batching. Like with e.g. bitmap fonts - why not
+   buffer all the drawing calls with one font as a (position + tex-coord) array, and batch-display it?
+   Maybe z-ordering would help? Would cause problems w/ transparency, though. I suppose it's best to work
+   on this after we actually hit a performance problem there.
+
+   --
+
+   At the lowest level, I suppose we will simply have OpenGL calls.
+
+   --
+
+   Also, the object-level API could be written in a way that's exposed to the game to provide its own
+   drawables. Also maybe we should separate out cache behaviour into a mixin (cacheable?).
+
+   Thinking of something along the lines of e.g.
+   #+BEGIN_SRC lisp
+     (defmethod free ((obj some-drawable))
+       (%native-free obj))
+
+     (defmethod free :around ((obj cachable))
+       (drop-from-cache obj))
+   #+END_SRC
+
+   And maybe, via magic, implement something to intercept make-instance calls? Or at least the process of making,
+   in a way that takes stuff from cache.
+
+** Asset management
+   I want an asset management system that's flexible, but does not introduce any unnecessary cognitive overhead
+   into the game code.
+
+   Critical assumption: an asset is _always available_ as long as the handle exists (and is valid).
+   Behind the scenes, the engine needs to be able to manage data so that the asset is ready when needed,
+   including recreating it if it was somehow paged out.
+
 ** Error handling policy
    2 goals:
    - for development, we want errors to be loud and clear -> log + condition, debugger break
@@ -51,6 +117,8 @@
       (draw-text "Hello world" :x x :y y :size size) ; text with non-default size
       (draw-text "Hello world" :position position :font some-font) ; uses specific font
     #+END_SRC
+
+    (NOTE maybe draw-text* for :x :y, and draw-text for position?)
 
 **** How to draw text
      - load font
