@@ -6,63 +6,52 @@
 
 * Design notes
 
-** Immediate / object-based drawing APIs
-   I want to support both easy immediate drawing API (like src_lisp[]{(draw-text "foo" :font +font+ :x 100 :y 100)})
-   and an object-like one that's maximally efficient:
+** 4-layer graphics API
 
-   #+BEGIN_SRC lisp
-     (let ((text (render-text "foo" :font +font+)))
-       (loop for i from 0 to 10
-            do (draw text :x 100 :y (+ 100 (* 10 i)))))
-   #+END_SRC
-   i.e. it computes all the expensive but constant values once, and caches them.
+   The idea is to have a layered API structure, in which _all_ layers are usable to engine's
+   users, and will be selected by convenience.
 
-   It feels like the immediate-mode API could actually be implemented efficiently in terms of object-mode API,
-   with caching management behind the back. The generic principle would be:
+*** Layers
 
-   #+BEGIN_SRC lisp
-     (defun draw-immediate (stuff)
-       (let ((object (get-from-cache-or-compute-and-put-there-if-doesnt-exist stuff)))
-         (draw object)))
-   #+END_SRC
+**** Layer 0 - cl-opengl (and SDL2/SDL2-ttf)
+     Enough said. The engine will _not_ pretend it's working with something else, and will
+     allow/support direct OpenGL calls and access to OpenGL properties as much as possible.
 
-   We could even make src_lisp[]{(draw-immediate ...)} calls return an object, which can later be used
-   with calls to src_lisp[]{(draw ...)}, only specifying data that changes.
+     The same idea applies to other dependencies that are directly related to drawing - e.g.
+     image loading code.
 
-   There needs to be some sort of cache-control exposed.
-   - The game might want to signal that this drawing call might be producing a different graphic every time
-     (e.g. rendering a different text every frame), so that a lot of such objects could accumulate over time,
-     and it makes little sense to pay the price of storing them.
-   - There might need to be a feedback about memory use, in order not to hit some memory use limit.
+     This layer is already present and is not part of the engine code.
 
-   We might also want to expose some batch-drawing primitives, that would translate into efficient
-   code using e.g. VBAs.
+**** Layer 1 - convenience wrappers around OpenGL calls
+     Lowest-level utilities wrapping together OpenGL operations in an interface that's more
+     convenient for most common operations.
 
-   Under the hood, we also might want to support some implicit batching. Like with e.g. bitmap fonts - why not
-   buffer all the drawing calls with one font as a (position + tex-coord) array, and batch-display it?
-   Maybe z-ordering would help? Would cause problems w/ transparency, though. I suppose it's best to work
-   on this after we actually hit a performance problem there.
+**** Layer 2 - object-mode high-level drawing API
+     Wrapping layers 0 and 1 in an object-based code that allows for convenient reuse of stateful
+     data while carefully managing state underneath.
 
-   --
+     Not sure what's the extent of resource management here. In particular, should the engine
+     automagically manage resources like textures or image surfaces? Should caching be implemented
+     underneath, so that e.g. image textue data is shared between instances of drawable quads?
 
-   At the lowest level, I suppose we will simply have OpenGL calls.
+     Should we split those two into sublayers of a) resources, and b) drawable objects?
 
-   --
+     Or maybe provide layers for both automagically managed objects and not managed objects?
 
-   Also, the object-level API could be written in a way that's exposed to the game to provide its own
-   drawables. Also maybe we should separate out cache behaviour into a mixin (cacheable?).
+     Resources: image, texture.
+     Drawable: textured quad.
 
-   Thinking of something along the lines of e.g.
-   #+BEGIN_SRC lisp
-     (defmethod free ((obj some-drawable))
-       (%native-free obj))
+**** Layer 3 - immediate-mode high-level drawing API
+     A high-level API for drawing things without having to manage any state.
 
-     (defmethod free :around ((obj cachable))
-       (drop-from-cache obj))
-   #+END_SRC
+     Primarily done in terms of underlying API, will manage its resources to ensure
+     maximum efficiency and minimum memory use.
 
-   And maybe, via magic, implement something to intercept make-instance calls? Or at least the process of making,
-   in a way that takes stuff from cache.
+*** Open questions
+    - Where do e.g. particle systems fit in? As Layer-2 drawable objects?
+
+*** Drawables I need right now
+    How about we keep working on games and see what pops up?
 
 ** Asset management
    I want an asset management system that's flexible, but does not introduce any unnecessary cognitive overhead

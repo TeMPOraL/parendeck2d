@@ -9,10 +9,18 @@
 (defparameter *window-height* 600)
 (defparameter *window-title* "Parendeck 2D")
 (defparameter *window-resizable* nil "Whether or not window is created as resizable.")
+
 ;;; TODO vsync param
+
+;;; TODO maybe a setter-based API for window properties?
+;;; TODO also an API for changing window stuff at runtime
+
+
 
 (defparameter *canvas-width* 800 "Width of the virtual canvas - i.e. GL 'screen space' in ortho mode.")
 (defparameter *canvas-height* 600 "Height of the virtual canvas - i.e. GL 'screen space' in ortho mode.")
+
+
 
 (defun init-main-window ()
   (log:info "Opening new ~Ax~A window \"~A\"." *window-width* *window-height* *window-title*)
