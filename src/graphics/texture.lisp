@@ -71,14 +71,14 @@
 
 ;;; Creation / deletion functions
 
-(defun make-texture-from-file (filename)
+(defun make-texture-from-file (filename &key (filter :linear))
   "Read the image in `FILENAME' and turn it into texture."
   ;; TODO handle missing file; we might want to return a "default texture" as well.
   (let ((surface (sdl2-image:load-image filename)))
-    (prog1 (make-texture-from-sdl-surface surface)
+    (prog1 (make-texture-from-sdl-surface surface :filter filter)
       (sdl2:free-surface surface))))
 
-(defun make-texture-from-sdl-surface (surface)
+(defun make-texture-from-sdl-surface (surface &key (filter :linear) (wrap nil))
   "Convert data from `SURFACE' into a texture. Does NOT free the surface."
   (let ((image-width (sdl2:surface-width surface))
         (image-height (sdl2:surface-height surface))
@@ -97,9 +97,13 @@
     
     ;; (gl:tex-image-2d :texture-2d 0 :rgba image-width image-height 0 :rgba :unsigned-byte image-pixels)
 
-    ;; TODO maybe parametrize min/mag filters, and also wraps for creation.
-    (gl:tex-parameter :texture-2d :texture-min-filter :linear)
-    (gl:tex-parameter :texture-2d :texture-mag-filter :linear)
+    ;; TODO maybe fully parametrize min/mag filters, and also wraps for creation.
+    (gl:tex-parameter :texture-2d :texture-min-filter filter)
+    (gl:tex-parameter :texture-2d :texture-mag-filter filter)
+
+    (unless wrap
+      (gl:tex-parameter :texture-2d :texture-wrap-s :clamp-to-edge)
+      (gl:tex-parameter :texture-2d :texture-wrap-t :clamp-to-edge))
 
     ;; TODO error handling - OpenGL problems
 
