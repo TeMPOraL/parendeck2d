@@ -1,5 +1,7 @@
 (in-package #:parendeck2d)
 
+(defparameter +default-refresh-rate+ 60 "Refresh rate which is assumed when the engine fails to get information about the actual refresh rate.")
+
 (defparameter *main-window* nil)
 (defparameter *gl-context* nil)
 
@@ -9,6 +11,8 @@
 (defparameter *window-height* 600)
 (defparameter *window-title* "Parendeck 2D")
 (defparameter *window-resizable* nil "Whether or not window is created as resizable.")
+
+(defparameter *window-refresh-rate* +default-refresh-rate+)
 
 ;;; TODO vsync param
 
@@ -39,6 +43,10 @@
     (log:info "Performing Windows hack.")
     (sdl2:hide-window *main-window*)
     (sdl2:show-window *main-window*))
+
+  (setf *window-refresh-rate* (current-screen-refresh-rate))
+
+  (log:debug *window-refresh-rate*)
   
   (log:info "Acquiring GL context.")
   (setf *gl-context* (sdl2:gl-create-context *main-window*))
@@ -76,6 +84,17 @@
 
 ;;; Utils
 ;;; FIXME move elsewhere?
+
+(defun current-screen-refresh-rate (&optional (display-id 0))
+  (let ((hz (nth-value 3 (sdl2:get-current-display-mode display-id))))
+    (if (zerop hz)
+        +default-refresh-rate+
+        ;; NOTE hack for old SDL2 versions on linux, courtesy of mfiano
+        #+linux (multiple-value-bind (major minor patch) (sdl2:version)
+                  (if (and (= major 2) (= minor 0) (< patch 5))
+                      (1+ hz)
+                      hz))
+        #-linux hz)))
 
 (defun window->canvas (x y)
   "Translate coordinates from window space to canvas space."

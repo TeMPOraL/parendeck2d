@@ -24,7 +24,8 @@
                #:sdl2-ttf
                #:cl-opengl
                #:yason
-               #:cl-who)
+               #:cl-who
+               #:gamebox-frame-manager)
 
   :components
   

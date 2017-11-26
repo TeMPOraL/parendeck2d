@@ -107,7 +107,69 @@ The `PROFILING-MODE' parameter does NOT affect engine's internal profiling and d
 
   (log:info "Entering main loop.")
 
-  (let ((dt 0)
+  (let ((frame-manager (make-instance 'box.fm:frame-manager :delta *update-step*))
+        (frames-counter (p2dprof:get-counter 'p2d-frames :interval 1 :description "full frames per second" :history-size 10)))
+    (sdl2:with-event-loop (:method :poll)
+                          (:keydown
+                           (:keysym key :state state :repeat repeat)
+                           (on-key-event *game* key state repeat))
+
+                          (:keyup
+                           (:keysym key :state state :repeat repeat)
+                           (on-key-event *game* key state repeat))
+
+                          (:mousemotion
+                           (:x x :y y :xrel xrel :yrel yrel :state state)
+                           (on-mouse-move *game* x y xrel yrel state))
+
+                          (:mousebuttonup
+                           (:x x :y y :state state :button button) ;:clicks clicks - for SDL >= 2.0.2
+                           (on-mouse-button-event *game* x y button state))
+
+                          (:mousebuttondown
+                           (:x x :y y :state state :button button) ;:clicks clicks - for SDL >= 2.0.2
+                           (on-mouse-button-event *game* x y button state))
+
+                          (:mousewheel
+                           (:x x :y y)
+                           (on-mouse-wheel-event *game* x y))
+
+                          (:windowevent
+                           (:window-id window-id :event event :data1 data-1 :data2 data-2)
+                           (dispatch-window-event event window-id data-1 data-2))
+
+                          (:fingermotion
+                           (:touch-id touch-id :finger-id finger-id :x x :y y :dx dx :dy dy :pressure pressure)
+                           (on-touch-event *game* touch-id finger-id :move x y dx dy pressure))
+
+                          (:fingerdown
+                           (:touch-id touch-id :finger-id finger-id :x x :y y :dx dx :dy dy :pressure pressure)
+                           (on-touch-event *game* touch-id finger-id :down x y dx dy pressure))
+
+                          (:fingerup
+                           (:touch-id touch-id :finger-id finger-id :x x :y y :dx dx :dy dy :pressure pressure)
+                           (on-touch-event *game* touch-id finger-id :up x y dx dy pressure))
+
+
+                          (:idle ()
+                                 (box.fm:tick frame-manager
+                                              *window-refresh-rate*
+                                              (lambda ()
+                                                (p2dprof:with-profiling ('p2d-game-tick :description "main loop single tick (msec/frame)" :history-size 128)
+                                                                        (on-tick *game* *update-step*))
+                                                (p2dprof:sample-appropriate-counters (get-current-seconds) :tick)))
+
+                                 (on-idle *game* (box.fm:frame-time frame-manager))
+
+                                 (p2dprof:with-profiling ('p2d-on-render :description "main loop on-render (msec/frame)" :interval :frame :history-size 64)
+                                                         (on-render *game* (box.fm:frame-time frame-manager)))
+                                 (p2dprof:increment-counter frames-counter)
+
+                                 (p2dprof:sample-appropriate-counters (get-current-seconds) :frame))
+                          (:quit ()
+                                 (on-quit *game*))))
+
+  #+nil(let ((dt 0)
         (dt-accumulator 0)
         (last-ticks (get-current-milliseconds))
         (current-ticks (get-current-milliseconds))
@@ -115,73 +177,73 @@ The `PROFILING-MODE' parameter does NOT affect engine's internal profiling and d
     (setf *fps-counter* frames-counter)
     (sdl2:with-event-loop (:method :poll)
 
-      (:keydown
-       (:keysym key :state state :repeat repeat)
-       (on-key-event *game* key state repeat))
+                          (:keydown
+                           (:keysym key :state state :repeat repeat)
+                           (on-key-event *game* key state repeat))
 
-      (:keyup
-       (:keysym key :state state :repeat repeat)
-       (on-key-event *game* key state repeat))
+                          (:keyup
+                           (:keysym key :state state :repeat repeat)
+                           (on-key-event *game* key state repeat))
 
-      (:mousemotion
-       (:x x :y y :xrel xrel :yrel yrel :state state)
-       (on-mouse-move *game* x y xrel yrel state))
+                          (:mousemotion
+                           (:x x :y y :xrel xrel :yrel yrel :state state)
+                           (on-mouse-move *game* x y xrel yrel state))
 
-      (:mousebuttonup
-       (:x x :y y :state state :button button) ;:clicks clicks - for SDL >= 2.0.2
-       (on-mouse-button-event *game* x y button state))
-    
-      (:mousebuttondown
-       (:x x :y y :state state :button button) ;:clicks clicks - for SDL >= 2.0.2
-       (on-mouse-button-event *game* x y button state))
+                          (:mousebuttonup
+                           (:x x :y y :state state :button button) ;:clicks clicks - for SDL >= 2.0.2
+                           (on-mouse-button-event *game* x y button state))
 
-      (:mousewheel
-       (:x x :y y)
-       (on-mouse-wheel-event *game* x y))
+                          (:mousebuttondown
+                           (:x x :y y :state state :button button) ;:clicks clicks - for SDL >= 2.0.2
+                           (on-mouse-button-event *game* x y button state))
 
-      (:windowevent
-       (:window-id window-id :event event :data1 data-1 :data2 data-2)
-       (dispatch-window-event event window-id data-1 data-2))
+                          (:mousewheel
+                           (:x x :y y)
+                           (on-mouse-wheel-event *game* x y))
 
-      (:fingermotion
-       (:touch-id touch-id :finger-id finger-id :x x :y y :dx dx :dy dy :pressure pressure)
-       (on-touch-event *game* touch-id finger-id :move x y dx dy pressure))
+                          (:windowevent
+                           (:window-id window-id :event event :data1 data-1 :data2 data-2)
+                           (dispatch-window-event event window-id data-1 data-2))
 
-      (:fingerdown
-       (:touch-id touch-id :finger-id finger-id :x x :y y :dx dx :dy dy :pressure pressure)
-       (on-touch-event *game* touch-id finger-id :down x y dx dy pressure))
+                          (:fingermotion
+                           (:touch-id touch-id :finger-id finger-id :x x :y y :dx dx :dy dy :pressure pressure)
+                           (on-touch-event *game* touch-id finger-id :move x y dx dy pressure))
 
-      (:fingerup
-       (:touch-id touch-id :finger-id finger-id :x x :y y :dx dx :dy dy :pressure pressure)
-       (on-touch-event *game* touch-id finger-id :up x y dx dy pressure))
+                          (:fingerdown
+                           (:touch-id touch-id :finger-id finger-id :x x :y y :dx dx :dy dy :pressure pressure)
+                           (on-touch-event *game* touch-id finger-id :down x y dx dy pressure))
+
+                          (:fingerup
+                           (:touch-id touch-id :finger-id finger-id :x x :y y :dx dx :dy dy :pressure pressure)
+                           (on-touch-event *game* touch-id finger-id :up x y dx dy pressure))
 
 
-      (:idle ()
-             (setf current-ticks (get-current-milliseconds)
-                   dt (max 0 (msec-delta-in-seconds last-ticks current-ticks))
-                   last-ticks current-ticks)
+                          (:idle ()
+                                 (setf current-ticks (get-current-milliseconds)
+                                       dt (max 0 (msec-delta-in-seconds last-ticks current-ticks))
+                                       last-ticks current-ticks)
 
-             (when *use-fixed-timestep*
-               ;; fixed-step game loop
-               (setf dt-accumulator (clamp (+ dt-accumulator dt) 0 +max-accumulated-timestep+))
+                                 (when *use-fixed-timestep*
+                                   ;; fixed-step game loop
+                                   (setf dt-accumulator (clamp (+ dt-accumulator dt) 0 +max-accumulated-timestep+))
 
-               (loop while (> dt-accumulator *update-step*) do
-                    (p2dprof:with-profiling ('p2d-game-tick :description "main loop single tick (msec/frame)" :history-size 128)
-                      (on-tick *game* *update-step*))
+                                   (loop while (> dt-accumulator *update-step*) do
+                                        (p2dprof:with-profiling ('p2d-game-tick :description "main loop single tick (msec/frame)" :history-size 128)
+                                                                (on-tick *game* *update-step*))
 
-                    (p2dprof:sample-appropriate-counters (get-current-seconds) :tick)
-                    (decf dt-accumulator *update-step*)))
+                                        (p2dprof:sample-appropriate-counters (get-current-seconds) :tick)
+                                        (decf dt-accumulator *update-step*)))
 
-             (on-idle *game* dt)
-             (p2dprof:with-profiling ('p2d-on-render :description "main loop on-render (msec/frame)" :interval :frame :history-size 64)
-               (on-render *game* dt))
-             (p2dprof:increment-counter frames-counter)
+                                 (on-idle *game* dt)
+                                 (p2dprof:with-profiling ('p2d-on-render :description "main loop on-render (msec/frame)" :interval :frame :history-size 64)
+                                                         (on-render *game* dt))
+                                 (p2dprof:increment-counter frames-counter)
 
-             (p2dprof:sample-appropriate-counters (get-current-seconds) :frame))
-      
-      (:quit ()
-             (on-quit *game*))))
-  
+                                 (p2dprof:sample-appropriate-counters (get-current-seconds) :frame))
+
+                          (:quit ()
+                                 (on-quit *game*))))
+
   (log:info "Leaving main loop."))
 
 (defun deinit-engine ()
@@ -191,7 +253,6 @@ The `PROFILING-MODE' parameter does NOT affect engine's internal profiling and d
   (p2dprof:uninstall-gc-tracker)
   (p2dprof:write-counter-report "perf-report.html") ;TODO need a debug/config flag for that at some point, to not dump that on unsuspecting users
 
-  
   (deinit-main-window)
   (p2da:deinitialize-audio)
   (sdl2-ttf:quit)
